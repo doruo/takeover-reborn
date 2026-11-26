@@ -51,7 +51,7 @@ language runtime. The port splits them:
 ## Source tree
 
 ```
-takeover/
+takeover-reborn/
 ├─ CMakeLists.txt            top-level build (+ CPack release archive)
 ├─ run.sh                    build when needed, then play
 ├─ cmake/                    dependency setup (SDL3)
