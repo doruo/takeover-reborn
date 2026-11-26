@@ -1,14 +1,19 @@
 
 ![logo](/static/icons/logo.png)
 
-# Takeover
+# Takeover Reborn
 
 Recompilation of the Flash strategy game *Takeover* (Published by IriySoft, 2011, v1.1.5). 
 
-The goal is identical behaviour to the original SWF, with source code
-organised like the original and readable without the decompiler at hand.
+The goal of this project is to originally have a functionning and stable version with identical behaviour to the original.
 
-The game is sole property of IriySoft, so you will need a .swf copy of the game, to extract assets and play.
+Then the code will be reorganized, more adapted to today standards, and add more content to it: better screen support, QoLs. 
+
+And also add some *new* content: new factions, units, buildings, and levels.
+
+The original game, assets and graphics are made and published IriySoft. It is *not* distributed here. 
+
+You will need a copy of the game (.swf) in order to extract assets and play.
 
 > Status: **playable**. Every screen of the original is ported: preloader and
 > intros, profiles, the three campaigns and their maps, edicts, badges, the
@@ -18,18 +23,21 @@ The game is sole property of IriySoft, so you will need a .swf copy of the game,
 > Newgrounds medals and cloud saves) are left out. See
 > [docs/PORT_ARCHITECTURE.md](docs/PORT_ARCHITECTURE.md).
 
+## Screenshots
+
+![logo](/static/screenshots/screenshot_level_2.png)
+
 ## Quick start (Linux)
 
 ```bash
-sudo apt install build-essential cmake pkg-config zlib1g-dev libcairo2-dev libsdl3-dev
+cd takeover-reborn
+./install-deps.sh
 ./run.sh
 ```
 
 `run.sh` configures and builds the project the first time (a few minutes), converts the original `takeover.swf` into the asset pack (a few seconds), then starts the game. 
 
 Later runs only rebuild what changed.
-The original game is not distributed with the source: `run.sh` looks for it
-in `takeover-original/swf/takeover.swf` or `./takeover.swf`, or wherever `TAKEOVER_SWF` points.
 
 ```bash
 ./run.sh --fullscreen      # F11 or Alt+Enter toggles it in game
@@ -54,7 +62,7 @@ the cairo and zlib libraries (preinstalled on desktop distributions). SDL3
 is bundled when the build had to compile it. `cmake --install build
 --prefix ~/.local` installs the same files.
 
-## Playing
+## Gameplay
 
 The controls are those of the original: click a building to open its
 window (recruit, upgrade, build), drag a squad's round icon onto a place or
@@ -78,10 +86,7 @@ menu wins the mission.
 ## Build
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j4
-./build/tools/assetpack/assetpack path/to/takeover.swf assets   # once
-./build/game/takeover --assets assets
+./build.sh
 ```
 
 Options: `-DTAKEOVER_BUILD_GAME=OFF` builds only the tools (no SDL needed),
