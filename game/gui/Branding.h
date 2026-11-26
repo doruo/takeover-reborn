@@ -12,11 +12,11 @@ namespace takeover {
 
 class Branding {
 public:
-    static constexpr const char* URL_ARMOR_GAMES = "http://armorgames.com/";
-    static constexpr const char* URL_A10COM = "http://www.a10.com/";
-    static constexpr const char* URL_IRIYSOFT = "http://www.iriySoft.ru";
-    static constexpr const char* URL_IRIYSOFT_TWITTER = "http://twitter.com/iriysoft";
-    static constexpr const char* URL_IRIYSOFT_FACEBOOK = "http://www.facebook.com/IriySoft";
+    static constexpr const char* URL_ARMOR_GAMES = "https://armorgames.com/";
+    static constexpr const char* URL_A10COM = "https://www.a10.com/";
+    static constexpr const char* URL_IRIYSOFT = "https://www.iriysoft.com";
+    static constexpr const char* URL_IRIYSOFT_TWITTER = "https://x.com/iriysoft";
+    static constexpr const char* URL_IRIYSOFT_FACEBOOK = "https://www.facebook.com/IriySoft";
     /// Original: Preloader.A10Com.
     static constexpr bool A10_COM = false;
 
