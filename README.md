@@ -9,9 +9,9 @@ The goal of this project is to originally have a functionning and stable version
 
 Then the code will be reorganized, more adapted to today standards, and add more content to it: better screen support, QoLs. 
 
-And also add some *new* content: new factions, units, buildings, and levels.
+Also *new* content could be added easily: new factions, units, buildings, and levels.
 
-The original game, assets and graphics are made and published IriySoft. It is *not* distributed here. 
+The original game, assets and graphics are made and published by [IriySoft](https://iriysoft.com). It is *not* distributed here. 
 
 You will need a copy of the game (.swf) in order to extract assets and play.
 
