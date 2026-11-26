@@ -1,7 +1,11 @@
-# Takeover Reborn
 
-A faithful C++20 port of the Flash strategy game *Take Over* (IriySoft, 2011,
-v1.1.5). The goal is identical behaviour to the original SWF, with source code
+![logo](/static/icons/logo.png)
+
+# Takeover
+
+Faithful port in C++ of the Flash strategy game *Takeover* (Published by IriySoft, 2011, v1.1.5). 
+
+The goal is identical behaviour to the original SWF, with source code
 organised like the original and readable without the decompiler at hand.
 
 > Status: **playable**. Every screen of the original is ported: preloader and
