@@ -42,14 +42,22 @@ public:
 
 /// Calls `f` on every object of a storage. The keys are taken first, so
 /// `f` may remove objects (like the original Haxe map iterators).
+/// Each object is held by a copy of its pointer while `f` runs: when `f`
+/// removes it from the storage, it stays alive until `f` returns.
 template <typename T, typename F>
 void forEachObject(const KeyedStorage<T>& storage, F&& f) {
     std::vector<int> keys;
     keys.reserve(storage.objects().size());
+
     for (const auto& entry : storage.objects()) keys.push_back(entry.first);
+
     for (const int key : keys) {
         const auto it = storage.objects().find(key);
-        if (it != storage.objects().end() && it->second) f(it->second);
+
+        if (it == storage.objects().end() || !it->second) continue;
+
+        const std::shared_ptr<T> object = it->second;
+        f(object);
     }
 }
 
