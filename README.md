@@ -3,10 +3,12 @@
 
 # Takeover
 
-Faithful port in C++ of the Flash strategy game *Takeover* (Published by IriySoft, 2011, v1.1.5). 
+Recompilation of the Flash strategy game *Takeover* (Published by IriySoft, 2011, v1.1.5). 
 
 The goal is identical behaviour to the original SWF, with source code
 organised like the original and readable without the decompiler at hand.
+
+The game is sole property of IriySoft, so you will need a .swf copy of the game, to extract assets and play.
 
 > Status: **playable**. Every screen of the original is ported: preloader and
 > intros, profiles, the three campaigns and their maps, edicts, badges, the

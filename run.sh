@@ -13,7 +13,11 @@
 set -euo pipefail
 cd "$(dirname "$(readlink -f "$0")")"
 
+FILENAME=$(basename $0)
 BUILD_DIR=${TAKEOVER_BUILD_DIR:-build}
+
+TOOLS="build-essential cmake pkg-config zlib1g-dev libcairo2-dev libsdl3-dev"
+
 OS=$(cat /etc/*release | grep ^NAME | tr -d 'NAME="' | awk '{print $1}')
 PACKAGE_MANAGER=""
 
@@ -41,8 +45,8 @@ fetch_package_manager
 
 need() {
     if ! command -v "$1" >/dev/null 2>&1; then
-        echo "run.sh: '$1' is missing. On $OS:" >&2
-        echo "  sudo $PACKAGE_MANAGER install build-essential cmake pkg-config zlib1g-dev libcairo2-dev libsdl3-dev" >&2
+        echo "$FILENAME: '$1' is missing. On $OS:" >&2
+        echo "  sudo $PACKAGE_MANAGER install $TOOLS" >&2
         exit 1
     fi
 }
