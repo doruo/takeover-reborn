@@ -22,176 +22,183 @@
 
 namespace engine {
 
-class DisplayObjectContainer;
-class Library;
-class Renderer;
-class ShapeCache;
-class Stage;
+    class DisplayObjectContainer;
+    class Library;
+    class Renderer;
+    class ShapeCache;
+    class Stage;
 
-/// What a render pass needs; passed down the tree.
-struct RenderContext {
-    Renderer& renderer;
-    ShapeCache& shapes;
-    double deviceScale = 1; ///< Framebuffer pixels per stage pixel.
-};
+    /// What a render pass needs; passed down the tree.
+    struct RenderContext {
+        Renderer& renderer;
+        ShapeCache& shapes;
+        double deviceScale = 1; ///< Framebuffer pixels per stage pixel.
+    };
 
-class DisplayObject : public EventDispatcher, public std::enable_shared_from_this<DisplayObject> {
-public:
-    DisplayObject() = default;
-    ~DisplayObject() override = default;
+    class DisplayObject : public EventDispatcher, public std::enable_shared_from_this<DisplayObject> {
+    public:
+        DisplayObject() = default;
+        ~DisplayObject() override = default;
 
-    // --- Identity -------------------------------------------------------------
+        // /----- IDENTITY -----/
 
-    [[nodiscard]] const std::string& name() const { return name_; }
-    void setName(std::string name) { name_ = std::move(name); }
-    [[nodiscard]] DisplayObjectContainer* parent() const { return parent_; }
-    /// The stage this object is on, or nullptr when it isn't displayed.
-    [[nodiscard]] Stage* stage() const;
-    /// Topmost ancestor (the object itself if it has no parent).
-    [[nodiscard]] DisplayObject* root();
+        [[nodiscard]] const std::string& name() const { return name_; }
+        void setName(std::string name) { name_ = std::move(name); }
+        [[nodiscard]] DisplayObjectContainer* parent() const { return parent_; }
+        /// The stage this object is on, or nullptr when it isn't displayed.
+        [[nodiscard]] Stage* stage() const;
 
-    // --- Transform (flash.display.DisplayObject properties) --------------------
-    //
-    // x/y are stored in twips like Flash: assigning 0.33 reads back 0.3.
-    // scaleX/scaleY/rotation are cached separately from the matrix, as Flash
-    // does, so that setting one doesn't make the others drift.
+        /// Topmost ancestor (the object itself if it has no parent).
+        [[nodiscard]] DisplayObject* root();
 
-    [[nodiscard]] const Matrix& matrix() const { return matrix_; }
-    void setMatrix(const Matrix& m);
+        // /----- TRANSFORM (FLASH.DISPLAY.DISPLAYOBJECT PROPERTIES) -----/
 
-    [[nodiscard]] double x() const { return matrix_.tx; }
-    [[nodiscard]] double y() const { return matrix_.ty; }
-    void setX(double value);
-    void setY(double value);
+        //
+        // x/y are stored in twips like Flash: assigning 0.33 reads back 0.3.
+        // scaleX/scaleY/rotation are cached separately from the matrix, as Flash
+        // does, so that setting one doesn't make the others drift.
 
-    [[nodiscard]] double scaleX() const;
-    [[nodiscard]] double scaleY() const;
-    [[nodiscard]] double rotation() const; ///< Degrees, in (-180, 180].
-    void setScaleX(double value);
-    void setScaleY(double value);
-    void setRotation(double degrees);
+        [[nodiscard]] const Matrix& matrix() const { return matrix_; }
+        void setMatrix(const Matrix& m);
 
-    [[nodiscard]] double alpha() const { return colorTransform_.alphaMultiplier; }
-    void setAlpha(double value); ///< Stored as 8.8 fixed point, like Flash.
+        [[nodiscard]] double x() const { return matrix_.tx; }
+        [[nodiscard]] double y() const { return matrix_.ty; }
+        void setX(double value);
+        void setY(double value);
 
-    [[nodiscard]] const ColorTransform& colorTransform() const { return colorTransform_; }
-    void setColorTransform(const ColorTransform& cx) { colorTransform_ = cx; }
+        [[nodiscard]] double scaleX() const;
+        [[nodiscard]] double scaleY() const;
+        [[nodiscard]] double rotation() const; ///< Degrees, in (-180, 180].
+        void setScaleX(double value);
+        void setScaleY(double value);
+        void setRotation(double degrees);
 
-    [[nodiscard]] bool visible() const { return visible_; }
-    void setVisible(bool visible) { visible_ = visible; }
+        [[nodiscard]] double alpha() const { return colorTransform_.alphaMultiplier; }
+        void setAlpha(double value); ///< Stored as 8.8 fixed point, like Flash.
 
-    [[nodiscard]] swf::BlendMode blendMode() const { return blendMode_; }
-    void setBlendMode(swf::BlendMode mode) { blendMode_ = mode; }
+        [[nodiscard]] const ColorTransform& colorTransform() const { return colorTransform_; }
+        void setColorTransform(const ColorTransform& cx) { colorTransform_ = cx; }
 
-    [[nodiscard]] const std::vector<swf::Filter>& filters() const { return filters_; }
-    void setFilters(std::vector<swf::Filter> filters) { filters_ = std::move(filters); }
+        [[nodiscard]] bool visible() const { return visible_; }
+        void setVisible(bool visible) { visible_ = visible; }
 
-    /// Size of the bounds in the parent's space.
-    [[nodiscard]] double width() const;
-    [[nodiscard]] double height() const;
-    /// Scales the object so its bounds get this size (text fields resize
-    /// their box instead).
-    virtual void setWidth(double value);
-    virtual void setHeight(double value);
+        [[nodiscard]] swf::BlendMode blendMode() const { return blendMode_; }
+        void setBlendMode(swf::BlendMode mode) { blendMode_ = mode; }
 
-    // --- Geometry -----------------------------------------------------------
+        [[nodiscard]] const std::vector<swf::Filter>& filters() const { return filters_; }
+        void setFilters(std::vector<swf::Filter> filters) { filters_ = std::move(filters); }
 
-    /// Bounds of this object's content in its own coordinate space.
-    [[nodiscard]] virtual Rectangle localBounds() const { return {}; }
+        /// Size of the bounds in the parent's space.
+        [[nodiscard]] double width() const;
+        [[nodiscard]] double height() const;
 
-    /// Bounds expressed in `targetSpace` (nullptr = this object's parent).
-    [[nodiscard]] Rectangle getBounds(const DisplayObject* targetSpace) const;
+        /// Scales the object so its bounds get this size (text fields resize
+        /// their box instead).
+        virtual void setWidth(double value);
+        virtual void setHeight(double value);
 
-    /// Transform from this object's space to the root of its tree.
-    [[nodiscard]] Matrix concatenatedMatrix() const;
+        // /----- GEOMETRY -----/
 
-    [[nodiscard]] Point localToGlobal(Point local) const { return concatenatedMatrix().apply(local); }
-    [[nodiscard]] Point globalToLocal(Point global) const { return concatenatedMatrix().inverted().apply(global); }
+        /// Bounds of this object's content in its own coordinate space.
+        [[nodiscard]] virtual Rectangle localBounds() const { return {}; }
 
-    /// Mouse position in this object's space (needs to be on the stage).
-    [[nodiscard]] double mouseX() const;
-    [[nodiscard]] double mouseY() const;
+        /// Bounds expressed in `targetSpace` (nullptr = this object's parent).
+        [[nodiscard]] Rectangle getBounds(const DisplayObject* targetSpace) const;
 
-    /// Does the point (in root/stage coordinates) touch this object? With
-    /// `shapeFlag`, tests the actual vector outlines, else the bounding box.
-    [[nodiscard]] bool hitTestPoint(double x, double y, bool shapeFlag = false) const;
+        /// Transform from this object's space to the root of its tree.
+        [[nodiscard]] Matrix concatenatedMatrix() const;
 
-    /// Exact hit test of a point in this object's own space, ignoring
-    /// visibility (used by hitTestPoint and mouse picking).
-    [[nodiscard]] virtual bool hitTestLocal(Point local) const;
+        [[nodiscard]] Point localToGlobal(Point local) const { return concatenatedMatrix().apply(local); }
+        [[nodiscard]] Point globalToLocal(Point global) const { return concatenatedMatrix().inverted().apply(global); }
 
-    // --- Interaction (flash.display.InteractiveObject) ---------------------------
-    // Shapes and bitmaps are not interactive in Flash: the mouse targets their
-    // parent. Sprites, clips, buttons and text fields are.
+        /// Mouse position in this object's space (needs to be on the stage).
+        [[nodiscard]] double mouseX() const;
+        [[nodiscard]] double mouseY() const;
 
-    [[nodiscard]] virtual bool isInteractive() const { return false; }
-    [[nodiscard]] bool mouseEnabled() const { return mouseEnabled_; }
-    void setMouseEnabled(bool enabled) { mouseEnabled_ = enabled; }
+        /// Does the point (in root/stage coordinates) touch this object? With
+        /// `shapeFlag`, tests the actual vector outlines, else the bounding box.
+        [[nodiscard]] bool hitTestPoint(double x, double y, bool shapeFlag = false) const;
 
-    /// Bubbles the event from this object up to the stage.
-    bool dispatchEvent(Event& event) override;
+        /// Exact hit test of a point in this object's own space, ignoring
+        /// visibility (used by hitTestPoint and mouse picking).
+        [[nodiscard]] virtual bool hitTestLocal(Point local) const;
 
-    // --- Timeline bookkeeping ---------------------------------------------------
-    // Set when a timeline places the object; used to replay frames exactly.
+        // /----- INTERACTION (FLASH.DISPLAY.INTERACTIVEOBJECT) -----/
 
-    [[nodiscard]] int depth() const { return depth_; }
-    [[nodiscard]] std::uint16_t characterId() const { return characterId_; }
-    [[nodiscard]] bool placedByTimeline() const { return placedByTimeline_; }
-    [[nodiscard]] int placeFrame() const { return placeFrame_; }
-    [[nodiscard]] std::optional<int> clipDepth() const { return clipDepth_; }
-    [[nodiscard]] std::uint16_t ratio() const { return ratio_; }
-    void setRatio(std::uint16_t ratio) { ratio_ = ratio; }
+        // Shapes and bitmaps are not interactive in Flash: the mouse targets their
+        // parent. Sprites, clips, buttons and text fields are.
 
-    /// Applies the properties carried by a PlaceObject record.
-    void applyPlacement(const swf::PlaceObject& place);
+        [[nodiscard]] virtual bool isInteractive() const { return false; }
+        [[nodiscard]] bool mouseEnabled() const { return mouseEnabled_; }
+        void setMouseEnabled(bool enabled) { mouseEnabled_ = enabled; }
 
-    // --- Per-frame hooks ------------------------------------------------------
+        /// Bubbles the event from this object up to the stage.
+        bool dispatchEvent(Event& event) override;
 
-    /// Advances timelines by one frame (no-op for static objects).
-    virtual void advanceFrame() {}
+        // /----- TIMELINE BOOKKEEPING -----/
 
-    /// Draws the object. `parentWorld` maps the parent's space to the stage.
-    virtual void render(RenderContext& context, const Matrix& parentWorld, const ColorTransform& parentColor);
-    /// Draws the object with `world` as its full transform, ignoring its own
-    /// matrix and visibility (BitmapData.draw does that).
-    void renderWorld(RenderContext& context, const Matrix& world, const ColorTransform& color);
+        // Set when a timeline places the object; used to replay frames exactly.
 
-    /// Draws only the object's coverage, for use as a mask.
-    virtual void renderMask(RenderContext& context, const Matrix& parentWorld);
+        [[nodiscard]] int depth() const { return depth_; }
+        [[nodiscard]] std::uint16_t characterId() const { return characterId_; }
+        [[nodiscard]] bool placedByTimeline() const { return placedByTimeline_; }
+        [[nodiscard]] int placeFrame() const { return placeFrame_; }
+        [[nodiscard]] std::optional<int> clipDepth() const { return clipDepth_; }
+        [[nodiscard]] std::uint16_t ratio() const { return ratio_; }
+        void setRatio(std::uint16_t ratio) { ratio_ = ratio; }
 
-protected:
-    /// Subclasses draw themselves here; `world` already includes this object.
-    virtual void draw(RenderContext&, const Matrix& /*world*/, const ColorTransform& /*color*/, bool /*asMask*/) {}
+        /// Applies the properties carried by a PlaceObject record.
+        void applyPlacement(const swf::PlaceObject& place);
 
-private:
-    friend class DisplayObjectContainer;
-    friend class MovieClip;
+        // /----- PER-FRAME HOOKS -----/
 
-    void cacheDecomposition() const;
-    void rebuildMatrix();
+        /// Advances timelines by one frame (no-op for static objects).
+        virtual void advanceFrame() {}
 
-    std::string name_;
-    DisplayObjectContainer* parent_ = nullptr;
-    bool mouseEnabled_ = true;
+        /// Draws the object. `parentWorld` maps the parent's space to the stage.
+        virtual void render(RenderContext& context, const Matrix& parentWorld, const ColorTransform& parentColor);
 
-    Matrix matrix_;
-    // Cached decomposition of matrix_ (see setScaleX & co).
-    mutable bool decompositionValid_ = true;
-    mutable double scaleX_ = 1, scaleY_ = 1, rotationRadians_ = 0, skewRadians_ = 0;
+        /// Draws the object with `world` as its full transform, ignoring its own
+        /// matrix and visibility (BitmapData.draw does that).
+        void renderWorld(RenderContext& context, const Matrix& world, const ColorTransform& color);
 
-    ColorTransform colorTransform_;
-    bool visible_ = true;
-    swf::BlendMode blendMode_ = swf::BlendMode::Normal;
-    std::vector<swf::Filter> filters_;
+        /// Draws only the object's coverage, for use as a mask.
+        virtual void renderMask(RenderContext& context, const Matrix& parentWorld);
 
-    int depth_ = 0;
-    std::uint16_t characterId_ = 0;
-    bool placedByTimeline_ = false;
-    int placeFrame_ = 0;
-    std::optional<int> clipDepth_;
-    std::uint16_t ratio_ = 0;
-};
+    protected:
+        /// Subclasses draw themselves here; `world` already includes this object.
+        virtual void draw(RenderContext&, const Matrix& /*world*/, const ColorTransform& /*color*/, bool /*asMask*/) {}
 
-using DisplayObjectPtr = std::shared_ptr<DisplayObject>;
+    private:
+        friend class DisplayObjectContainer;
+        friend class MovieClip;
+
+        void cacheDecomposition() const;
+        void rebuildMatrix();
+
+        std::string name_;
+        DisplayObjectContainer* parent_ = nullptr;
+        bool mouseEnabled_ = true;
+
+        Matrix matrix_;
+
+        // Cached decomposition of matrix_ (see setScaleX & co).
+        mutable bool decompositionValid_ = true;
+        mutable double scaleX_ = 1, scaleY_ = 1, rotationRadians_ = 0, skewRadians_ = 0;
+
+        ColorTransform colorTransform_;
+        bool visible_ = true;
+        swf::BlendMode blendMode_ = swf::BlendMode::Normal;
+        std::vector<swf::Filter> filters_;
+
+        int depth_ = 0;
+        std::uint16_t characterId_ = 0;
+        bool placedByTimeline_ = false;
+        int placeFrame_ = 0;
+        std::optional<int> clipDepth_;
+        std::uint16_t ratio_ = 0;
+    };
+
+    using DisplayObjectPtr = std::shared_ptr<DisplayObject>;
 
 } // namespace engine

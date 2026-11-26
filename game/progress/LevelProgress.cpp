@@ -9,30 +9,37 @@
 
 namespace takeover {
 
-LevelProgress LevelProgress::fromMission(const MissionResult& result, const LevelInfo& level) {
-    LevelProgress progress;
-    progress.completeStatus = level.rankFor(result);
-    progress.score = as3::toInt(100000 * std::floor(60 * 20 / result.missionTime));
-    return progress;
-}
+    LevelProgress LevelProgress::fromMission(const MissionResult& result, const LevelInfo& level) {
+        LevelProgress progress;
+        progress.completeStatus = level.rankFor(result);
+        progress.score = as3::toInt(100000 * std::floor(60 * 20 / result.missionTime));
 
-bool LevelProgress::compareStatus(const LevelProgress& other) const {
-    if (other.completeStatus == completeStatus) return other.score > score;
-    return other.completeStatus > completeStatus;
-}
+        return progress;
+    }
 
-void LevelProgress::serialize(ByteArray& data) const {
-    SerializableObject object;
-    object.add("scrs", SerializableObject::SHORT, static_cast<double>(score));
-    object.add("stts", SerializableObject::SHORT, static_cast<double>(completeStatus));
-    object.save(data);
-}
+    bool LevelProgress::compareStatus(const LevelProgress& other) const {
+        if (other.completeStatus == completeStatus)
+            return other.score > score;
 
-void LevelProgress::deserialize(ByteArray& data) {
-    SerializableObject object;
-    object.load(data);
-    if (object.has("scrs")) score = static_cast<int>(object.getNumber("scrs"));
-    if (object.has("stts")) completeStatus = static_cast<int>(object.getNumber("stts"));
-}
+        return other.completeStatus > completeStatus;
+    }
+
+    void LevelProgress::serialize(ByteArray& data) const {
+        SerializableObject object;
+        object.add("scrs", SerializableObject::SHORT, static_cast<double>(score));
+        object.add("stts", SerializableObject::SHORT, static_cast<double>(completeStatus));
+        object.save(data);
+    }
+
+    void LevelProgress::deserialize(ByteArray& data) {
+        SerializableObject object;
+        object.load(data);
+
+        if (object.has("scrs"))
+            score = static_cast<int>(object.getNumber("scrs"));
+
+        if (object.has("stts"))
+            completeStatus = static_cast<int>(object.getNumber("stts"));
+    }
 
 } // namespace takeover

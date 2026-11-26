@@ -25,40 +25,42 @@ namespace takeover {
 
     Main::~Main() {
         removeEventListener(engine::Event::ENTER_FRAME, this, &Main::onEnterFrame);
-        if (states_) states_->dispose();
+
+        if (states_)
+            states_->dispose();
     }
 
     Profile& Main::profile() { return storage_->currentProfile(); }
 
     void Main::showVersion(bool enable) {
-        if (enable) 
+        if (enable)
             addChild(version_);
 
-        else if (version_->parent() != nullptr) 
+        else if (version_->parent() != nullptr)
             version_->parent()->removeChild(version_.get());
     }
 
     // /----- LOGO PANEL -----/
 
     void Main::createLogoPanel() {
-        
+
         // The sponsor logo in the corner of the screens (Armor Games branding).
-        auto panel = 
+        auto panel =
             symbols::create(
                 Branding::A10_COM ? "SmallLogoPanelA10Class" : "SmallLogoPanelClass"
             );
 
-        logoButton_ = 
+        logoButton_ =
             std::make_shared<Button>(
                 ButtonDef::make(
                     sharedClip(symbols::child(*panel, "butLogo")), std::nullopt
                 )
             );
-        
+
         logoButton_->signalClick.addListener(this, &Main::onLogoClick);
         logoButton_->signalRollOut.addListener(this, &Main::onLogoRollOut);
         logoButton_->signalRollOver.addListener(this, &Main::onLogoRollOver);
-        
+
         addChild(panel);
     }
 
@@ -97,7 +99,9 @@ namespace takeover {
     void Main::onLoadingFrame(engine::Event&) { preloader_->setProgress(resources_->maker().getProgress()); }
 
     void Main::onFinishCaching() {
-        if (preloader_ == nullptr) return;
+        if (preloader_ == nullptr)
+            return;
+
         removeEventListener(engine::Event::ENTER_FRAME, this, &Main::onLoadingFrame);
         preloader_->complete();
     }
@@ -106,7 +110,10 @@ namespace takeover {
 
     std::shared_ptr<IntroScreen> Main::playIntro(const std::string& introClass, void (Main::*then)(), const std::string& url) {
         auto intro = IntroScreen::play(symbols::create(introClass), url);
-        if (then != nullptr) intro->signalFinish.addListener(this, then);
+
+        if (then != nullptr)
+            intro->signalFinish.addListener(this, then);
+
         screens_->addChild(intro->clip());
         return intro;
     }
@@ -145,7 +152,7 @@ namespace takeover {
 
         states_ = std::make_shared<StateManager>();
         addEventListener(engine::Event::ENTER_FRAME, this, &Main::onEnterFrame);
-        
+
         showGameIntro();
     }
 
@@ -173,7 +180,7 @@ namespace takeover {
 
             symbols::setHtmlText(*achievementPopup_, "message.txtName", badgeQueue_.front()->name());
             symbols::find(*achievementPopup_, "message.icon")->gotoAndStop(static_cast<int>(badgeQueue_.front()->iconNum()));
-            
+
             badgeQueue_.pop_front();
         }
     }
@@ -186,12 +193,15 @@ namespace takeover {
     std::shared_ptr<ScreenDef> Main::screenDef() { return std::make_shared<ScreenDef>(); }
 
     std::shared_ptr<GameScreenDef> Main::gameScreenDef(std::shared_ptr<GameScreenDef> def) {
-        if (!def) def = std::make_shared<GameScreenDef>();
+        if (!def)
+            def = std::make_shared<GameScreenDef>();
+
         def->keyboard = keyboard_.get();
         def->mouse = mouse_.get();
         def->resources = resources_.get();
         def->profile = &profile();
         def->hintLayer = hintLayer_.get();
+
         return def;
     }
 
@@ -205,7 +215,7 @@ namespace takeover {
         hintLayer_->hideHint();
 
         // Play Menu Music
-        if (!lockSound) 
+        if (!lockSound)
             MusicConst::instance().playMenuMusic();
     }
 
@@ -226,7 +236,7 @@ namespace takeover {
     }
 
     void Main::onGameIntroButton(int id) {
-        if (id == GameIntro::BUT_SKIP) 
+        if (id == GameIntro::BUT_SKIP)
             onIntroSkipped();
     }
 
@@ -239,21 +249,22 @@ namespace takeover {
 
     // /----- LOGO -----/
 
-    void Main::onLogoClick(Button*) { 
+    void Main::onLogoClick(Button*) {
         engine::navigateToURL(
             Branding::A10_COM ? Branding::URL_A10COM : Branding::URL_ARMOR_GAMES
-        ); 
+        );
     }
 
-    void Main::onLogoRollOut(Button*) { 
-        Level::isCursorUnderButton = false; 
+    void Main::onLogoRollOut(Button*) {
+        Level::isCursorUnderButton = false;
     }
 
-    void Main::onLogoRollOver(Button*) { 
-        Level::isCursorUnderButton = true; 
+    void Main::onLogoRollOver(Button*) {
+        Level::isCursorUnderButton = true;
     }
 
     // /----- TITLE -----/
+
     void Main::showTitle() {
 
         enableLogo(false);
@@ -270,16 +281,16 @@ namespace takeover {
             .removeListener(this, &Main::onBadgeUnlocked);
     }
 
-    void Main::onStorageReady() { 
-        storageReady_ = true; 
+    void Main::onStorageReady() {
+        storageReady_ = true;
     }
 
     void Main::onTitleButton(int id) {
-        
-        if (!storageReady_) 
+
+        if (!storageReady_)
             return;
 
-        if (id == TitleScreen::BUT_START) 
+        if (id == TitleScreen::BUT_START)
             showChooseProfile();
     }
 
@@ -299,14 +310,17 @@ namespace takeover {
 
     void Main::onChooseProfileButton(int id) {
         showVersion(false);
+
         switch (id) {
         case ChooseProfileScreen::BUT_SELECT: showChooseCampaign(); break;
         case ChooseProfileScreen::BUT_QUIT: showTitle(); break;
         }
+
         profile().badges().signalBadgeUnlocked.addListener(this, &Main::onBadgeUnlocked);
     }
 
     // /----- CHOOSE CAMPAIGN -----/
+
     void Main::showChooseCampaign() {
         enableLogo(true);
         auto screen = std::make_shared<ChooseCompaignScreen>(gameScreenDef());
@@ -331,7 +345,10 @@ namespace takeover {
     void Main::showGlobalMap() {
         auto screen = std::make_shared<GlobalMapScreen>(gameScreenDef());
         screen->signalButton.addListener(this, &Main::onGlobalMapButton);
-        if (profile().selectedCompany().currentLevel() < 0) profile().selectedCompany().setCurrentLevel(0);
+
+        if (profile().selectedCompany().currentLevel() < 0)
+            profile().selectedCompany().setCurrentLevel(0);
+
         showScreen(screen);
         screen->signalLevel.addListener(this, &Main::onLevelChosen);
         profile().checkLevelBadges();
@@ -358,7 +375,9 @@ namespace takeover {
     }
 
     void Main::onMissionOverButton(int id) {
-        if (id != MissionOverScreen::BUT_OK) return;
+        if (id != MissionOverScreen::BUT_OK)
+            return;
+
         CompanyProgress& campaign = profile().selectedCompany();
         if (campaign.shouldShowVictory()) {
             showVictory();
@@ -380,6 +399,7 @@ namespace takeover {
         def->missionResult = std::make_shared<MissionResult>(result);
         def->completeStatus = progress.completeStatus + 1;
         storage_->save();
+
         return def;
     }
 
@@ -394,6 +414,7 @@ namespace takeover {
 
     void Main::onVictoryButton(int id) {
         enableLogo(true);
+
         switch (id) {
         case VictoryScreen::BUT_YES: showChooseCampaign(); break;
         case VictoryScreen::BUT_NO: showGlobalMap(); break;
@@ -449,12 +470,12 @@ namespace takeover {
         playTransition(true);
     }
 
-    void Main::onBattleReady(BattleScreen* battle) { 
-        battle->setStartDelay(playTransition(false)); 
+    void Main::onBattleReady(BattleScreen* battle) {
+        battle->setStartDelay(playTransition(false));
     }
 
-    void Main::onBattleEnableLogo(bool enable) { 
-        enableLogo(enable); 
+    void Main::onBattleEnableLogo(bool enable) {
+        enableLogo(enable);
     }
 
     void Main::onBattleRestart() {
@@ -476,7 +497,8 @@ namespace takeover {
     }
 
     void Main::onBadgesRoomButton(int id) {
-        if (id == BadgesRoomScreen::BUT_OK) showGlobalMap();
+        if (id == BadgesRoomScreen::BUT_OK)
+            showGlobalMap();
     }
 
 } // namespace takeover

@@ -36,23 +36,27 @@ namespace takeover {
 
         Combatant(std::shared_ptr<CombatantKey> description, Race race, const EdictBonuses& bonuses);
 
-        // --- Static tables ------------------------------------------------------------------
+        // /----- STATIC TABLES -----/
 
         static std::uint32_t raceColor(Race race);   ///< Original: _SafeStr_2499.
         static std::string raceName(Race race);      ///< Original: _SafeStr_1377.
+
         /// Index of the race in the army table (original: _SafeStr_2491).
         static int raceTableIndex(Race race);
         static Race raceFromTableIndex(int index);   ///< Original: _SafeStr_2509.
         static constexpr int RACE_COUNT = 5;         ///< Original: _SafeStr_2494.
         static constexpr int TIER_COUNT = 3;         ///< Original: _SafeStr_2501.
+
         /// The edict-dependent modifiers of a unit kind (original: _SafeStr_2505).
         static ArmyStatBonus makeArmyStatBonus(const ArmyStat& stat, const EdictBonuses& bonuses);
+
         /// The four spells of a race, by level (original: _SafeStr_2504).
         static std::vector<const SpellInfo*> raceSpells(Race race);
+
         /// > 0 when the edicts unlocked the spell (original: _SafeStr_2503).
         static int spellUnlockValue(const SpellInfo* spell, const EdictBonuses& bonuses);
 
-        // --- Identity ---------------------------------------------------------------------------
+        // /----- IDENTITY -----/
 
         std::shared_ptr<CombatantKey> description;
         EdictBonuses bonuses;
@@ -63,7 +67,7 @@ namespace takeover {
         [[nodiscard]] bool isOwnSquad(const Squad& squad) const;      ///< _SafeStr_2386
         [[nodiscard]] bool ownsKeyNode(const KeyNode& node) const;    ///< _SafeStr_2426
 
-        // --- Economy --------------------------------------------------------------------------
+        // /----- ECONOMY -----/
 
         [[nodiscard]] int getGold() const { return gold_; }
         [[nodiscard]] int getMana() const { return mana_; }
@@ -88,12 +92,12 @@ namespace takeover {
 
         /// Called every second: adds the incomes (original: _SafeStr_2425).
         void tick();
-        
+
         /// Incomes computed by the level from the owned strongholds
         /// (original: _SafeStr_2238).
         void setIncome(int goldSpeed, int supplyPower, int armyPower, int manaSpeed, int ultimateChargeSpeed);
 
-        // --- Army -----------------------------------------------------------------------------
+        // /----- ARMY -----/
 
         /// Tier of a unit type given by the edicts (original: _SafeStr_2493).
         [[nodiscard]] int getTier(UnitType type) const;
@@ -101,38 +105,38 @@ namespace takeover {
         /// The squad kind this combatant recruits for a unit type (original: _SafeStr_1373).
         [[nodiscard]] ArmyStat* getArmyStat(UnitType type) const;
         [[nodiscard]] ArmyStatBonus getArmyStatBonus(const ArmyStat& stat) const { return makeArmyStatBonus(stat, bonuses); } ///< _SafeStr_1398
-        
+
         /// Price of a squad, with the undead discount (original: _SafeStr_2483).
         [[nodiscard]] int getUnitCost(const ArmyStat& stat) const;
         [[nodiscard]] bool canBuy(const ArmyStat& stat) const; ///< _SafeStr_2365
-        
+
         void buySquad(Squad& squad);                           ///< _SafeStr_2343
-        
+
         [[nodiscard]] int getSquadsCount() const { return squadsCount_; } ///< _SafeStr_2416
         void setSquadsCount(int count) { squadsCount_ = count; }           ///< _SafeStr_2376
         void incrementSquadsCount() { ++squadsCount_; }                     ///< _SafeStr_2381
 
-        // --- Strongholds --------------------------------------------------------------------------
+        // /----- STRONGHOLDS -----/
 
         [[nodiscard]] const std::vector<std::shared_ptr<KeyNode>>& getKeyNodes() const { return keyNodes_; } ///< _SafeStr_2361
-        
+
         void setKeyNodes(std::vector<std::shared_ptr<KeyNode>> nodes);                                       ///< _SafeStr_2313
         bool upgradeKeyNode(KeyNode& node); ///< _SafeStr_1382
         void buildSupplyBuilding(SupplyBuildingType type);
 
-        // --- Spells -------------------------------------------------------------------------------
+        // /----- SPELLS -----/
 
         [[nodiscard]] const std::vector<std::shared_ptr<Spell>>& getSpells() const { return spells_; }
-        
+
         void castSpell(int cost);
         void castNormalSpell(int cost) { castSpell(cost); } ///< _SafeStr_2353
         void setBanner(int cost);                            ///< _SafeStr_2374
         void castUltimateSpell();
-        
+
         /// Charge of the ultimate power, 0..1 (original name kept: getUSpeelFactor).
         [[nodiscard]] double getUSpeelFactor() const;
 
-        // --- Statistics events ----------------------------------------------------------------------
+        // /----- STATISTICS EVENTS -----/
 
         void onEnemySquadKilled(Squad& squad);   ///< _SafeStr_2368
         void recordSquadsOwned();                ///< _SafeStr_2358
@@ -143,7 +147,7 @@ namespace takeover {
         void onStrongholdLost();                 ///< _SafeStr_2375
         void onStrongholdSeized();               ///< _SafeStr_2371
 
-        // --- AI and cheats --------------------------------------------------------------------------
+        // /----- AI AND CHEATS -----/
 
         double aiCooldown = 0; ///< Seconds before the AI acts again (original: _SafeStr_2394).
 

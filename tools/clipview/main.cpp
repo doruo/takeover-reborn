@@ -29,70 +29,82 @@
 
 namespace {
 
-std::uint16_t resolveCharacter(const engine::Library& library, const std::string& what) {
-    if (auto classId = library.findClass(what)) return *classId;
-    return static_cast<std::uint16_t>(std::atoi(what.c_str()));
-}
+    std::uint16_t resolveCharacter(const engine::Library& library, const std::string& what) {
+        if (auto classId = library.findClass(what))
+            return *classId;
 
-/// Interactive playback with a fixed timestep: the clip advances exactly
-/// frameRate times per second whatever the display refresh rate.
-int play(const char* assets, const std::string& what) {
-
-    engine::Window window({.title = "clipview - " + what});
-    engine::Library library(assets);
-
-    engine::DisplayObjectPtr object = engine::createDisplayObject(library, resolveCharacter(library, what));
-    if (!object) {
-        std::fprintf(stderr, "'%s' is not a displayable character\n", what.c_str());
-        return 1;
+        return static_cast<std::uint16_t>(std::atoi(what.c_str()));
     }
 
-    engine::Renderer renderer;
-    engine::ShapeCache shapes(library);
+    /// Interactive playback with a fixed timestep: the clip advances exactly
+    /// frameRate times per second whatever the display refresh rate.
+    int play(const char* assets, const std::string& what) {
 
-    const std::uint64_t frameNs = static_cast<std::uint64_t>(1e9 / library.frameRate());
-    std::uint64_t previous = SDL_GetTicksNS(), accumulator = 0;
-    bool running = true, paused = false;
-    
-    while (running) {
+        engine::Window window({.title = "clipview - " + what});
+        engine::Library library(assets);
 
-        bool step = false;
-        SDL_Event event;
+        engine::DisplayObjectPtr object = engine::createDisplayObject(library, resolveCharacter(library, what));
+        if (!object) {
+            std::fprintf(stderr, "'%s' is not a displayable character\n", what.c_str());
+            return 1;
+        }
 
-        while (SDL_PollEvent(&event)) {
+        engine::Renderer renderer;
+        engine::ShapeCache shapes(library);
 
-            if (event.type == SDL_EVENT_QUIT) running = false;
-            
-            if (event.type == SDL_EVENT_KEY_DOWN) {
-                if (event.key.key == SDLK_ESCAPE) running = false;
-                if (event.key.key == SDLK_SPACE) paused = !paused;
-                if (event.key.key == SDLK_RIGHT) step = true;
+        const std::uint64_t frameNs = static_cast<std::uint64_t>(1e9 / library.frameRate());
+        std::uint64_t previous = SDL_GetTicksNS(), accumulator = 0;
+        bool running = true, paused = false;
+
+        while (running) {
+
+            bool step = false;
+            SDL_Event event;
+
+            while (SDL_PollEvent(&event)) {
+
+                if (event.type == SDL_EVENT_QUIT)
+                    running = false;
+
+                if (event.type == SDL_EVENT_KEY_DOWN) {
+                    if (event.key.key == SDLK_ESCAPE)
+                        running = false;
+
+                    if (event.key.key == SDLK_SPACE)
+                        paused = !paused;
+
+                    if (event.key.key == SDLK_RIGHT)
+                        step = true;
+                }
             }
+
+            const std::uint64_t now = SDL_GetTicksNS();
+            accumulator += now - previous;
+            previous = now;
+
+            while (accumulator >= frameNs) {
+                if (!paused)
+                    object->advanceFrame();
+
+                accumulator -= frameNs;
+            }
+
+            if (step)
+                object->advanceFrame();
+
+            int width = 0, height = 0;
+            window.framebufferSize(width, height);
+
+            gl::glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            renderer.beginFrame(width, height, library.stageWidth(), library.stageHeight(), 1, 1, 1);
+            engine::RenderContext context{renderer, shapes, renderer.stageScale()};
+            object->render(context, engine::Matrix{}, engine::ColorTransform{});
+
+            window.swap();
         }
 
-        const std::uint64_t now = SDL_GetTicksNS();
-        accumulator += now - previous;
-        previous = now;
-
-        while (accumulator >= frameNs) {
-            if (!paused) object->advanceFrame();
-            accumulator -= frameNs;
-        }
-
-        if (step) object->advanceFrame();
-
-        int width = 0, height = 0;
-        window.framebufferSize(width, height);
-
-        gl::glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        renderer.beginFrame(width, height, library.stageWidth(), library.stageHeight(), 1, 1, 1);
-        engine::RenderContext context{renderer, shapes, renderer.stageScale()};
-        object->render(context, engine::Matrix{}, engine::ColorTransform{});
-
-        window.swap();
+        return 0;
     }
-    return 0;
-}
 
 } // namespace
 
@@ -120,20 +132,24 @@ int main(int argc, char** argv) {
 
         const std::string option = argv[i];
 
-        if (option == "--frame" && i + 1 < argc) frame = std::atoi(argv[++i]);
-        else if (option == "--advance" && i + 1 < argc) advance = std::atoi(argv[++i]);
-        else if (option == "--scale" && i + 1 < argc) scale = std::atof(argv[++i]);
-        else if (option == "--stage") stageMode = true;
+        if (option == "--frame" && i + 1 < argc)
+            frame = std::atoi(argv[++i]);
+        else if (option == "--advance" && i + 1 < argc)
+            advance = std::atoi(argv[++i]);
+        else if (option == "--scale" && i + 1 < argc)
+            scale = std::atof(argv[++i]);
+        else if (option == "--stage")
+            stageMode = true;
     }
 
     try {
         SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "offscreen");
         engine::Window window(
             {
-                .title = "clipview", 
-                .width = 64, 
-                .height = 64, 
-                .resizable = false, 
+                .title = "clipview",
+                .width = 64,
+                .height = 64,
+                .resizable = false,
                 .hidden = true,
                 .vsync = false
             });
@@ -154,7 +170,7 @@ int main(int argc, char** argv) {
 
         if (clip) {
             if (advance > 0)
-                for (int i = 0; i < advance; ++i) 
+                for (int i = 0; i < advance; ++i)
                     clip->advanceFrame();
             else
                 clip->gotoAndStop(frame);
@@ -165,23 +181,24 @@ int main(int argc, char** argv) {
             0, 0, static_cast<double>(library.stageWidth()), static_cast<double>(library.stageHeight())
         };
 
-        if (!stageMode) area = object->localBounds();
-        
+        if (!stageMode)
+            area = object->localBounds();
+
         const int width = std::max(1, static_cast<int>(std::ceil(area.width * scale)));
         const int height = std::max(1, static_cast<int>(std::ceil(area.height * scale)));
 
         engine::RenderTarget target(width, height);
         engine::Renderer renderer;
         engine::ShapeCache shapes(library);
-        
+
         target.bind();
-        
+
         // Transparent background outside stage mode, to compare with exports.
         renderer.beginFrame(width, height, width, height, 0, 0, 0);
-        
+
         gl::glClearColor(0, 0, 0, 0);
         gl::glClear(GL_COLOR_BUFFER_BIT);
-        
+
         if (stageMode) {
             gl::glClearColor(1, 1, 1, 1);
             gl::glClear(GL_COLOR_BUFFER_BIT);
@@ -196,7 +213,7 @@ int main(int argc, char** argv) {
             std::fprintf(stderr, "cannot write %s\n", argv[3]);
             return 1;
         }
-        
+
         std::printf("%s: %dx%d, %zu shape texture(s)%s\n", argv[3], width, height, shapes.size(),
                     clip ? (", frame " + std::to_string(clip->currentFrame()) + "/" +
                     std::to_string(clip->totalFrames())
@@ -206,5 +223,6 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "error: %s\n", e.what());
         return 1;
     }
+
     return 0;
 }

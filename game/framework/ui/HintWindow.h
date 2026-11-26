@@ -17,94 +17,96 @@
 
 namespace takeover {
 
-/// Which side of the target the hint goes (original: _SafeStr_2581).
-enum class DockSide { Left, Right, Top, Bottom };
-/// How it lines up along that side (original: _SafeStr_2583).
-enum class DockAlign { LeftTop, Center, RightBottom };
+    /// Which side of the target the hint goes (original: _SafeStr_2581).
+    enum class DockSide { Left, Right, Top, Bottom };
 
-DockSide opposite(DockSide side); ///< Original: _SafeStr_2600.
+    /// How it lines up along that side (original: _SafeStr_2583).
+    enum class DockAlign { LeftTop, Center, RightBottom };
 
-class HintWindow {
-public:
-    explicit HintWindow(std::shared_ptr<engine::Sprite> window, std::string_view backgroundName = "background",
-                        std::string_view textName = "text");
-    virtual ~HintWindow() = default;
+    DockSide opposite(DockSide side); ///< Original: _SafeStr_2600.
 
-    [[nodiscard]] engine::Sprite* image() const { return image_.get(); }
-    [[nodiscard]] const std::shared_ptr<engine::Sprite>& imagePtr() const { return image_; }
-    [[nodiscard]] engine::TextField* text() const { return text_; }
-    [[nodiscard]] engine::DisplayObject* background() const { return background_; }
+    class HintWindow {
+    public:
+        explicit HintWindow(std::shared_ptr<engine::Sprite> window, std::string_view backgroundName = "background",
+                            std::string_view textName = "text");
+        virtual ~HintWindow() = default;
 
-    /// With auto width the text field grows with its content; otherwise it
-    /// keeps its authored width and wraps (original: _SafeStr_2593).
-    [[nodiscard]] bool autoWidth() const { return autoWidth_; }
-    void setAutoWidth(bool value);
+        [[nodiscard]] engine::Sprite* image() const { return image_.get(); }
+        [[nodiscard]] const std::shared_ptr<engine::Sprite>& imagePtr() const { return image_; }
+        [[nodiscard]] engine::TextField* text() const { return text_; }
+        [[nodiscard]] engine::DisplayObject* background() const { return background_; }
 
-    void setMargins(double horizontal, double vertical); ///< Original: _SafeStr_2597.
-    void setText(const std::string& html);
-    void setBounds(const engine::Rectangle& bounds);      ///< Original: _SafeStr_2599.
-    /// Shows the hint docked to `target` (original: _SafeStr_2601).
-    void show(const engine::Rectangle& target, DockSide side, DockAlign align, double margin);
-    void hide();
+        /// With auto width the text field grows with its content; otherwise it
+        /// keeps its authored width and wraps (original: _SafeStr_2593).
+        [[nodiscard]] bool autoWidth() const { return autoWidth_; }
+        void setAutoWidth(bool value);
 
-protected:
-    void resize();
-    void place(); ///< Original: _SafeStr_2589.
-    void dock(engine::Point& position, DockSide side) const; ///< Original: _SafeStr_2596.
-    [[nodiscard]] bool isOutOfBounds(DockSide side) const;
-    void align(engine::Point& position, DockAlign alignment) const;
+        void setMargins(double horizontal, double vertical); ///< Original: _SafeStr_2597.
+        void setText(const std::string& html);
+        void setBounds(const engine::Rectangle& bounds);      ///< Original: _SafeStr_2599.
 
-    std::shared_ptr<engine::Sprite> image_;
-    engine::DisplayObject* background_ = nullptr;
-    engine::TextField* text_ = nullptr;
-    double authoredTextWidth_ = 0;
-    bool autoWidth_ = true;
-    double marginX_ = 0, marginY_ = 0;
-    engine::Rectangle bounds_;
-    engine::Rectangle target_;
-    DockSide side_ = DockSide::Bottom;
-    DockAlign align_ = DockAlign::LeftTop;
-    double targetMargin_ = 0;
-};
+        /// Shows the hint docked to `target` (original: _SafeStr_2601).
+        void show(const engine::Rectangle& target, DockSide side, DockAlign align, double margin);
+        void hide();
 
-/// The hint used by the game: bounded to the stage, docked below its
-/// target by default (original: _SafePkg_773/HintWindow2).
-class HintWindow2 : public HintWindow {
-public:
-    explicit HintWindow2(std::shared_ptr<engine::MovieClip> hint);
+    protected:
+        void resize();
+        void place(); ///< Original: _SafeStr_2589.
+        void dock(engine::Point& position, DockSide side) const; ///< Original: _SafeStr_2596.
+        [[nodiscard]] bool isOutOfBounds(DockSide side) const;
+        void align(engine::Point& position, DockAlign alignment) const;
 
-    DockSide dockSide = DockSide::Bottom;     ///< Original: _SafeStr_2602.
-    DockAlign dockAlign = DockAlign::LeftTop; ///< Original: _SafeStr_2603.
-    double margin = 5;
+        std::shared_ptr<engine::Sprite> image_;
+        engine::DisplayObject* background_ = nullptr;
+        engine::TextField* text_ = nullptr;
+        double authoredTextWidth_ = 0;
+        bool autoWidth_ = true;
+        double marginX_ = 0, marginY_ = 0;
+        engine::Rectangle bounds_;
+        engine::Rectangle target_;
+        DockSide side_ = DockSide::Bottom;
+        DockAlign align_ = DockAlign::LeftTop;
+        double targetMargin_ = 0;
+    };
 
-    void showAt(const engine::Rectangle& target) { show(target, dockSide, dockAlign, margin); } ///< _SafeStr_2604
-    void dispose();
-};
+    /// The hint used by the game: bounded to the stage, docked below its
+    /// target by default (original: _SafePkg_773/HintWindow2).
+    class HintWindow2 : public HintWindow {
+    public:
+        explicit HintWindow2(std::shared_ptr<engine::MovieClip> hint);
 
-/// A sprite on top of everything that shows one hint at a time (original:
-/// _SafePkg_773/HintLayer).
-class HintLayer : public Disposable {
-public:
-    HintLayer();
+        DockSide dockSide = DockSide::Bottom;     ///< Original: _SafeStr_2602.
+        DockAlign dockAlign = DockAlign::LeftTop; ///< Original: _SafeStr_2603.
+        double margin = 5;
 
-    [[nodiscard]] engine::Sprite* image() const { return image_.get(); }
-    [[nodiscard]] const std::shared_ptr<engine::Sprite>& imagePtr() const { return image_; }
+        void showAt(const engine::Rectangle& target) { show(target, dockSide, dockAlign, margin); } ///< _SafeStr_2604
+        void dispose();
+    };
 
-    [[nodiscard]] HintWindow2* getHintWindow(int id) const { return windows_[static_cast<std::size_t>(id)].get(); }
-    int addHintWindow(std::shared_ptr<HintWindow2> window); ///< Original: _SafeStr_3070.
+    /// A sprite on top of everything that shows one hint at a time (original:
+    /// _SafePkg_773/HintLayer).
+    class HintLayer : public Disposable {
+    public:
+        HintLayer();
 
-    void showHintAtObject(engine::DisplayObject* target, int hintId);
-    void showWindowAtObject(engine::DisplayObject* target, HintWindow2* window); ///< _SafeStr_3156
-    void showHintAtRect(const engine::Rectangle& rect, int hintId);
-    void showHintWindowAtRect(const engine::Rectangle& rect, HintWindow2* window);
-    void hideHint();
+        [[nodiscard]] engine::Sprite* image() const { return image_.get(); }
+        [[nodiscard]] const std::shared_ptr<engine::Sprite>& imagePtr() const { return image_; }
 
-protected:
-    void customDispose() override;
+        [[nodiscard]] HintWindow2* getHintWindow(int id) const { return windows_[static_cast<std::size_t>(id)].get(); }
+        int addHintWindow(std::shared_ptr<HintWindow2> window); ///< Original: _SafeStr_3070.
 
-private:
-    std::vector<std::shared_ptr<HintWindow2>> windows_;
-    std::shared_ptr<engine::Sprite> image_;
-};
+        void showHintAtObject(engine::DisplayObject* target, int hintId);
+        void showWindowAtObject(engine::DisplayObject* target, HintWindow2* window); ///< _SafeStr_3156
+        void showHintAtRect(const engine::Rectangle& rect, int hintId);
+        void showHintWindowAtRect(const engine::Rectangle& rect, HintWindow2* window);
+        void hideHint();
+
+    protected:
+        void customDispose() override;
+
+    private:
+        std::vector<std::shared_ptr<HintWindow2>> windows_;
+        std::shared_ptr<engine::Sprite> image_;
+    };
 
 } // namespace takeover

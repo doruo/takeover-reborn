@@ -13,26 +13,26 @@ namespace takeover {
     } // namespace
 
     SpellInfo::SpellInfo(
-        int id_, 
-        int level_, 
-        std::string name_, 
-        Race race_, 
-        int type_, 
-        int cost_, 
+        int id_,
+        int level_,
+        std::string name_,
+        Race race_,
+        int type_,
+        int cost_,
         int radius_,
-        double power_, 
-        double time_, 
+        double power_,
+        double time_,
         std::string hint_
     )
-    : id(id_), 
-    level(level_), 
-    name(std::move(name_)), 
-    race(race_), 
-    type(type_), 
-    cost(cost_), 
+    : id(id_),
+    level(level_),
+    name(std::move(name_)),
+    race(race_),
+    type(type_),
+    cost(cost_),
     radius(radius_),
-    power(power_), 
-    time(time_), 
+    power(power_),
+    time(time_),
     hint(std::move(hint_)) {
         registry().push_back(this);
     }
@@ -71,11 +71,14 @@ namespace takeover {
     const SpellInfo SpellInfo::RAISE_THE_DEAD        (13, 2, "RAISE THE DEAD",         Race::TheEmpire,    0, 250, 75, 1,  0,  "Призывает нежить-пехоту или стрелков");
     const SpellInfo SpellInfo::BANNER_OF_DESECRATION (14, 3, "BANNER OF DESECRATION",  Race::TheEmpire,    1, 75,  75, 10, 12, "Лечит и возрождает ваши юниты");
     const SpellInfo SpellInfo::CALL_OF_THE_GRAVE     (15, 4, "CALL OF THE GRAVE",      Race::TheEmpire,    2, 1,   0,  2,  0,  "Превращает 1-3 случайных живых вражеских отряда в соответствующие отряды нежити");
+
     // clang-format on
 
     Spell::Spell(const SpellInfo& info, const EdictBonuses* bonuses) {
         SpellInfo::copyFrom(info);
-        if (bonuses != nullptr) applyBonuses(info, *bonuses);
+
+        if (bonuses != nullptr)
+            applyBonuses(info, *bonuses);
     }
 
     const SpellInfo* Spell::byId(int spellId) {
@@ -84,16 +87,16 @@ namespace takeover {
     }
 
     void Spell::applyBonuses(const SpellInfo& info, const EdictBonuses& bonuses) {
-        
-        if (type == TYPE_BANNER) 
+
+        if (type == TYPE_BANNER)
             time *= bonuses.factor(Bonus::BANNERS_DURATION);
-        
-        if (&info == &LORDS_JUDGEMENT) 
+
+        if (&info == &LORDS_JUDGEMENT)
             power *= bonuses.factor(Bonus::LORDS_JUDGEMENT_DAMAGE);
-        
-        else if (&info == &ICE_BLAST) 
+
+        else if (&info == &ICE_BLAST)
             time += bonuses.value(Bonus::FREEZE_DURATION);
-        
+
         cost = static_cast<int>(as3::round(cost * bonuses.factor(Bonus::SPELLS_COST)));
     }
 

@@ -23,59 +23,60 @@
 
 namespace takeover {
 
-class MediaSwitchers;
+    class MediaSwitchers;
 
-class GameScreen : public GameState {
-public:
-    GameScreen() = default;
-    ~GameScreen() override;
+    class GameScreen : public GameState {
+    public:
+        GameScreen() = default;
+        ~GameScreen() override;
 
-    /// The id of the button clicked (original: _SafeStr_667).
-    Signal<int> signalButton;
+        /// The id of the button clicked (original: _SafeStr_667).
+        Signal<int> signalButton;
 
-    [[nodiscard]] engine::Sprite* image() const { return image_.get(); }
-    [[nodiscard]] const std::shared_ptr<engine::Sprite>& imagePtr() const { return image_; }
+        [[nodiscard]] engine::Sprite* image() const { return image_.get(); }
+        [[nodiscard]] const std::shared_ptr<engine::Sprite>& imagePtr() const { return image_; }
 
-    void update(double timeElapsed) override;
+        void update(double timeElapsed) override;
 
-protected:
-    GameScreen& initScreen(std::shared_ptr<ScreenDef> def); ///< _SafeStr_3449
+    protected:
+        GameScreen& initScreen(std::shared_ptr<ScreenDef> def); ///< _SafeStr_3449
 
-    void customDispose() override;
+        void customDispose() override;
 
-    virtual void initVisualBlock();
-    virtual void disposeVisualBlock();
-    virtual void initButtonsBlock() {}
-    virtual void disposeButtonsBlock();
-    void initDevices();     ///< _SafeStr_3377
-    void disposeDevices();  ///< _SafeStr_3363
-    void updateDevices(double timeElapsed); ///< _SafeStr_3382
-    /// Per-frame work of the screen (original: _SafeStr_1428).
-    virtual void updateScreen(double /*timeElapsed*/) {}
+        virtual void initVisualBlock();
+        virtual void disposeVisualBlock();
+        virtual void initButtonsBlock() {}
+        virtual void disposeButtonsBlock();
+        void initDevices();     ///< _SafeStr_3377
+        void disposeDevices();  ///< _SafeStr_3363
+        void updateDevices(double timeElapsed); ///< _SafeStr_3382
 
-    [[nodiscard]] MouseDevice* mouse() const { return mouse_.get(); }          ///< _SafeStr_3450
-    [[nodiscard]] KeyboardDevice* keyboard() const { return keyboard_.get(); } ///< _SafeStr_3451
+        /// Per-frame work of the screen (original: _SafeStr_1428).
+        virtual void updateScreen(double /*timeElapsed*/) {}
 
-    /// A button on a child clip of the view, reporting `id` (original: _SafeStr_1417).
-    Button* addButton(engine::MovieClip* clip, std::optional<std::string> caption, int id);
-    Button* addButton(std::string_view childName, std::optional<std::string> caption, int id);
-    virtual void onButtonClick(Button* button);
-    void sendButton(int id) { signalButton.dispatch(id); } ///< _SafeStr_3448
+        [[nodiscard]] MouseDevice* mouse() const { return mouse_.get(); }          ///< _SafeStr_3450
+        [[nodiscard]] KeyboardDevice* keyboard() const { return keyboard_.get(); } ///< _SafeStr_3451
 
-    /// The view's child clip by instance name.
-    [[nodiscard]] engine::MovieClip* clip(std::string_view name) const;
+        /// A button on a child clip of the view, reporting `id` (original: _SafeStr_1417).
+        Button* addButton(engine::MovieClip* clip, std::optional<std::string> caption, int id);
+        Button* addButton(std::string_view childName, std::optional<std::string> caption, int id);
+        virtual void onButtonClick(Button* button);
+        void sendButton(int id) { signalButton.dispatch(id); } ///< _SafeStr_3448
 
-    std::shared_ptr<ScreenDef> def_;
-    std::shared_ptr<engine::Sprite> image_;
-    std::shared_ptr<MediaSwitchers> mediaSwitchers_;
-    std::vector<std::shared_ptr<Button>> buttons_;
+        /// The view's child clip by instance name.
+        [[nodiscard]] engine::MovieClip* clip(std::string_view name) const;
 
-private:
-    std::shared_ptr<KeyboardDevice> keyboard_;
-    std::shared_ptr<MouseDevice> mouse_;
-};
+        std::shared_ptr<ScreenDef> def_;
+        std::shared_ptr<engine::Sprite> image_;
+        std::shared_ptr<MediaSwitchers> mediaSwitchers_;
+        std::vector<std::shared_ptr<Button>> buttons_;
 
-/// Shared pointer to a clip found in a view: Button needs ownership.
-std::shared_ptr<engine::MovieClip> sharedClip(engine::DisplayObject* clip);
+    private:
+        std::shared_ptr<KeyboardDevice> keyboard_;
+        std::shared_ptr<MouseDevice> mouse_;
+    };
+
+    /// Shared pointer to a clip found in a view: Button needs ownership.
+    std::shared_ptr<engine::MovieClip> sharedClip(engine::DisplayObject* clip);
 
 } // namespace takeover

@@ -17,144 +17,145 @@
 
 namespace takeover {
 
-class Combatant;
-class Level;
+    class Combatant;
+    class Level;
 
-/// A RasterAnimation on the battlefield (original: _SafeStr_854).
-class RasterAnimSprite : public UpdatableObject, public ILayerObject {
-public:
-    static const engine::ColorTransform DEFAULT_SELECTED_COLOR;
+    /// A RasterAnimation on the battlefield (original: _SafeStr_854).
+    class RasterAnimSprite : public UpdatableObject, public ILayerObject {
+    public:
+        static const engine::ColorTransform DEFAULT_SELECTED_COLOR;
 
-    explicit RasterAnimSprite(std::shared_ptr<RasterAnimation> animation);
+        explicit RasterAnimSprite(std::shared_ptr<RasterAnimation> animation);
 
-    [[nodiscard]] RasterAnimation& animation() { return *animation_; } ///< rasterObject
-    void update(double timeElapsed) override;
-    [[nodiscard]] double getX() const { return animation_->getX(); }
+        [[nodiscard]] RasterAnimation& animation() { return *animation_; } ///< rasterObject
+        void update(double timeElapsed) override;
+        [[nodiscard]] double getX() const { return animation_->getX(); }
 
-    void drawTo(engine::BitmapData& place, double x = 0, double y = 0, double yScale = 1,
-                const engine::ColorTransform* color = nullptr) override;
-    [[nodiscard]] double getY() const override { return animation_->getY(); }
-    void setY(double y) override { animation_->setY(y); }
-    void attach(std::shared_ptr<IRasterDrawable> drawable, bool above = true) override { attached_.attach(std::move(drawable), above); }
-    void detach(const IRasterDrawable* drawable) override { attached_.detach(drawable); }
-    [[nodiscard]] bool isVisible() const override { return visible_; }
-    void setVisible(bool visible) override { visible_ = visible; }
-    [[nodiscard]] bool isHighlighted() const override { return highlighted_; }
-    void setHighlighted(bool highlighted) override { highlighted_ = highlighted; }
-    [[nodiscard]] bool hitTest(double x, double y, double yScale = 1) const override;
+        void drawTo(engine::BitmapData& place, double x = 0, double y = 0, double yScale = 1,
+                    const engine::ColorTransform* color = nullptr) override;
+        [[nodiscard]] double getY() const override { return animation_->getY(); }
+        void setY(double y) override { animation_->setY(y); }
+        void attach(std::shared_ptr<IRasterDrawable> drawable, bool above = true) override { attached_.attach(std::move(drawable), above); }
+        void detach(const IRasterDrawable* drawable) override { attached_.detach(drawable); }
+        [[nodiscard]] bool isVisible() const override { return visible_; }
+        void setVisible(bool visible) override { visible_ = visible; }
+        [[nodiscard]] bool isHighlighted() const override { return highlighted_; }
+        void setHighlighted(bool highlighted) override { highlighted_ = highlighted; }
+        [[nodiscard]] bool hitTest(double x, double y, double yScale = 1) const override;
 
-protected:
-    void customDispose() override;
+    protected:
+        void customDispose() override;
 
-private:
-    std::shared_ptr<RasterAnimation> animation_; ///< Original: _SafeStr_3055.
-    engine::ColorTransform selectedColor_;       ///< Original: _SafeStr_2135.
-    RenderableObjectsContainer attached_;
-    bool visible_ = true;
-    bool highlighted_ = false;
-};
+    private:
+        std::shared_ptr<RasterAnimation> animation_; ///< Original: _SafeStr_3055.
+        engine::ColorTransform selectedColor_;       ///< Original: _SafeStr_2135.
+        RenderableObjectsContainer attached_;
+        bool visible_ = true;
+        bool highlighted_ = false;
+    };
 
-/// Shows a layer object for a while (original: _SafeCls_837).
-class TimedEffect : public UpdatableObject, public ILevelObject {
-public:
-    TimedEffect(std::shared_ptr<ILayerObject> object, double showTime);
+    /// Shows a layer object for a while (original: _SafeCls_837).
+    class TimedEffect : public UpdatableObject, public ILevelObject {
+    public:
+        TimedEffect(std::shared_ptr<ILayerObject> object, double showTime);
 
-    [[nodiscard]] const std::shared_ptr<ILayerObject>& layerObject() const { return object_; } ///< _SafeStr_841
-    void update(double timeElapsed) override;
-    [[nodiscard]] bool isFinished() const override { return finished_; }
-    [[nodiscard]] const TypedKey& getKey() const override { return key_; }
-    void dispose() override { UpdatableObject::dispose(); }
+        [[nodiscard]] const std::shared_ptr<ILayerObject>& layerObject() const { return object_; } ///< _SafeStr_841
+        void update(double timeElapsed) override;
+        [[nodiscard]] bool isFinished() const override { return finished_; }
+        [[nodiscard]] const TypedKey& getKey() const override { return key_; }
+        void dispose() override { UpdatableObject::dispose(); }
 
-protected:
-    void customDispose() override;
+    protected:
+        void customDispose() override;
 
-    std::shared_ptr<ILayerObject> object_;
-    double timeLeft_;        ///< Original: _SafeStr_840.
-    TypedKey key_{"vsleff"}; ///< Original: _SafeStr_843.
-    bool finished_ = false;  ///< Original: _SafeStr_842.
-};
+        std::shared_ptr<ILayerObject> object_;
+        double timeLeft_;        ///< Original: _SafeStr_840.
+        TypedKey key_{"vsleff"}; ///< Original: _SafeStr_843.
+        bool finished_ = false;  ///< Original: _SafeStr_842.
+    };
 
-/// An animation definition and how long it shows (original: _SafeStr_855).
-struct AnimEffectDef {
-    std::shared_ptr<RasterAnimation> anim;
-    double time = 0;
-};
+    /// An animation definition and how long it shows (original: _SafeStr_855).
+    struct AnimEffectDef {
+        std::shared_ptr<RasterAnimation> anim;
+        double time = 0;
+    };
 
-/// A TimedEffect playing an animation (original: _SafeCls_852).
-class AnimEffect : public TimedEffect {
-public:
-    explicit AnimEffect(const AnimEffectDef& def);
+    /// A TimedEffect playing an animation (original: _SafeCls_852).
+    class AnimEffect : public TimedEffect {
+    public:
+        explicit AnimEffect(const AnimEffectDef& def);
 
-    [[nodiscard]] RasterAnimSprite& rglAnim() { return *sprite_; }
-    void update(double timeElapsed) override;
-    std::any data;
+        [[nodiscard]] RasterAnimSprite& rglAnim() { return *sprite_; }
+        void update(double timeElapsed) override;
+        std::any data;
 
-protected:
-    void customDispose() override;
+    protected:
+        void customDispose() override;
 
-    std::shared_ptr<RasterAnimSprite> sprite_; ///< Original: _SafeStr_853.
-};
+        std::shared_ptr<RasterAnimSprite> sprite_; ///< Original: _SafeStr_853.
+    };
 
-/// What a banner is made from (original: _SafeStr_858).
-struct BannerDef {
-    std::shared_ptr<Spell> spellData;
-    AnimEffectDef animDef;
-    Level* level = nullptr;        ///< Original: _SafeStr_859.
-    Combatant* owner = nullptr;    ///< Original: _SafeStr_862.
-};
+    /// What a banner is made from (original: _SafeStr_858).
+    struct BannerDef {
+        std::shared_ptr<Spell> spellData;
+        AnimEffectDef animDef;
+        Level* level = nullptr;        ///< Original: _SafeStr_859.
+        Combatant* owner = nullptr;    ///< Original: _SafeStr_862.
+    };
 
-/// Heals the owner's living squads around it (original: BannerHeal).
-class BannerHeal : public AnimEffect {
-public:
-    explicit BannerHeal(BannerDef def);
-    void update(double timeElapsed) override;
+    /// Heals the owner's living squads around it (original: BannerHeal).
+    class BannerHeal : public AnimEffect {
+    public:
+        explicit BannerHeal(BannerDef def);
+        void update(double timeElapsed) override;
 
-protected:
-    void customDispose() override;
-    /// Acts on the squads, every half second (original: updateAuraEffect).
-    virtual void updateAuraEffect();
+    protected:
+        void customDispose() override;
 
-    BannerDef def_;           ///< Original: _SafeStr_839.
-    double nextAura_ = 0;     ///< Original: _SafeStr_857.
-};
+        /// Acts on the squads, every half second (original: updateAuraEffect).
+        virtual void updateAuraEffect();
 
-/// Raises the damage of the owner's squads around it (original: BannerBloodlust).
-class BannerBloodlust : public BannerHeal {
-public:
-    using BannerHeal::BannerHeal;
+        BannerDef def_;           ///< Original: _SafeStr_839.
+        double nextAura_ = 0;     ///< Original: _SafeStr_857.
+    };
 
-protected:
-    void updateAuraEffect() override;
-};
+    /// Raises the damage of the owner's squads around it (original: BannerBloodlust).
+    class BannerBloodlust : public BannerHeal {
+    public:
+        using BannerHeal::BannerHeal;
 
-/// Makes the owner's squads around it heroic (original: BannerHeroism).
-class BannerHeroism : public BannerHeal {
-public:
-    using BannerHeal::BannerHeal;
+    protected:
+        void updateAuraEffect() override;
+    };
 
-protected:
-    void updateAuraEffect() override;
-};
+    /// Makes the owner's squads around it heroic (original: BannerHeroism).
+    class BannerHeroism : public BannerHeal {
+    public:
+        using BannerHeal::BannerHeal;
 
-/// Protects the owner's squads around it from spells (original: BannerOfLiberation).
-class BannerOfLiberation : public BannerHeal {
-public:
-    using BannerHeal::BannerHeal;
+    protected:
+        void updateAuraEffect() override;
+    };
 
-protected:
-    void updateAuraEffect() override;
-};
+    /// Protects the owner's squads around it from spells (original: BannerOfLiberation).
+    class BannerOfLiberation : public BannerHeal {
+    public:
+        using BannerHeal::BannerHeal;
 
-/// Strikes again at each loop of its animation (original: _SafeCls_1965).
-class RepeatingSpellEffect : public BannerHeal {
-public:
-    explicit RepeatingSpellEffect(BannerDef def);
+    protected:
+        void updateAuraEffect() override;
+    };
 
-protected:
-    void updateAuraEffect() override;
+    /// Strikes again at each loop of its animation (original: _SafeCls_1965).
+    class RepeatingSpellEffect : public BannerHeal {
+    public:
+        explicit RepeatingSpellEffect(BannerDef def);
 
-private:
-    int lastRepeat_; ///< Original: _SafeStr_1966.
-};
+    protected:
+        void updateAuraEffect() override;
+
+    private:
+        int lastRepeat_; ///< Original: _SafeStr_1966.
+    };
 
 } // namespace takeover

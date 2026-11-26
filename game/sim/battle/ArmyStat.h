@@ -17,27 +17,27 @@ namespace takeover {
     class ArmyStat {
     public:
         ArmyStat(
-            std::string name, 
-            int hp, 
-            Race side, 
-            int unitsCount, 
-            int dmgMin, 
-            int dmgMax, 
-            int attackSpeed, 
+            std::string name,
+            int hp,
+            Race side,
+            int unitsCount,
+            int dmgMin,
+            int dmgMax,
+            int attackSpeed,
             int range,
-            int meleePenalty, 
-            int morale, 
-            int speed, 
-            int cost, 
-            int 
-            upkeep, 
+            int meleePenalty,
+            int morale,
+            int speed,
+            int cost,
+            int
+            upkeep,
             std::string abilities,
             int techLevel,
-            UnitType unitType, 
-            double attackAnimFactor, 
-            int distAttackStartHeight, 
+            UnitType unitType,
+            double attackAnimFactor,
+            int distAttackStartHeight,
             int radAfterShowBullet,
-            double baseSpeedAnimWalk, 
+            double baseSpeedAnimWalk,
             double missileTime
         );
 
@@ -62,7 +62,7 @@ namespace takeover {
         int radAfterShowBullet;
         double baseSpeedAnimWalk;
         double missileTime;       ///< Missile flight time in tenths of a second (original: _SafeStr_2672).
-        
+
         /// Animation naming rules set by XMLData for special squads (original: _SafeStr_1286).
         std::shared_ptr<INameModifier> animModifier;
 
@@ -121,7 +121,7 @@ namespace takeover {
         /// _SafePkg_909/_SafeStr_978.hasAbility)?
         static bool hasAbility(const std::string& ability, const std::string& abilities);
 
-        [[nodiscard]] bool hasAbility(const std::string& ability) 
+        [[nodiscard]] bool hasAbility(const std::string& ability)
         const { return hasAbility(ability, abilities); }
     };
 

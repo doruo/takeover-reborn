@@ -9,16 +9,16 @@
 
 namespace takeover {
 
-class Profile;
+    class Profile;
 
-class PlayerStatPanel {
-public:
-    PlayerStatPanel(engine::MovieClip* panel, Profile& profile);
-    void refresh(); ///< _SafeStr_3470
+    class PlayerStatPanel {
+    public:
+        PlayerStatPanel(engine::MovieClip* panel, Profile& profile);
+        void refresh(); ///< _SafeStr_3470
 
-private:
-    std::shared_ptr<engine::MovieClip> panel_;
-    Profile* profile_;
-};
+    private:
+        std::shared_ptr<engine::MovieClip> panel_;
+        Profile* profile_;
+    };
 
 } // namespace takeover

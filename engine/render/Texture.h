@@ -6,30 +6,31 @@
 
 namespace engine {
 
-class Texture {
-public:
-    Texture() = default;
-    /// Uploads premultiplied BGRA pixels (vector::Image layout).
-    explicit Texture(const vector::Image& image, bool smooth = true);
-    ~Texture();
+    class Texture {
+    public:
+        Texture() = default;
 
-    Texture(Texture&& other) noexcept;
-    Texture& operator=(Texture&& other) noexcept;
-    Texture(const Texture&) = delete;
-    Texture& operator=(const Texture&) = delete;
+        /// Uploads premultiplied BGRA pixels (vector::Image layout).
+        explicit Texture(const vector::Image& image, bool smooth = true);
+        ~Texture();
 
-    /// Replaces the pixels (same size).
-    void update(const vector::Image& image);
+        Texture(Texture&& other) noexcept;
+        Texture& operator=(Texture&& other) noexcept;
+        Texture(const Texture&) = delete;
+        Texture& operator=(const Texture&) = delete;
 
-    [[nodiscard]] GLuint id() const { return id_; }
-    [[nodiscard]] int width() const { return width_; }
-    [[nodiscard]] int height() const { return height_; }
-    [[nodiscard]] bool valid() const { return id_ != 0; }
+        /// Replaces the pixels (same size).
+        void update(const vector::Image& image);
 
-private:
-    GLuint id_ = 0;
-    int width_ = 0;
-    int height_ = 0;
-};
+        [[nodiscard]] GLuint id() const { return id_; }
+        [[nodiscard]] int width() const { return width_; }
+        [[nodiscard]] int height() const { return height_; }
+        [[nodiscard]] bool valid() const { return id_ != 0; }
+
+    private:
+        GLuint id_ = 0;
+        int width_ = 0;
+        int height_ = 0;
+    };
 
 } // namespace engine

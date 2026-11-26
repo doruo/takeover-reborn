@@ -9,38 +9,39 @@
 
 namespace takeover {
 
-class GameStorage;
-class Profile;
+    class GameStorage;
+    class Profile;
 
-class ProfileIcon : public Disposable {
-public:
-    ProfileIcon(engine::MovieClip* slot, GameStorage& storage, int id);
+    class ProfileIcon : public Disposable {
+    public:
+        ProfileIcon(engine::MovieClip* slot, GameStorage& storage, int id);
 
-    Signal<ProfileIcon*> signalClick;
-    /// (icon, confirmed) after the delete question (original: _SafeStr_3526).
-    Signal<ProfileIcon*, bool> signalDelete;
+        Signal<ProfileIcon*> signalClick;
 
-    [[nodiscard]] Profile& profile() const;
-    [[nodiscard]] bool isEmpty() const;
-    [[nodiscard]] int id() const { return id_; }
+        /// (icon, confirmed) after the delete question (original: _SafeStr_3526).
+        Signal<ProfileIcon*, bool> signalDelete;
 
-    void recreateSlot(bool enable = true);
+        [[nodiscard]] Profile& profile() const;
+        [[nodiscard]] bool isEmpty() const;
+        [[nodiscard]] int id() const { return id_; }
 
-protected:
-    void customDispose() override;
+        void recreateSlot(bool enable = true);
 
-private:
-    void onIconClick(Button*);          ///< _SafeStr_3654
-    void showCompanyProgress(engine::MovieClip* icon, int companyId); ///< _SafeStr_3652
-    void onDeleteClick(Button*);        ///< _SafeStr_3655 / _SafeStr_3656
-    void disposeConfirmButtons();       ///< _SafeStr_3651
-    void onDeleteNo(Button*);           ///< _SafeStr_3657
-    void onDeleteYes(Button*);          ///< _SafeStr_3653
+    protected:
+        void customDispose() override;
 
-    std::shared_ptr<engine::MovieClip> slot_;
-    GameStorage* storage_;
-    int id_;
-    std::shared_ptr<Button> iconButton_, deleteButton_, yesButton_, noButton_;
-};
+    private:
+        void onIconClick(Button*);          ///< _SafeStr_3654
+        void showCompanyProgress(engine::MovieClip* icon, int companyId); ///< _SafeStr_3652
+        void onDeleteClick(Button*);        ///< _SafeStr_3655 / _SafeStr_3656
+        void disposeConfirmButtons();       ///< _SafeStr_3651
+        void onDeleteNo(Button*);           ///< _SafeStr_3657
+        void onDeleteYes(Button*);          ///< _SafeStr_3653
+
+        std::shared_ptr<engine::MovieClip> slot_;
+        GameStorage* storage_;
+        int id_;
+        std::shared_ptr<Button> iconButton_, deleteButton_, yesButton_, noButton_;
+    };
 
 } // namespace takeover

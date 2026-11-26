@@ -9,20 +9,20 @@
 namespace takeover {
 
     Combatant::Combatant(
-        std::shared_ptr<CombatantKey> description_, 
-        Race race, 
+        std::shared_ptr<CombatantKey> description_,
+        Race race,
         const EdictBonuses& bonuses_
-    ): 
-    description(std::move(description_)), 
+    ):
+    description(std::move(description_)),
     bonuses(bonuses_),
-    missionStats(std::make_shared<MissionStats>(race)), 
-    race_(race) 
+    missionStats(std::make_shared<MissionStats>(race)),
+    race_(race)
     {
         initBonuses();
         initSpells();
     }
 
-    // --- Static tables ---------------------------------------------------------------------------
+    // /----- STATIC TABLES -----/
 
     std::uint32_t Combatant::raceColor(Race race) {
         switch (race) {
@@ -32,6 +32,7 @@ namespace takeover {
             case Race::TheCult: return 27349;           // 0x006AD5
             case Race::Bandits: return 0;               // 0x000000
         }
+
         return 0;
     }
 
@@ -43,6 +44,7 @@ namespace takeover {
             case Race::TheCult: return "Icedales Cult";
             case Race::Bandits: return "n/a";
         }
+
         return "";
     }
 
@@ -54,6 +56,7 @@ namespace takeover {
             case Race::TheEmpire: return 3;
             case Race::Bandits: return 4;
         }
+
         return 0;
     }
 
@@ -68,7 +71,7 @@ namespace takeover {
     }
 
     ArmyStatBonus Combatant::makeArmyStatBonus(const ArmyStat& stat, const EdictBonuses& b) {
-        
+
         ArmyStatBonus bonus;
 
         // Define default healthpoint, damage and charge
@@ -99,21 +102,21 @@ namespace takeover {
         bonus.moraleFactor = b.factor(Bonus::BASE_MORALE);
         bonus.speedFactor = b.factor(Bonus::MOVING_SPEED);
 
-        if (stat.unitType == UnitType::Siege) 
+        if (stat.unitType == UnitType::Siege)
             bonus.speedFactor += b.factor(Bonus::SIEGE_SPEED) - 1;
-            
+
         bonus.strongholdDamageBonus = b.value(Bonus::DAMAGE_VS_STRONGHOLDS);
         bonus.poisonDamageBonus = b.value(Bonus::POISON_DAMAGE);
         bonus.freezeDurationBonus = b.value(Bonus::FREEZE_DURATION);
         bonus.xpFactor = b.factor(Bonus::XP_RATE);
 
-        if (&stat == &ArmyStat::GIANTBOTS) 
+        if (&stat == &ArmyStat::GIANTBOTS)
             bonus.regenFactor = b.value(Bonus::GIANTBOTS_REGENERATION) / 100.0;
 
-        if (&stat == &ArmyStat::IMMORTALS) 
+        if (&stat == &ArmyStat::IMMORTALS)
             bonus.addUnit = b.value(Bonus::IMMORTALS_EXTRA_UNITS);
 
-        if (ArmyStat::hasAbility("Mechanism", stat.abilities)) 
+        if (ArmyStat::hasAbility("Mechanism", stat.abilities))
             bonus.mechanismCritChance = b.value(Bonus::MECHANISM_CRIT);
 
         return bonus;
@@ -123,90 +126,110 @@ namespace takeover {
 
         switch (race) {
 
-            case Race::TheEmpire: 
+            case Race::TheEmpire:
                 return {
-                    &SpellInfo::TERROR, 
-                    &SpellInfo::RAISE_THE_DEAD, 
+                    &SpellInfo::TERROR,
+                    &SpellInfo::RAISE_THE_DEAD,
                     &SpellInfo::BANNER_OF_DESECRATION
                 };
 
             case Race::Westaria:
                 return {
-                    &SpellInfo::LORDS_JUDGEMENT, 
-                    &SpellInfo::BANNER_OF_CONSECRATION, 
+                    &SpellInfo::LORDS_JUDGEMENT,
+                    &SpellInfo::BANNER_OF_CONSECRATION,
                     &SpellInfo::BANNER_OF_HEROISM
                 };
-            
+
             case Race::TheKhaganate:
                 return {
-                    &SpellInfo::SUMMON_STONEWORMS, 
-                    &SpellInfo::DISENTOMB, 
+                    &SpellInfo::SUMMON_STONEWORMS,
+                    &SpellInfo::DISENTOMB,
                     &SpellInfo::BANNER_OF_BLOODLUST
                 };
-            
-            case Race::TheCult: 
+
+            case Race::TheCult:
                 return {
-                    &SpellInfo::ICE_BLAST, 
-                    &SpellInfo::FROST_ENCHANTMENT, 
+                    &SpellInfo::ICE_BLAST,
+                    &SpellInfo::FROST_ENCHANTMENT,
                     &SpellInfo::BANNER_OF_LIBERATION
                 };
-            
-            case Race::Bandits: 
+
+            case Race::Bandits:
                 return {
-                    nullptr, 
-                    nullptr, 
+                    nullptr,
+                    nullptr,
                     nullptr
                 };
         }
+
         return {};
     }
 
 int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
-    if (spell == &SpellInfo::LORDS_JUDGEMENT) return b.value(Bonus::LORDS_JUDGEMENT);
+    if (spell == &SpellInfo::LORDS_JUDGEMENT)
+        return b.value(Bonus::LORDS_JUDGEMENT);
 
-    if (spell == &SpellInfo::BANNER_OF_CONSECRATION) return b.value(Bonus::BANNER_OF_CONSECRATION);
-    
-    if (spell == &SpellInfo::BANNER_OF_HEROISM) return b.value(Bonus::BANNER_OF_HEROISM);
-    
-    if (spell == &SpellInfo::SUMMON_STONEWORMS) return b.value(Bonus::SUMMON_STONEWORMS);
-    
-    if (spell == &SpellInfo::DISENTOMB) return b.value(Bonus::DISENTOMB);
-    
-    if (spell == &SpellInfo::BANNER_OF_BLOODLUST) return b.value(Bonus::BANNER_OF_BLOODLUST);
-    
-    if (spell == &SpellInfo::ICE_BLAST) return b.value(Bonus::ICE_BLAST);
-    
-    if (spell == &SpellInfo::FROST_ENCHANTMENT) return b.value(Bonus::FROST_ENCHANTMENT);
-    
-    if (spell == &SpellInfo::BANNER_OF_LIBERATION) return b.value(Bonus::BANNER_OF_LIBERATION);
-    
-    if (spell == &SpellInfo::TERROR) return b.value(Bonus::TERROR);
-    
-    if (spell == &SpellInfo::RAISE_THE_DEAD) return b.value(Bonus::RAISE_THE_DEAD);
-    
-    if (spell == &SpellInfo::BANNER_OF_DESECRATION) return b.value(Bonus::BANNER_OF_DESECRATION);
+    if (spell == &SpellInfo::BANNER_OF_CONSECRATION)
+        return b.value(Bonus::BANNER_OF_CONSECRATION);
+
+    if (spell == &SpellInfo::BANNER_OF_HEROISM)
+        return b.value(Bonus::BANNER_OF_HEROISM);
+
+    if (spell == &SpellInfo::SUMMON_STONEWORMS)
+        return b.value(Bonus::SUMMON_STONEWORMS);
+
+    if (spell == &SpellInfo::DISENTOMB)
+        return b.value(Bonus::DISENTOMB);
+
+    if (spell == &SpellInfo::BANNER_OF_BLOODLUST)
+        return b.value(Bonus::BANNER_OF_BLOODLUST);
+
+    if (spell == &SpellInfo::ICE_BLAST)
+        return b.value(Bonus::ICE_BLAST);
+
+    if (spell == &SpellInfo::FROST_ENCHANTMENT)
+        return b.value(Bonus::FROST_ENCHANTMENT);
+
+    if (spell == &SpellInfo::BANNER_OF_LIBERATION)
+        return b.value(Bonus::BANNER_OF_LIBERATION);
+
+    if (spell == &SpellInfo::TERROR)
+        return b.value(Bonus::TERROR);
+
+    if (spell == &SpellInfo::RAISE_THE_DEAD)
+        return b.value(Bonus::RAISE_THE_DEAD);
+
+    if (spell == &SpellInfo::BANNER_OF_DESECRATION)
+        return b.value(Bonus::BANNER_OF_DESECRATION);
+
     return 0;
 }
 
-    // --- Identity --------------------------------------------------------------------------------
+    // /----- IDENTITY -----/
 
-    // --- Economy ------------------------------------------------------------------------------------
+    // /----- ECONOMY -----/
 
     int Combatant::getGoldSpeed() const {
-        if (squadsCount_ == 0 || goldSpeed_ == 0) return goldSpeed_;
+        if (squadsCount_ == 0 || goldSpeed_ == 0)
+            return goldSpeed_;
+
         const double extraSquads = std::min(squadsCount_, 10) - 1;
         const double factor = (100 - (30 + extraSquads * 5)) / 100;
         return static_cast<int>(as3::round(std::max(goldSpeed_ * factor, 1.0)));
     }
 
     int Combatant::getSupplyModifierPercent() const {
-        if (squadsCount_ == 0) return 0;
-        if (squadsCount_ >= 10) return 75;
+        if (squadsCount_ == 0)
+            return 0;
+
+        if (squadsCount_ >= 10)
+            return 75;
+
         return 25 + squadsCount_ * 5;
     }
 
     int Combatant::getSupplyCost(SupplyBuildingType type) const {
-        
+
         const int base = type == SupplyBuildingType::Empty ? 0 : 150;
 
         return static_cast<int>(
@@ -242,13 +265,15 @@ int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
         supplyPower_ = supplyPower;
         armyPower_ = armyPower;
         ultimateChargeSpeed_ = ultimateChargeSpeed;
-        if (ultimateChargeSpeed_ <= 0 && forcedUltimateFactor_ == 0) ultimateCharge_ = 0;
+        if (ultimateChargeSpeed_ <= 0 && forcedUltimateFactor_ == 0)
+            ultimateCharge_ = 0;
     }
 
-    // --- Army ----------------------------------------------------------------------------------------
+    // /----- ARMY -----/
 
     int Combatant::getTier(UnitType type) const {
         int upgrade = 0;
+
         switch (type) {
         case UnitType::Infantry: upgrade = bonuses.value(Bonus::INFANTRY_TIER); break;
         case UnitType::Archers: upgrade = bonuses.value(Bonus::ARCHERS_TIER); break;
@@ -256,13 +281,16 @@ int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
         case UnitType::Siege: upgrade = bonuses.value(Bonus::SIEGE_TIER); break;
         case UnitType::Magic: upgrade = bonuses.value(Bonus::MAGIC_TIER); break;
         }
+
         return upgrade + 1;
     }
 
     ArmyStat* Combatant::getArmyStat(UnitType type) const { return ArmyStat::find(race_, type, getTier(type)); }
 
     int Combatant::getUnitCost(const ArmyStat& stat) const {
-        if (&stat != &ArmyStat::ANCIENT_RAIDERS && &stat != &ArmyStat::IMMORTALS) return stat.cost;
+        if (&stat != &ArmyStat::ANCIENT_RAIDERS && &stat != &ArmyStat::IMMORTALS)
+            return stat.cost;
+
         return static_cast<int>(as3::round(stat.cost * bonuses.factor(Bonus::UNDEAD_COST)));
     }
 
@@ -270,7 +298,7 @@ int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
         return getGold() >= getUnitCost(stat) && supplyPower_ - armyPower_ >= stat.upkeep;
     }
 
-    // --- Strongholds -------------------------------------------------------------------------------------
+    // /----- STRONGHOLDS -----/
 
     void Combatant::setKeyNodes(std::vector<std::shared_ptr<KeyNode>> nodes) {
         keyNodes_ = std::move(nodes);
@@ -279,16 +307,18 @@ int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
 
     void Combatant::buildSupplyBuilding(SupplyBuildingType type) {
         int counter = 0;
+
         switch (type) {
         case SupplyBuildingType::Village: counter = MissionStats::FARMS_BUILT; break;
         case SupplyBuildingType::Mine: counter = MissionStats::MINES_BUILT; break;
         case SupplyBuildingType::Obelisk: counter = MissionStats::OBELISKS_BUILT; break;
         default: return;
         }
+
         missionStats->add(counter, 1);
     }
 
-    // --- Spells ---------------------------------------------------------------------------------------------
+    // /----- SPELLS -----/
 
     void Combatant::castSpell(int cost) {
         mana_ -= cost;
@@ -314,15 +344,19 @@ int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
     void Combatant::initSpells() {
         const std::vector<const SpellInfo*> raceList = raceSpells(race_);
         spells_.clear();
-        for (int i = 0; i < 3; ++i) spells_.push_back(makeSpell(raceList[static_cast<std::size_t>(i)]));
+
+        for (int i = 0; i < 3; ++i)
+            spells_.push_back(makeSpell(raceList[static_cast<std::size_t>(i)]));
     }
 
     std::shared_ptr<Spell> Combatant::makeSpell(const SpellInfo* info) const {
-        if (spellUnlockValue(info, bonuses) > 0) return std::make_shared<Spell>(*info, &bonuses);
+        if (spellUnlockValue(info, bonuses) > 0)
+            return std::make_shared<Spell>(*info, &bonuses);
+
         return nullptr;
     }
 
-    // --- Statistics events ---------------------------------------------------------------------------------
+    // /----- STATISTICS EVENTS -----/
 
     void Combatant::onEnemySquadKilled(Squad&) { missionStats->add(MissionStats::ENEMY_SQUADS_DESTROYED, 1); }
 
@@ -344,6 +378,7 @@ int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
     void Combatant::onOwnSquadLost(Squad&) {
         if (ultimateChargeSpeed_ > 0)
             ultimateCharge_ += ultimateChargeMax_ * bonuses.value(Bonus::ULTIMATE_CHARGE_ON_SQUAD_DEATH) / 100.0;
+
         missionStats->add(MissionStats::SQUADS_LOST, 1);
     }
 
@@ -354,7 +389,7 @@ int Combatant::spellUnlockValue(const SpellInfo* spell, const EdictBonuses& b) {
         addGold(bonuses.value(Bonus::CAPTURE_GOLD));
     }
 
-    // --- Setup ------------------------------------------------------------------------------------------------
+    // /----- SETUP -----/
 
     void Combatant::initBonuses() {
         ultimateChargeMax_ = 200 * bonuses.factor(Bonus::ULTIMATE_COOLDOWN);

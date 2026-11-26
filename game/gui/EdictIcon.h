@@ -7,29 +7,29 @@
 
 namespace takeover {
 
-class EdictIcon : public Disposable {
-public:
-    EdictIcon(Edict& edict, engine::MovieClip* icon, int iconFrame);
+    class EdictIcon : public Disposable {
+    public:
+        EdictIcon(Edict& edict, engine::MovieClip* icon, int iconFrame);
 
-    Signal<EdictIcon*> signalClick; ///< Original: _SafeStr_3469.
-    [[nodiscard]] Edict& edict() const { return *edict_; }
+        Signal<EdictIcon*> signalClick; ///< Original: _SafeStr_3469.
+        [[nodiscard]] Edict& edict() const { return *edict_; }
 
-    /// Shows the levels bought, buyable or locked; `edictCount` is the
-    /// number of points spent in the campaign.
-    void updateIconView(int edictCount);
+        /// Shows the levels bought, buyable or locked; `edictCount` is the
+        /// number of points spent in the campaign.
+        void updateIconView(int edictCount);
 
-protected:
-    void customDispose() override;
+    protected:
+        void customDispose() override;
 
-private:
-    void showLevel(engine::MovieClip* icon, bool enabled, bool canBuy, int id, bool present, const std::string& hint,
-                   const std::string& prefix); ///< _SafeStr_3623
-    void onClick(Button*);
+    private:
+        void showLevel(engine::MovieClip* icon, bool enabled, bool canBuy, int id, bool present, const std::string& hint,
+                       const std::string& prefix); ///< _SafeStr_3623
+        void onClick(Button*);
 
-    Edict* edict_;
-    std::shared_ptr<engine::MovieClip> icon_;
-    int iconFrame_;
-    std::shared_ptr<Button> button_;
-};
+        Edict* edict_;
+        std::shared_ptr<engine::MovieClip> icon_;
+        int iconFrame_;
+        std::shared_ptr<Button> button_;
+    };
 
 } // namespace takeover

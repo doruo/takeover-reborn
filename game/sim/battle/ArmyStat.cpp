@@ -22,58 +22,59 @@ namespace takeover {
             std::vector<std::string> parts;
             std::stringstream stream(abilities);
 
-            for (std::string part; std::getline(stream, part, ';');) 
+            for (std::string part; std::getline(stream, part, ';');)
                 parts.push_back(part);
-            
-            if (abilities.empty()) 
+
+            if (abilities.empty())
                 parts.push_back("");
+
             return parts;
         }
 
     } // namespace
 
     ArmyStat::ArmyStat(
-        std::string name_, 
-        int hp_, Race side_, 
-        int unitsCount_, 
-        int dmgMin_, 
-        int dmgMax_, 
+        std::string name_,
+        int hp_, Race side_,
+        int unitsCount_,
+        int dmgMin_,
+        int dmgMax_,
         int attackSpeed_,
-        int range_, 
-        int meleePenalty_, 
-        int morale_, 
-        int speed_, 
-        int cost_, 
-        int upkeep_, 
+        int range_,
+        int meleePenalty_,
+        int morale_,
+        int speed_,
+        int cost_,
+        int upkeep_,
         std::string abilities_,
-        int techLevel_, 
-        UnitType unitType_, 
-        double attackAnimFactor_, 
+        int techLevel_,
+        UnitType unitType_,
+        double attackAnimFactor_,
         int distAttackStartHeight_,
-        int radAfterShowBullet_, 
-        double baseSpeedAnimWalk_, 
+        int radAfterShowBullet_,
+        double baseSpeedAnimWalk_,
         double missileTime_
     )
-        : name(std::move(name_)), 
-        hp(hp_), 
-        side(side_), 
-        unitsCount(unitsCount_), 
-        dmgMin(dmgMin_), 
+        : name(std::move(name_)),
+        hp(hp_),
+        side(side_),
+        unitsCount(unitsCount_),
+        dmgMin(dmgMin_),
         dmgMax(dmgMax_),
-        attackSpeed(attackSpeed_), 
-        range(range_), 
-        meleePenalty(meleePenalty_), 
-        morale(morale_), 
+        attackSpeed(attackSpeed_),
+        range(range_),
+        meleePenalty(meleePenalty_),
+        morale(morale_),
         speed(speed_),
-        cost(cost_), 
-        upkeep(upkeep_), 
-        abilities(std::move(abilities_)), 
-        techLevel(techLevel_), 
+        cost(cost_),
+        upkeep(upkeep_),
+        abilities(std::move(abilities_)),
+        techLevel(techLevel_),
         unitType(unitType_),
-        attackAnimFactor(attackAnimFactor_), 
+        attackAnimFactor(attackAnimFactor_),
         distAttackStartHeight(distAttackStartHeight_),
-        radAfterShowBullet(radAfterShowBullet_), 
-        baseSpeedAnimWalk(baseSpeedAnimWalk_), 
+        radAfterShowBullet(radAfterShowBullet_),
+        baseSpeedAnimWalk(baseSpeedAnimWalk_),
         missileTime(missileTime_) {
 
         // Like the original constructor: register in the lookup table. A later
@@ -82,30 +83,31 @@ namespace takeover {
     }
 
     ArmyStat* ArmyStat::find(Race race, UnitType type, int tier) {
-        auto& byType = 
+        auto& byType =
             table()[Combatant::raceTableIndex(race)][unit_types::toInt(type)];
-        
+
             const auto it = byType.find(tier);
         return it == byType.end() ? nullptr : it->second;
     }
 
     bool ArmyStat::hasAbility(
-        const std::string& ability, 
+        const std::string& ability,
         const std::string& abilities
-    ) {    
+    ) {
         for (const std::string& entry : splitAbilities(abilities)) {
-            
+
             const std::string name = entry.substr(0, entry.find(' '));
             if (name == ability)
                 return true;
         }
-        
+
         return false;
     }
 
     // clang-format off
     using R = Race;
     using U = UnitType;
+
     //                                name,                 hp, race,            n,dmg,atkSpd,range,melee,morale,speed,cost, upk,abilities                                         tier type         anim  dASH rABS walk  missile
     ArmyStat ArmyStat::GUARDS          ("Guards",           26, R::Westaria,     9, 2, 3,  15, 0,   0,  50, 40, 100, 1, "",                                               1, U::Infantry, 0.75, 0,  0,  11,   5);
     ArmyStat ArmyStat::WARRIORS        ("Warriors",         18, R::TheKhaganate, 9, 3, 4,  15, 0,   0,  50, 40, 100, 1, "",                                               1, U::Infantry, 0.75, 0,  0,  11,   5);
@@ -152,6 +154,7 @@ namespace takeover {
     ArmyStat ArmyStat::WOLVES          ("Wolves",           40, R::Bandits,      6, 4, 10, 17, 0,   0,  50, 60, 0,   0, "Charge 2",                                       1, U::Cavalry,  0.75, 0,  0,  11,   5);
     ArmyStat ArmyStat::BRIGAND_WARRIORS("Brigand Warriors", 20, R::Bandits,      9, 1, 5,  16, 0,   0,  50, 40, 0,   0, "",                                               1, U::Infantry, 0.75, 0,  0,  11,   5);
     ArmyStat ArmyStat::BRIGAND_ARCHERS ("Brigand Archers",  16, R::Bandits,      9, 4, 8,  30, 100, 50, 50, 40, 0,   0, "",                                               1, U::Archers,  0.75, 0,  0,  11,   5);
+
     // clang-format on
 
 } // namespace takeover

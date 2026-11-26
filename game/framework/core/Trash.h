@@ -12,10 +12,10 @@
 
 namespace takeover {
 
-/// Keeps `object` alive until the next emptyTrash().
-void releaseLater(std::shared_ptr<void> object);
+    /// Keeps `object` alive until the next emptyTrash().
+    void releaseLater(std::shared_ptr<void> object);
 
-/// Destroys everything released since the last call.
-void emptyTrash();
+    /// Destroys everything released since the last call.
+    void emptyTrash();
 
 } // namespace takeover

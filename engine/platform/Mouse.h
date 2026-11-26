@@ -6,8 +6,8 @@
 
 namespace engine::Mouse {
 
-enum class Cursor { Auto, Arrow, Button, Hand };
+    enum class Cursor { Auto, Arrow, Button, Hand };
 
-inline Cursor cursor = Cursor::Auto;
+    inline Cursor cursor = Cursor::Auto;
 
 } // namespace engine::Mouse

@@ -86,11 +86,11 @@
 namespace gl {
 
 #define TAKEOVER_DECLARE_GL(name) inline decltype(&::name) name = nullptr;
-TAKEOVER_GL_FUNCTIONS(TAKEOVER_DECLARE_GL)
+    TAKEOVER_GL_FUNCTIONS(TAKEOVER_DECLARE_GL)
 #undef TAKEOVER_DECLARE_GL
 
-/// Resolves every function of the list. Requires a current GL context.
-/// Throws std::runtime_error naming the first missing function.
-void load();
+    /// Resolves every function of the list. Requires a current GL context.
+    /// Throws std::runtime_error naming the first missing function.
+    void load();
 
 } // namespace gl

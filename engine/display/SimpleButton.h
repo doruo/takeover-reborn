@@ -7,35 +7,35 @@
 
 namespace engine {
 
-class Library;
+    class Library;
 
-class SimpleButton : public DisplayObject {
-public:
-    enum class State { Up, Over, Down };
+    class SimpleButton : public DisplayObject {
+    public:
+        enum class State { Up, Over, Down };
 
-    SimpleButton(Library& library, const swf::ButtonDef& definition);
+        SimpleButton(Library& library, const swf::ButtonDef& definition);
 
-    void setState(State state) { state_ = state; }
-    [[nodiscard]] State state() const { return state_; }
+        void setState(State state) { state_ = state; }
+        [[nodiscard]] State state() const { return state_; }
 
-    [[nodiscard]] Sprite& upState() { return *up_; }
-    [[nodiscard]] Sprite& overState() { return *over_; }
-    [[nodiscard]] Sprite& downState() { return *down_; }
-    [[nodiscard]] Sprite& hitTestState() { return *hit_; }
+        [[nodiscard]] Sprite& upState() { return *up_; }
+        [[nodiscard]] Sprite& overState() { return *over_; }
+        [[nodiscard]] Sprite& downState() { return *down_; }
+        [[nodiscard]] Sprite& hitTestState() { return *hit_; }
 
-    [[nodiscard]] Rectangle localBounds() const override;
-    [[nodiscard]] bool hitTestLocal(Point local) const override { return hit_->hitTestLocal(local); }
-    [[nodiscard]] bool isInteractive() const override { return true; }
-    void advanceFrame() override;
+        [[nodiscard]] Rectangle localBounds() const override;
+        [[nodiscard]] bool hitTestLocal(Point local) const override { return hit_->hitTestLocal(local); }
+        [[nodiscard]] bool isInteractive() const override { return true; }
+        void advanceFrame() override;
 
-protected:
-    void draw(RenderContext& context, const Matrix& world, const ColorTransform& color, bool asMask) override;
+    protected:
+        void draw(RenderContext& context, const Matrix& world, const ColorTransform& color, bool asMask) override;
 
-private:
-    [[nodiscard]] Sprite& current() const;
+    private:
+        [[nodiscard]] Sprite& current() const;
 
-    std::shared_ptr<Sprite> up_, over_, down_, hit_;
-    State state_ = State::Up;
-};
+        std::shared_ptr<Sprite> up_, over_, down_, hit_;
+        State state_ = State::Up;
+    };
 
 } // namespace engine

@@ -14,7 +14,7 @@ namespace takeover {
     namespace {
 
         std::shared_ptr<engine::MovieClip> shared(engine::DisplayObject* object) {
-            return object ? 
+            return object ?
                 std::dynamic_pointer_cast<engine::MovieClip>
                 (object->shared_from_this()) : nullptr;
         }
@@ -22,12 +22,12 @@ namespace takeover {
         /// Nothing under the mouse in this part of the ring.
         void ignoreMouse(engine::DisplayObject* object) {
 
-            if (object == nullptr) 
+            if (object == nullptr)
                 return;
 
             object->setMouseEnabled(false);
-            
-            if (auto* container = dynamic_cast<engine::DisplayObjectContainer*>(object)) 
+
+            if (auto* container = dynamic_cast<engine::DisplayObjectContainer*>(object))
                 container->setMouseChildren(false);
         }
 
@@ -37,29 +37,31 @@ namespace takeover {
 
         panel.gotoAndStop(def.statsOnRightSide ? "lbRight" : "lbLeft");
 
-        if (auto* ring = symbols::child(panel, "mcRing")) 
+        if (auto* ring = symbols::child(panel, "mcRing"))
             ring->gotoAndStop(def.frame);
 
-        if (auto* caption = symbols::child<engine::TextField>(panel, "txtCaption")) 
+        if (auto* caption = symbols::child<engine::TextField>(panel, "txtCaption"))
             caption->setText(def.caption);
-        
-        const auto stat = 
+
+        const auto stat =
         [&](int value, const char* text, const char* icon, const char* stripe) {
-            
+
             if (value > 0) {
                 symbols::setHtmlText(panel, text, "<FONT>+" + std::to_string(value) + "</FONT>");
-            } 
+            }
             else {
                 for (const char* name : {text, icon, stripe}) {
                     if (
-                        auto* part = 
+                        auto* part =
                         symbols::child<engine::DisplayObject>(panel, name)
                     ) {
                         part->setVisible(false);
                     }
                 }
             }
-            for (const char* name : {text, icon, stripe}) ignoreMouse(symbols::child<engine::DisplayObject>(panel, name));
+
+            for (const char* name : {text, icon, stripe})
+                ignoreMouse(symbols::child<engine::DisplayObject>(panel, name));
         };
 
         // Gold income text
@@ -67,12 +69,12 @@ namespace takeover {
 
         // Supply income text
         stat(def.supplyIncome, "txtUpkeep", "mcUpkeep", "mcStripeGreen");
-        
+
         // Mana income text
         stat(def.manaIncome, "txtMana", "mcMana", "mcStripeBlue");
     }
 
-    // --- WindowContentManager -------------------------------------------------------------------------------
+    // /----- WINDOW CONTENT MANAGER -----/
 
     Combatant* WindowContentManager::owner() { return level_->getLocationOwner(*node_->nodeDescription); }
 
@@ -83,15 +85,15 @@ namespace takeover {
         std::shared_ptr<engine::MovieClip> icon =
             symbols::create(
                 SquadIcon::unitIconClass(
-                    type, 
-                    combatant->getRace(), 
+                    type,
+                    combatant->getRace(),
                     combatant->getTier(type)
                 )
             );
-        
+
         icon->setScaleX(1.5);
         icon->setScaleY(1.5);
-        
+
         return icon;
     }
 
@@ -105,6 +107,7 @@ namespace takeover {
     int WindowContentManager::price(int buttonId) {
 
         Combatant* combatant = owner();
+
         switch (buttonId) {
 
             case WindowBase::BUT_ID_UNIT_0:
@@ -117,23 +120,23 @@ namespace takeover {
 
             case WindowBase::BUT_ID_UNIT_4:
                 return combatant->getUnitCost(*combatant->getArmyStat(unit_types::fromInt(buttonId)));
-            
+
             case WindowBase::BUT_ID_UPGRADE: {
                 auto* node = dynamic_cast<KeyNode*>(node_);
-                return node != nullptr ? 
+                return node != nullptr ?
                     node->getUpgradeCost(node->getLevel()) : -1;
             }
 
-            case WindowBase::BUT_ID_BUILD_FARM: 
+            case WindowBase::BUT_ID_BUILD_FARM:
                 return combatant->getSupplyCost(SupplyBuildingType::Village);
 
-            case WindowBase::BUT_ID_BUILD_MINE: 
+            case WindowBase::BUT_ID_BUILD_MINE:
                 return combatant->getSupplyCost(SupplyBuildingType::Mine);
 
-            case WindowBase::BUT_ID_BUILD_OBELISK: 
+            case WindowBase::BUT_ID_BUILD_OBELISK:
                 return combatant->getSupplyCost(SupplyBuildingType::Obelisk);
-                
-            default: 
+
+            default:
                 return -1;
         }
     }
@@ -160,7 +163,7 @@ namespace takeover {
 
                 case WindowBase::BUT_ID_UNIT_4:
                     button->setEnabled(
-                        id <= LOCK_UNIT_ABOVE 
+                        id <= LOCK_UNIT_ABOVE
                         && combatant->canBuy(
                             *combatant->getArmyStat(unit_types::fromInt(id))
                         ) && active
@@ -169,38 +172,38 @@ namespace takeover {
 
                 case WindowBase::BUT_ID_UPGRADE: {
 
-                    const int cost = 
-                        node != nullptr ? 
+                    const int cost =
+                        node != nullptr ?
                         node->getUpgradeCost(node->getLevel()) : -1;
 
                     button->setEnabled(
                         combatant->getGold() >= cost && cost > 0 && active
                     );
-                    
+
                     window.showLocked(*button, node->isMaxLevel());
                     break;
                 }
 
                 case WindowBase::BUT_ID_BUILD_FARM:
                     button->setEnabled(
-                        combatant->getGold() >= 
-                        combatant->getSupplyCost(SupplyBuildingType::Village) 
+                        combatant->getGold() >=
+                        combatant->getSupplyCost(SupplyBuildingType::Village)
                         && UNLOCK_VILAGE
                     );
                     break;
 
                 case WindowBase::BUT_ID_BUILD_MINE:
                     button->setEnabled(
-                        combatant->getGold() >= 
-                        combatant->getSupplyCost(SupplyBuildingType::Mine) 
+                        combatant->getGold() >=
+                        combatant->getSupplyCost(SupplyBuildingType::Mine)
                         && UNLOCK_MINE
                     );
                     break;
-                    
+
                 case WindowBase::BUT_ID_BUILD_OBELISK:
                     button->setEnabled(
-                        combatant->getGold() >= 
-                        combatant->getSupplyCost(SupplyBuildingType::Obelisk) 
+                        combatant->getGold() >=
+                        combatant->getSupplyCost(SupplyBuildingType::Obelisk)
                         && UNLOCK_OBELISK
                     );
                     break;
@@ -211,7 +214,7 @@ namespace takeover {
         }
     }
 
-    // --- WindowBase -------------------------------------------------------------------------------------------
+    // /----- WINDOW BASE -----/
 
     WindowBase::WindowBase(WindowDef def) : def_(std::move(def)) {
         window_ = symbols::create(def_.windowClass);
@@ -226,20 +229,24 @@ namespace takeover {
         for (auto& button : buttons_) {
             button->dispose();
         }
+
         buttons_.clear();
-        
-        if (ultimate_) 
-            ultimate_->dispose();    
+
+        if (ultimate_)
+            ultimate_->dispose();
+
         ultimate_.reset();
-        
+
         signalAction.dispose();
 
-        if (window_ && window_->parent() != nullptr) 
+        if (window_ && window_->parent() != nullptr)
             window_->parent()->removeChild(window_.get());
+
         window_.reset();
 
-        if (def_.content) 
+        if (def_.content)
             def_.content->dispose();
+
         def_.content.reset();
 
         UpdatableObject::customDispose();
@@ -248,8 +255,8 @@ namespace takeover {
     void WindowBase::showGold(engine::MovieClip* clip, int gold) {
         if (clip != nullptr) {
             symbols::setHtmlText(
-        *clip, 
-            "txtGold", 
+        *clip,
+            "txtGold",
             std::to_string(gold)
             );
         }
@@ -257,9 +264,9 @@ namespace takeover {
 
     void WindowBase::placeWindow() {
         std::size_t i = 0;
-        
+
         for (; i + 1 < def_.positions.size(); ++i) {
-            
+
             if (window_->x() < def_.positions[i].second) {
 
                 window_->gotoAndStop(
@@ -268,39 +275,41 @@ namespace takeover {
                 return;
             }
         }
+
         window_->gotoAndStop(def_.positions[i].first);
     }
 
     void WindowBase::decorate() {
-        
-        if (auto* color = symbols::find(*window_, "mcPanel.mcColor")) 
+
+        if (auto* color = symbols::find(*window_, "mcPanel.mcColor"))
             color->gotoAndStop(def_.panelColorFrame);
 
-        if (auto* center = symbols::child(*window_, "mcCenter")) 
+        if (auto* center = symbols::child(*window_, "mcCenter"))
             showCenterPanel(*center, def_.center);
 
-        if (auto* caption = 
+        if (auto* caption =
             symbols::child<engine::DisplayObjectContainer>(*window_, "txtCaption")) {
-            
+
             if (
                 auto* text = symbols::child<engine::TextField>(*caption, "text")
             ) {
                 text->setHtmlText(def_.text);
                 text->setMouseEnabled(false);
             }
+
             caption->setMouseEnabled(false);
         }
 
         const std::pair<const char*, const char*> titles[] = {
-            {"txtUnits", "UNITS"}, 
-            {"txtUpgrade", "UPGRADE"}, 
-            {"txtMagic", "MAGIC"}, 
-            {"txtBuild", "BUILD"}, 
+            {"txtUnits", "UNITS"},
+            {"txtUpgrade", "UPGRADE"},
+            {"txtMagic", "MAGIC"},
+            {"txtBuild", "BUILD"},
             {"txtDestroy", "DESTROY"}
         };
 
         for (const auto& [name, title] : titles) {
-            if (auto* block = 
+            if (auto* block =
                 symbols::child<engine::DisplayObject>(*window_, name)) {
 
                 symbols::setHtmlText(
@@ -328,10 +337,10 @@ namespace takeover {
 
     void WindowBase::refresh() {
 
-        if (ultimate_) 
+        if (ultimate_)
             ultimate_->setReadyFactor(def_.content->ultimateFactor());
 
-        if (def_.content) 
+        if (def_.content)
             def_.content->refreshButtons(*this);
     }
 
@@ -342,7 +351,7 @@ namespace takeover {
         Button& button = addButton(image, typeId);
 
         showGold(
-            symbols::child(*image, "mcGold"), 
+            symbols::child(*image, "mcGold"),
             def_.content->price(typeId)
         );
 
@@ -360,20 +369,20 @@ namespace takeover {
         addButton(image, BUT_ID_UPGRADE);
         showGold(
             symbols::child(
-                *image, 
+                *image,
                 "mcGoldBlock"
-            ), 
+            ),
             def_.content->price(BUT_ID_UPGRADE)
         );
     }
 
     void WindowBase::showLocked(Button& button, bool locked) {
-        if (auto* message = 
+        if (auto* message =
             symbols::child<engine::DisplayObject>(*button.image(), "mcLockMessage")) {
             message->setVisible(locked);
         }
 
-        if (auto* gold = 
+        if (auto* gold =
             symbols::child<engine::DisplayObject>(*button.image(), "mcGoldBlock")) {
             gold->setVisible(!locked);
         }
@@ -383,7 +392,7 @@ namespace takeover {
 
         ultimate_ = std::make_shared<USpellButton>(
             ButtonDef::make(
-                shared(symbols::child(*window_, "butSpell")), 
+                shared(symbols::child(*window_, "butSpell")),
                 std::nullopt, BUT_ID_ULTIMATE_SPELL
             )
         );
@@ -396,30 +405,30 @@ namespace takeover {
     }
 
     Button& WindowBase::addBuildButton(int slot, int typeId) {
-        
+
         engine::MovieClip* image = symbols::child(
-            *window_, 
+            *window_,
             "butBuild" + std::to_string(slot)
         );
 
         Button& button = addButton(image, typeId);
-        
+
         showGold(
-            symbols::child(*image, "mcGoldBlock"), 
+            symbols::child(*image, "mcGoldBlock"),
             def_.content->price(typeId)
         );
 
         return button;
     }
 
-    Button& WindowBase::addDestroyButton() { 
+    Button& WindowBase::addDestroyButton() {
         return addButton(
             symbols::child(
-                *window_, 
+                *window_,
                 "butDestroy"
-            ), 
+            ),
             BUT_ID_DESTROY
-        ); 
+        );
     }
 
 } // namespace takeover

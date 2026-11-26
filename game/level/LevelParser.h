@@ -15,24 +15,25 @@
 
 namespace takeover {
 
-class LevelParser {
-public:
-    /// Builds the level of a battle (original: _SafeStr_3131).
-    static std::shared_ptr<Level> parse(const BattleDef& def);
+    class LevelParser {
+    public:
+        /// Builds the level of a battle (original: _SafeStr_3131).
+        static std::shared_ptr<Level> parse(const BattleDef& def);
 
-private:
-    LevelParser() = default;
-    void init(const BattleDef& def);
-    void parseMarkers(engine::DisplayObjectContainer& markers); ///< parse
-    void addNode(engine::DisplayObject& marker);                ///< _SafeStr_3130
-    void addRoad(engine::DisplayObject& marker);                ///< _SafeStr_3127
-    /// Puts the map objects and the buildings in the battlefield layer (original: _SafeStr_3128).
-    void fillLayer();
+    private:
+        LevelParser() = default;
+        void init(const BattleDef& def);
+        void parseMarkers(engine::DisplayObjectContainer& markers); ///< parse
+        void addNode(engine::DisplayObject& marker);                ///< _SafeStr_3130
+        void addRoad(engine::DisplayObject& marker);                ///< _SafeStr_3127
 
-    std::map<std::string, std::shared_ptr<GraphNode>> nodes_; ///< By marker id (original: _SafeStr_2277).
-    std::shared_ptr<Level> level_;                            ///< Original: _SafeStr_1502.
-    std::vector<int> locationViews_;                          ///< Original: _SafeStr_3125.
-    TOResManager* resources_ = nullptr;                       ///< Original: _SafeStr_1252.
-};
+        /// Puts the map objects and the buildings in the battlefield layer (original: _SafeStr_3128).
+        void fillLayer();
+
+        std::map<std::string, std::shared_ptr<GraphNode>> nodes_; ///< By marker id (original: _SafeStr_2277).
+        std::shared_ptr<Level> level_;                            ///< Original: _SafeStr_1502.
+        std::vector<int> locationViews_;                          ///< Original: _SafeStr_3125.
+        TOResManager* resources_ = nullptr;                       ///< Original: _SafeStr_1252.
+    };
 
 } // namespace takeover

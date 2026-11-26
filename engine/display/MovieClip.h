@@ -19,73 +19,74 @@
 
 namespace engine {
 
-class Library;
+    class Library;
 
-struct FrameLabel {
-    std::string name;
-    int frame = 1; ///< 1-based, like flash.display.FrameLabel.
-};
+    struct FrameLabel {
+        std::string name;
+        int frame = 1; ///< 1-based, like flash.display.FrameLabel.
+    };
 
-class MovieClip : public Sprite {
-public:
-    /// An empty clip, as `new MovieClip()` in AS3 (one empty frame).
-    MovieClip() = default;
-    /// A clip playing a library sprite's timeline; frame 1 is entered
-    /// immediately, so its children exist when the constructor returns.
-    MovieClip(Library& library, const swf::Timeline& timeline, std::uint16_t spriteId = 0);
+    class MovieClip : public Sprite {
+    public:
+        /// An empty clip, as `new MovieClip()` in AS3 (one empty frame).
+        MovieClip() = default;
 
-    /// Frame scripts that belong to a library symbol rather than to code:
-    /// the `stop()` calls the Flash IDE compiled into some clips. Registered
-    /// once at startup, they run for every instance of the symbol.
-    /// `frameIndex` is 0-based like AS3 addFrameScript.
-    static void registerSymbolScript(std::uint16_t spriteId, int frameIndex, std::function<void(MovieClip&)> script);
+        /// A clip playing a library sprite's timeline; frame 1 is entered
+        /// immediately, so its children exist when the constructor returns.
+        MovieClip(Library& library, const swf::Timeline& timeline, std::uint16_t spriteId = 0);
 
-    /// While true, frames entered don't play their sounds (used when clips
-    /// are rendered to bitmaps frame by frame).
-    static inline bool timelineSoundsMuted = false;
+        /// Frame scripts that belong to a library symbol rather than to code:
+        /// the `stop()` calls the Flash IDE compiled into some clips. Registered
+        /// once at startup, they run for every instance of the symbol.
+        /// `frameIndex` is 0-based like AS3 addFrameScript.
+        static void registerSymbolScript(std::uint16_t spriteId, int frameIndex, std::function<void(MovieClip&)> script);
 
-    [[nodiscard]] std::uint16_t spriteId() const { return spriteId_; }
+        /// While true, frames entered don't play their sounds (used when clips
+        /// are rendered to bitmaps frame by frame).
+        static inline bool timelineSoundsMuted = false;
 
-    [[nodiscard]] int currentFrame() const { return currentFrame_; }
-    [[nodiscard]] int totalFrames() const;
-    [[nodiscard]] bool isPlaying() const { return playing_; }
-    [[nodiscard]] const std::vector<FrameLabel>& currentLabels() const { return labels_; }
-    /// Label of the current frame or the closest one before it ("" if none).
-    [[nodiscard]] std::string currentLabel() const;
-    [[nodiscard]] bool hasLabel(std::string_view label) const { return frameForLabel(label) != 0; }
+        [[nodiscard]] std::uint16_t spriteId() const { return spriteId_; }
 
-    void play() { playing_ = true; }
-    void stop() { playing_ = false; }
-    void gotoAndStop(int frame);
-    void gotoAndPlay(int frame);
-    void gotoAndStop(std::string_view label);
-    void gotoAndPlay(std::string_view label);
-    void nextFrame();
-    void prevFrame();
+        [[nodiscard]] int currentFrame() const { return currentFrame_; }
+        [[nodiscard]] int totalFrames() const;
+        [[nodiscard]] bool isPlaying() const { return playing_; }
+        [[nodiscard]] const std::vector<FrameLabel>& currentLabels() const { return labels_; }
+        /// Label of the current frame or the closest one before it ("" if none).
+        [[nodiscard]] std::string currentLabel() const;
+        [[nodiscard]] bool hasLabel(std::string_view label) const { return frameForLabel(label) != 0; }
 
-    /// AS3 addFrameScript: `frameIndex` is 0-based, as in the original code.
-    void addFrameScript(int frameIndex, std::function<void()> script);
+        void play() { playing_ = true; }
+        void stop() { playing_ = false; }
+        void gotoAndStop(int frame);
+        void gotoAndPlay(int frame);
+        void gotoAndStop(std::string_view label);
+        void gotoAndPlay(std::string_view label);
+        void nextFrame();
+        void prevFrame();
 
-    void advanceFrame() override;
+        /// AS3 addFrameScript: `frameIndex` is 0-based, as in the original code.
+        void addFrameScript(int frameIndex, std::function<void()> script);
 
-private:
-    void gotoFrame(int target);
-    [[nodiscard]] int frameForLabel(std::string_view label) const;
-    DisplayObjectPtr instantiate(std::uint16_t characterId) const;
+        void advanceFrame() override;
 
-    void runFrameActions();
+    private:
+        void gotoFrame(int target);
+        [[nodiscard]] int frameForLabel(std::string_view label) const;
+        DisplayObjectPtr instantiate(std::uint16_t characterId) const;
 
-    Library* library_ = nullptr;
-    const swf::Timeline* timeline_ = nullptr;
-    std::uint16_t spriteId_ = 0;
-    int currentFrame_ = 1;
-    bool playing_ = true;
-    std::vector<FrameLabel> labels_;
-    std::map<int, std::function<void()>> frameScripts_; ///< Keyed by 1-based frame.
-};
+        void runFrameActions();
 
-/// Creates the display object for a library character (shape, sprite,
-/// button, text...). Returns nullptr for characters that are not displayable.
-DisplayObjectPtr createDisplayObject(Library& library, std::uint16_t characterId);
+        Library* library_ = nullptr;
+        const swf::Timeline* timeline_ = nullptr;
+        std::uint16_t spriteId_ = 0;
+        int currentFrame_ = 1;
+        bool playing_ = true;
+        std::vector<FrameLabel> labels_;
+        std::map<int, std::function<void()>> frameScripts_; ///< Keyed by 1-based frame.
+    };
+
+    /// Creates the display object for a library character (shape, sprite,
+    /// button, text...). Returns nullptr for characters that are not displayable.
+    DisplayObjectPtr createDisplayObject(Library& library, std::uint16_t characterId);
 
 } // namespace engine

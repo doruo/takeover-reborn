@@ -14,9 +14,9 @@
 #include <memory>
 
 namespace engine {
-class Event;
-class MouseEvent;
-class MovieClip;
+    class Event;
+    class MouseEvent;
+    class MovieClip;
 }
 
 namespace takeover {
@@ -45,6 +45,7 @@ namespace takeover {
     class USpellButton : public Button {
     public:
         explicit USpellButton(ButtonDef def);
+
         /// Shows the charge, 0..1; clickable when full (original: _SafeStr_1427).
         void setReadyFactor(double factor);
 
@@ -89,23 +90,23 @@ namespace takeover {
         /// Lays out the available spell buttons (original: _SafeStr_3029).
         void layoutSpellButtons();
         void setUltimateVisible(bool visible); ///< _SafeStr_3043
-        
+
         /// Shows the player's resources (original: _SafeStr_3044).
         void showResources(const IResourceSource& source);
 
         // IInputProcess
-        [[nodiscard]] bool isEnabled() const override { 
-            return enabled_; 
+        [[nodiscard]] bool isEnabled() const override {
+            return enabled_;
         }
 
-        void setEnabled(bool enabled) override { 
-            enabled_ = enabled; 
+        void setEnabled(bool enabled) override {
+            enabled_ = enabled;
         }
 
         bool process(double timeElapsed, bool locked) override;
 
-        void reset() override { 
-            releaseSpellButtons(); 
+        void reset() override {
+            releaseSpellButtons();
         }
 
     protected:
@@ -155,7 +156,7 @@ namespace takeover {
 
         std::shared_ptr<USpellButton> ultimateButton_; ///< Original: _SafeStr_3006.
         int pendingUltimate_ = -1;                  ///< Original: _SafeStr_3012.
-        
+
         // The layout of the spell bar, measured on the clip (static in the original).
         int ultimateX_ = 0, centerX_ = 0, buttonSpacing_ = 0;
     };

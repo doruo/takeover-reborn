@@ -4,6 +4,6 @@
 
 namespace takeover {
 
-enum class SupplyBuildingType { Empty = 0, Village = 1, Mine = 2, Obelisk = 3 };
+    enum class SupplyBuildingType { Empty = 0, Village = 1, Mine = 2, Obelisk = 3 };
 
 } // namespace takeover

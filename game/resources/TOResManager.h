@@ -10,13 +10,13 @@
 
 namespace takeover {
 
-class TOResManager : public ResourceManager {
-public:
-    /// With `addXMLData`, every battle clip is rendered at startup too
-    /// (the game passes false).
-    /// (The original also raised the stage frame rate to 120 while
-    /// loading, to render more per second; the budget here is per frame.)
-    explicit TOResManager(int gameFps, bool addXMLData = true);
-};
+    class TOResManager : public ResourceManager {
+    public:
+        /// With `addXMLData`, every battle clip is rendered at startup too
+        /// (the game passes false).
+        /// (The original also raised the stage frame rate to 120 while
+        /// loading, to render more per second; the budget here is per frame.)
+        explicit TOResManager(int gameFps, bool addXMLData = true);
+    };
 
 } // namespace takeover

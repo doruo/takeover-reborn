@@ -17,60 +17,60 @@
 
 namespace swf {
 
-/// PlaceObject2/3. Every field is optional because a "move" only carries the
-/// properties that change.
-struct PlaceObject {
-    Depth depth = 0;
-    bool isMove = false; ///< Modify the object already at `depth`.
-    std::optional<CharacterId> characterId;
-    std::optional<Matrix> matrix;
-    std::optional<ColorTransform> colorTransform;
-    std::optional<std::uint16_t> ratio; ///< Morph shape blend, 0..65535.
-    std::optional<std::string> name;   ///< Instance name (e.g. "butLogo").
-    std::optional<Depth> clipDepth;    ///< Present when this object is a mask.
-    std::optional<std::vector<Filter>> filters;
-    std::optional<BlendMode> blendMode;
-    std::optional<bool> cacheAsBitmap;
-    std::optional<bool> visible;
-    std::optional<std::string> className;
-};
+    /// PlaceObject2/3. Every field is optional because a "move" only carries the
+    /// properties that change.
+    struct PlaceObject {
+        Depth depth = 0;
+        bool isMove = false; ///< Modify the object already at `depth`.
+        std::optional<CharacterId> characterId;
+        std::optional<Matrix> matrix;
+        std::optional<ColorTransform> colorTransform;
+        std::optional<std::uint16_t> ratio; ///< Morph shape blend, 0..65535.
+        std::optional<std::string> name;   ///< Instance name (e.g. "butLogo").
+        std::optional<Depth> clipDepth;    ///< Present when this object is a mask.
+        std::optional<std::vector<Filter>> filters;
+        std::optional<BlendMode> blendMode;
+        std::optional<bool> cacheAsBitmap;
+        std::optional<bool> visible;
+        std::optional<std::string> className;
+    };
 
-struct RemoveObject {
-    Depth depth = 0;
-};
+    struct RemoveObject {
+        Depth depth = 0;
+    };
 
-struct SoundEnvelopePoint {
-    std::uint32_t position44 = 0; ///< Sample position at 44.1 kHz.
-    std::uint16_t leftLevel = 32768;
-    std::uint16_t rightLevel = 32768;
-};
+    struct SoundEnvelopePoint {
+        std::uint32_t position44 = 0; ///< Sample position at 44.1 kHz.
+        std::uint16_t leftLevel = 32768;
+        std::uint16_t rightLevel = 32768;
+    };
 
-struct SoundInfo {
-    bool syncStop = false;
-    bool syncNoMultiple = false;
-    std::optional<std::uint32_t> inPoint;
-    std::optional<std::uint32_t> outPoint;
-    std::uint16_t loopCount = 1;
-    std::vector<SoundEnvelopePoint> envelope;
-};
+    struct SoundInfo {
+        bool syncStop = false;
+        bool syncNoMultiple = false;
+        std::optional<std::uint32_t> inPoint;
+        std::optional<std::uint32_t> outPoint;
+        std::uint16_t loopCount = 1;
+        std::vector<SoundEnvelopePoint> envelope;
+    };
 
-struct StartSound {
-    CharacterId soundId = 0;
-    SoundInfo info;
-};
+    struct StartSound {
+        CharacterId soundId = 0;
+        SoundInfo info;
+    };
 
-using DisplayCommand = std::variant<PlaceObject, RemoveObject>;
+    using DisplayCommand = std::variant<PlaceObject, RemoveObject>;
 
-struct Frame {
-    std::vector<DisplayCommand> commands; ///< In file order.
-    std::vector<StartSound> sounds;
-    std::vector<std::string> labels; ///< Usually zero or one.
-};
+    struct Frame {
+        std::vector<DisplayCommand> commands; ///< In file order.
+        std::vector<StartSound> sounds;
+        std::vector<std::string> labels; ///< Usually zero or one.
+    };
 
-struct Timeline {
-    std::vector<Frame> frames;
+    struct Timeline {
+        std::vector<Frame> frames;
 
-    [[nodiscard]] int frameCount() const { return static_cast<int>(frames.size()); }
-};
+        [[nodiscard]] int frameCount() const { return static_cast<int>(frames.size()); }
+    };
 
 } // namespace swf

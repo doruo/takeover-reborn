@@ -16,47 +16,47 @@
 
 namespace takeover {
 
-class Disposable : public std::enable_shared_from_this<Disposable> {
-public:
-    Disposable() = default;
-    virtual ~Disposable() = default;
-    Disposable(const Disposable&) = delete;
-    Disposable& operator=(const Disposable&) = delete;
+    class Disposable : public std::enable_shared_from_this<Disposable> {
+    public:
+        Disposable() = default;
+        virtual ~Disposable() = default;
+        Disposable(const Disposable&) = delete;
+        Disposable& operator=(const Disposable&) = delete;
 
-    /// Runs preDispose(), marks the object, tells the listeners, then runs
-    /// customDispose(). Calling it again does nothing.
-    void dispose();
+        /// Runs preDispose(), marks the object, tells the listeners, then runs
+        /// customDispose(). Calling it again does nothing.
+        void dispose();
 
-    [[nodiscard]] bool isDisposed() const { return disposed_; }
-    /// Dispatched with the object being disposed (original: _SafeStr_30).
-    [[nodiscard]] Signal<Disposable*>& signalDisposed() { return signalDisposed_; }
+        [[nodiscard]] bool isDisposed() const { return disposed_; }
+        /// Dispatched with the object being disposed (original: _SafeStr_30).
+        [[nodiscard]] Signal<Disposable*>& signalDisposed() { return signalDisposed_; }
 
-protected:
-    virtual void preDispose() {}
-    virtual void customDispose() {}
+    protected:
+        virtual void preDispose() {}
+        virtual void customDispose() {}
 
-    bool disposed_ = false;
+        bool disposed_ = false;
 
-private:
-    Signal<Disposable*> signalDisposed_;
-};
+    private:
+        Signal<Disposable*> signalDisposed_;
+    };
 
-/// A Disposable that is updated every frame and can be paused; it counts
-/// the time it has been running (original: _SafeStr_36).
-class UpdatableObject : public Disposable {
-public:
-    [[nodiscard]] bool isPaused() const { return paused_; }
-    [[nodiscard]] double lifetime() const { return lifetime_; }
-    virtual void pause() { paused_ = true; }
-    virtual void resume() { paused_ = false; }
+    /// A Disposable that is updated every frame and can be paused; it counts
+    /// the time it has been running (original: _SafeStr_36).
+    class UpdatableObject : public Disposable {
+    public:
+        [[nodiscard]] bool isPaused() const { return paused_; }
+        [[nodiscard]] double lifetime() const { return lifetime_; }
+        virtual void pause() { paused_ = true; }
+        virtual void resume() { paused_ = false; }
 
-    /// Override and call the base version: it does nothing while paused or
-    /// disposed, else adds `timeElapsed` to the lifetime.
-    virtual void update(double timeElapsed);
+        /// Override and call the base version: it does nothing while paused or
+        /// disposed, else adds `timeElapsed` to the lifetime.
+        virtual void update(double timeElapsed);
 
-protected:
-    double lifetime_ = 0;
-    bool paused_ = false;
-};
+    protected:
+        double lifetime_ = 0;
+        bool paused_ = false;
+    };
 
 } // namespace takeover

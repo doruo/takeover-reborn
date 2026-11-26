@@ -13,47 +13,52 @@
 
 namespace takeover {
 
-class IInputProcess {
-public:
-    virtual ~IInputProcess() = default;
-    [[nodiscard]] virtual bool isEnabled() const = 0;
-    virtual void setEnabled(bool enabled) = 0;
-    /// Handles this frame's input; returns true if it took it.
-    virtual bool process(double timeElapsed, bool locked) = 0;
-    virtual void reset() = 0;
-};
+    class IInputProcess {
+    public:
+        virtual ~IInputProcess() = default;
+        [[nodiscard]] virtual bool isEnabled() const = 0;
+        virtual void setEnabled(bool enabled) = 0;
 
-/// A process made of functions (original: _SafeCls_1936).
-class FunctionProcess : public Disposable, public IInputProcess {
-public:
-    using ProcessFunction = std::function<bool(double, bool)>;
+        /// Handles this frame's input; returns true if it took it.
+        virtual bool process(double timeElapsed, bool locked) = 0;
+        virtual void reset() = 0;
+    };
 
-    explicit FunctionProcess(ProcessFunction process, std::function<void()> reset = nullptr, bool enabled = true,
-                             std::function<void(bool)> setEnabled = nullptr, std::function<bool()> getEnabled = nullptr)
-        : process_(std::move(process)), reset_(std::move(reset)), enabled_(enabled), setEnabled_(std::move(setEnabled)),
-          getEnabled_(std::move(getEnabled)) {}
+    /// A process made of functions (original: _SafeCls_1936).
+    class FunctionProcess : public Disposable, public IInputProcess {
+    public:
+        using ProcessFunction = std::function<bool(double, bool)>;
 
-    [[nodiscard]] bool isEnabled() const override { return getEnabled_ ? getEnabled_() : enabled_; }
-    void setEnabled(bool enabled) override {
-        if (setEnabled_) setEnabled_(enabled);
-        else enabled_ = enabled;
-    }
-    bool process(double timeElapsed, bool locked) override { return process_(timeElapsed, locked); }
-    void reset() override {
-        if (reset_) reset_();
-    }
+        explicit FunctionProcess(ProcessFunction process, std::function<void()> reset = nullptr, bool enabled = true,
+                                 std::function<void(bool)> setEnabled = nullptr, std::function<bool()> getEnabled = nullptr)
+            : process_(std::move(process)), reset_(std::move(reset)), enabled_(enabled), setEnabled_(std::move(setEnabled)),
+              getEnabled_(std::move(getEnabled)) {}
 
-protected:
-    void customDispose() override {
-        process_ = nullptr, reset_ = nullptr, setEnabled_ = nullptr, getEnabled_ = nullptr;
-    }
+        [[nodiscard]] bool isEnabled() const override { return getEnabled_ ? getEnabled_() : enabled_; }
+        void setEnabled(bool enabled) override {
+            if (setEnabled_)
+                setEnabled_(enabled);
+            else
+                enabled_ = enabled;
+        }
 
-private:
-    ProcessFunction process_;          ///< Original: _SafeStr_1940.
-    std::function<void()> reset_;      ///< Original: _SafeStr_1939.
-    bool enabled_;                     ///< Original: _SafeStr_1335.
-    std::function<void(bool)> setEnabled_; ///< Original: _SafeStr_1937.
-    std::function<bool()> getEnabled_;     ///< Original: _SafeStr_1938.
-};
+        bool process(double timeElapsed, bool locked) override { return process_(timeElapsed, locked); }
+        void reset() override {
+            if (reset_)
+                reset_();
+        }
+
+    protected:
+        void customDispose() override {
+            process_ = nullptr, reset_ = nullptr, setEnabled_ = nullptr, getEnabled_ = nullptr;
+        }
+
+    private:
+        ProcessFunction process_;          ///< Original: _SafeStr_1940.
+        std::function<void()> reset_;      ///< Original: _SafeStr_1939.
+        bool enabled_;                     ///< Original: _SafeStr_1335.
+        std::function<void(bool)> setEnabled_; ///< Original: _SafeStr_1937.
+        std::function<bool()> getEnabled_;     ///< Original: _SafeStr_1938.
+    };
 
 } // namespace takeover

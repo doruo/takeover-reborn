@@ -13,45 +13,49 @@
 
 namespace takeover {
 
-/// Original: _SafePkg_774/_SafeStr_742.
-class GameState : public UpdatableObject {
-public:
-    [[nodiscard]] bool modal() const { return modal_; }
+    /// Original: _SafePkg_774/_SafeStr_742.
+    class GameState : public UpdatableObject {
+    public:
+        [[nodiscard]] bool modal() const { return modal_; }
 
-private:
-    friend class StateManager;
-    bool modal_ = false;
-};
+    private:
+        friend class StateManager;
+        bool modal_ = false;
+    };
 
-class StateManager : public UpdatableObject {
-public:
-    StateManager() = default;
+    class StateManager : public UpdatableObject {
+    public:
+        StateManager() = default;
 
-    /// Original: _SafeStr_1471.
-    [[nodiscard]] GameState* topState() const;
-    /// The state just below the top (original: _SafeStr_1473).
-    [[nodiscard]] GameState* stateBelowTop() const;
+        /// Original: _SafeStr_1471.
+        [[nodiscard]] GameState* topState() const;
 
-    void update(double timeElapsed) override;
+        /// The state just below the top (original: _SafeStr_1473).
+        [[nodiscard]] GameState* stateBelowTop() const;
 
-    virtual void pushState(std::shared_ptr<GameState> state, bool modal = true);
-    /// Disposes the top state and resumes the ones below it, down to the
-    /// first modal one (original: _SafeStr_1476).
-    std::shared_ptr<GameState> popState();
-    /// Disposes every state (original: _SafeStr_1475).
-    void clear();
-    /// Replaces the whole stack with `state` (original: _SafeStr_743).
-    void setState(std::shared_ptr<GameState> state);
+        void update(double timeElapsed) override;
 
-protected:
-    void customDispose() override;
+        virtual void pushState(std::shared_ptr<GameState> state, bool modal = true);
 
-private:
-    void onStateDisposed(Disposable* state);
+        /// Disposes the top state and resumes the ones below it, down to the
+        /// first modal one (original: _SafeStr_1476).
+        std::shared_ptr<GameState> popState();
 
-    std::vector<std::shared_ptr<GameState>> states_;
-    int updateIndex_ = 0;
-    bool updating_ = false;
-};
+        /// Disposes every state (original: _SafeStr_1475).
+        void clear();
+
+        /// Replaces the whole stack with `state` (original: _SafeStr_743).
+        void setState(std::shared_ptr<GameState> state);
+
+    protected:
+        void customDispose() override;
+
+    private:
+        void onStateDisposed(Disposable* state);
+
+        std::vector<std::shared_ptr<GameState>> states_;
+        int updateIndex_ = 0;
+        bool updating_ = false;
+    };
 
 } // namespace takeover

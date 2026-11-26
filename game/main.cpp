@@ -34,32 +34,39 @@
 namespace {
 
 #if defined(__linux__)
-/// On a crash, prints the call stack (addresses can be turned into lines
-/// with addr2line -e takeover) so bug reports are useful.
-void onCrash(int signal) {
-    void* frames[64];
-    const int count = backtrace(frames, 64);
-    const char header[] = "\nTake Over crashed. Call stack:\n";
-    (void)!write(STDERR_FILENO, header, sizeof header - 1);
-    backtrace_symbols_fd(frames, count, STDERR_FILENO);
-    std::signal(signal, SIG_DFL);
-    std::raise(signal);
-}
+    /// On a crash, prints the call stack (addresses can be turned into lines
+    /// with addr2line -e takeover) so bug reports are useful.
+    void onCrash(int signal) {
+        void* frames[64];
+        const int count = backtrace(frames, 64);
+        const char header[] = "\nTake Over crashed. Call stack:\n";
+        (void)!write(STDERR_FILENO, header, sizeof header - 1);
+        backtrace_symbols_fd(frames, count, STDERR_FILENO);
+        std::signal(signal, SIG_DFL);
+        std::raise(signal);
+    }
 #endif
 
-std::filesystem::path findAssets(const char* fromCommandLine) {
-    namespace fs = std::filesystem;
-    const auto isPack = [](const fs::path& p) { return fs::exists(p / "manifest.json") && fs::exists(p / "library.swf"); };
-    if (fromCommandLine) return fromCommandLine;
-    if (const char* env = std::getenv("TAKEOVER_ASSETS"); env && *env) return env;
-    if (const char* base = SDL_GetBasePath()) {
-        const fs::path exe(base);
-        for (const fs::path& candidate : {exe / "../share/takeover/assets", exe / "assets", exe / "../assets",
-                                          exe / "../../assets"})
-            if (isPack(candidate)) return fs::weakly_canonical(candidate);
+    std::filesystem::path findAssets(const char* fromCommandLine) {
+        namespace fs = std::filesystem;
+        const auto isPack = [](const fs::path& p) { return fs::exists(p / "manifest.json") && fs::exists(p / "library.swf"); };
+
+        if (fromCommandLine)
+            return fromCommandLine;
+
+        if (const char* env = std::getenv("TAKEOVER_ASSETS"); env && *env)
+            return env;
+
+        if (const char* base = SDL_GetBasePath()) {
+            const fs::path exe(base);
+            for (const fs::path& candidate : {exe / "../share/takeover/assets", exe / "assets", exe / "../assets",
+                                              exe / "../../assets"})
+                if (isPack(candidate))
+                    return fs::weakly_canonical(candidate);
+        }
+
+        return "assets";
     }
-    return "assets";
-}
 
 } // namespace
 
@@ -74,13 +81,20 @@ int main(int argc, char** argv) {
     bool fast = false;
     bool fullscreen = false;
     int scale = 1;
+
     for (int i = 1; i < argc; ++i) {
-        if (std::strcmp(argv[i], "--assets") == 0 && i + 1 < argc) assets = argv[++i];
-        else if (std::strcmp(argv[i], "--fullscreen") == 0) fullscreen = true;
-        else if (std::strcmp(argv[i], "--scale") == 0 && i + 1 < argc) scale = std::atoi(argv[++i]);
-        else if (std::strcmp(argv[i], "--script") == 0 && i + 1 < argc) script = argv[++i];
-        else if (std::strcmp(argv[i], "--fast") == 0) fast = true;
-        else if (std::strcmp(argv[i], "--cheat") == 0) takeover::LevelVisual::mode.add(takeover::LevelVisual::ST_CHEAT_MODE);
+        if (std::strcmp(argv[i], "--assets") == 0 && i + 1 < argc)
+            assets = argv[++i];
+        else if (std::strcmp(argv[i], "--fullscreen") == 0)
+            fullscreen = true;
+        else if (std::strcmp(argv[i], "--scale") == 0 && i + 1 < argc)
+            scale = std::atoi(argv[++i]);
+        else if (std::strcmp(argv[i], "--script") == 0 && i + 1 < argc)
+            script = argv[++i];
+        else if (std::strcmp(argv[i], "--fast") == 0)
+            fast = true;
+        else if (std::strcmp(argv[i], "--cheat") == 0)
+            takeover::LevelVisual::mode.add(takeover::LevelVisual::ST_CHEAT_MODE);
         else if (std::strcmp(argv[i], "--help") == 0 || std::strcmp(argv[i], "-h") == 0) {
             std::printf("usage: takeover [--assets DIR] [--fullscreen] [--scale N] [--cheat]\n"
                         "  F11 or Alt+Enter toggles fullscreen.\n");
@@ -98,6 +112,7 @@ int main(int argc, char** argv) {
                          assetDir.string().c_str());
             return 1;
         }
+
         engine::Application app({.assets = assetDir,
                                  .title = "Take Over",
                                  .fullscreen = fullscreen,
@@ -118,6 +133,7 @@ int main(int argc, char** argv) {
         app.stage().removeChild(game.get());
         game.reset();
         takeover::emptyTrash();
+
         return code;
     } catch (const std::exception& e) {
         std::fprintf(stderr, "Take Over stopped: %s\n", e.what());

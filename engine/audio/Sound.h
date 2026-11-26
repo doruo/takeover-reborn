@@ -24,110 +24,113 @@ struct ma_engine;
 
 namespace engine {
 
-class AudioSystem;
-class Library;
+    class AudioSystem;
+    class Library;
 
-/// flash.media.SoundTransform.
-struct SoundTransform {
-    double volume = 1; ///< 0..1
-    double pan = 0;    ///< -1 (left) .. 1 (right)
-};
+    /// flash.media.SoundTransform.
+    struct SoundTransform {
+        double volume = 1; ///< 0..1
+        double pan = 0;    ///< -1 (left) .. 1 (right)
+    };
 
-/// Decoded PCM of one sound: interleaved stereo float at the device rate.
-struct SoundData {
-    std::vector<float> frames;
-    std::uint64_t frameCount = 0;
-    std::uint32_t sampleRate = 44100;
-};
+    /// Decoded PCM of one sound: interleaved stereo float at the device rate.
+    struct SoundData {
+        std::vector<float> frames;
+        std::uint64_t frameCount = 0;
+        std::uint32_t sampleRate = 44100;
+    };
 
-class SoundChannel : public EventDispatcher, public std::enable_shared_from_this<SoundChannel> {
-public:
-    ~SoundChannel() override;
+    class SoundChannel : public EventDispatcher, public std::enable_shared_from_this<SoundChannel> {
+    public:
+        ~SoundChannel() override;
 
-    void stop();
-    [[nodiscard]] const SoundTransform& soundTransform() const { return transform_; }
-    void setSoundTransform(const SoundTransform& transform);
-    /// Playback position in milliseconds within the current loop.
-    [[nodiscard]] double position() const;
+        void stop();
+        [[nodiscard]] const SoundTransform& soundTransform() const { return transform_; }
+        void setSoundTransform(const SoundTransform& transform);
 
-private:
-    friend class Sound;
-    friend class AudioSystem;
-    struct Voice; ///< miniaudio objects, hidden from the header
+        /// Playback position in milliseconds within the current loop.
+        [[nodiscard]] double position() const;
 
-    SoundChannel(AudioSystem& audio, std::shared_ptr<const SoundData> data, double startMs, int loops,
-                 const SoundTransform& transform);
-    /// Called every frame: handles loop counts; true when playback ended.
-    bool poll();
+    private:
+        friend class Sound;
+        friend class AudioSystem;
+        struct Voice; ///< miniaudio objects, hidden from the header
 
-    AudioSystem& audio_;
-    std::shared_ptr<const SoundData> data_;
-    std::unique_ptr<Voice> voice_;
-    SoundTransform transform_;
-    int loopsLeft_ = 0;
-    std::uint64_t startFrame_ = 0;
-    bool stopped_ = false;
-};
+        SoundChannel(AudioSystem& audio, std::shared_ptr<const SoundData> data, double startMs, int loops,
+                     const SoundTransform& transform);
+        /// Called every frame: handles loop counts; true when playback ended.
+        bool poll();
 
-class Sound {
-public:
-    /// flash.media.Sound.play: `loops` is the number of extra repetitions
-    /// (0 = play once). Returns nullptr when audio is unavailable.
-    std::shared_ptr<SoundChannel> play(double startTimeMs = 0, int loops = 0, const SoundTransform& transform = {});
+        AudioSystem& audio_;
+        std::shared_ptr<const SoundData> data_;
+        std::unique_ptr<Voice> voice_;
+        SoundTransform transform_;
+        int loopsLeft_ = 0;
+        std::uint64_t startFrame_ = 0;
+        bool stopped_ = false;
+    };
 
-    /// Length in milliseconds.
-    [[nodiscard]] double length() const;
+    class Sound {
+    public:
+        /// flash.media.Sound.play: `loops` is the number of extra repetitions
+        /// (0 = play once). Returns nullptr when audio is unavailable.
+        std::shared_ptr<SoundChannel> play(double startTimeMs = 0, int loops = 0, const SoundTransform& transform = {});
 
-private:
-    friend class AudioSystem;
-    Sound(AudioSystem& audio, std::uint16_t id) : audio_(audio), id_(id) {}
+        /// Length in milliseconds.
+        [[nodiscard]] double length() const;
 
-    AudioSystem& audio_;
-    std::uint16_t id_;
-};
+    private:
+        friend class AudioSystem;
+        Sound(AudioSystem& audio, std::uint16_t id) : audio_(audio), id_(id) {}
 
-/// Owns the audio device, the decoded sounds and the playing channels.
-class AudioSystem {
-public:
-    explicit AudioSystem(Library& library);
-    ~AudioSystem();
-    AudioSystem(const AudioSystem&) = delete;
-    AudioSystem& operator=(const AudioSystem&) = delete;
+        AudioSystem& audio_;
+        std::uint16_t id_;
+    };
 
-    /// The audio system of the running game (set by the constructor).
-    static AudioSystem* instance() { return instance_; }
+    /// Owns the audio device, the decoded sounds and the playing channels.
+    class AudioSystem {
+    public:
+        explicit AudioSystem(Library& library);
+        ~AudioSystem();
+        AudioSystem(const AudioSystem&) = delete;
+        AudioSystem& operator=(const AudioSystem&) = delete;
 
-    [[nodiscard]] bool available() const { return engine_ != nullptr; }
+        /// The audio system of the running game (set by the constructor).
+        static AudioSystem* instance() { return instance_; }
 
-    /// The sound of a library character, or nullptr if it isn't one.
-    Sound* sound(std::uint16_t id);
+        [[nodiscard]] bool available() const { return engine_ != nullptr; }
 
-    /// flash.media.SoundMixer.stopAll.
-    void stopAll();
-    /// Master volume (flash.media.SoundMixer.soundTransform).
-    void setMasterVolume(double volume);
+        /// The sound of a library character, or nullptr if it isn't one.
+        Sound* sound(std::uint16_t id);
 
-    /// Plays a sound placed on a timeline (StartSound tag).
-    void playTimelineSound(std::uint16_t id, bool stopInstead, bool noMultiple, int loops);
+        /// flash.media.SoundMixer.stopAll.
+        void stopAll();
 
-    /// Once per frame: ends finished channels and dispatches SOUND_COMPLETE.
-    void update();
+        /// Master volume (flash.media.SoundMixer.soundTransform).
+        void setMasterVolume(double volume);
 
-private:
-    friend class Sound;
-    friend class SoundChannel;
+        /// Plays a sound placed on a timeline (StartSound tag).
+        void playTimelineSound(std::uint16_t id, bool stopInstead, bool noMultiple, int loops);
 
-    std::shared_ptr<const SoundData> decode(std::uint16_t id);
+        /// Once per frame: ends finished channels and dispatches SOUND_COMPLETE.
+        void update();
 
-    static AudioSystem* instance_;
-    Library& library_;
-    ma_engine* engine_ = nullptr;
-    std::unordered_map<std::uint16_t, std::unique_ptr<Sound>> sounds_;
-    std::unordered_map<std::uint16_t, std::shared_ptr<const SoundData>> decoded_;
-    /// Playing channels, kept alive until they finish (Flash doesn't need a
-    /// reference to keep a sound playing either).
-    std::vector<std::shared_ptr<SoundChannel>> playing_;
-    std::unordered_map<std::uint16_t, std::vector<std::weak_ptr<SoundChannel>>> timelineChannels_;
-};
+    private:
+        friend class Sound;
+        friend class SoundChannel;
+
+        std::shared_ptr<const SoundData> decode(std::uint16_t id);
+
+        static AudioSystem* instance_;
+        Library& library_;
+        ma_engine* engine_ = nullptr;
+        std::unordered_map<std::uint16_t, std::unique_ptr<Sound>> sounds_;
+        std::unordered_map<std::uint16_t, std::shared_ptr<const SoundData>> decoded_;
+
+        /// Playing channels, kept alive until they finish (Flash doesn't need a
+        /// reference to keep a sound playing either).
+        std::vector<std::shared_ptr<SoundChannel>> playing_;
+        std::unordered_map<std::uint16_t, std::vector<std::weak_ptr<SoundChannel>>> timelineChannels_;
+    };
 
 } // namespace engine

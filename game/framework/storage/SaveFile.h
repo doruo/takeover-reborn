@@ -14,22 +14,24 @@
 
 namespace takeover {
 
-class SaveFile {
-public:
-    explicit SaveFile(std::string name) : name_(std::move(name)) {}
+    class SaveFile {
+    public:
+        explicit SaveFile(std::string name) : name_(std::move(name)) {}
 
-    /// Writes the data, compressed (original: saveData).
-    bool saveData(ByteArray data, bool compress);
-    /// The stored data, uncompressed (original: _SafeStr_2615).
-    [[nodiscard]] std::optional<ByteArray> loadData() const;
-    /// True if a complete save exists (original: _SafeStr_2616).
-    [[nodiscard]] bool isComplete() const;
+        /// Writes the data, compressed (original: saveData).
+        bool saveData(ByteArray data, bool compress);
 
-    [[nodiscard]] std::filesystem::path path() const;
-    static std::filesystem::path directory();
+        /// The stored data, uncompressed (original: _SafeStr_2615).
+        [[nodiscard]] std::optional<ByteArray> loadData() const;
 
-private:
-    std::string name_;
-};
+        /// True if a complete save exists (original: _SafeStr_2616).
+        [[nodiscard]] bool isComplete() const;
+
+        [[nodiscard]] std::filesystem::path path() const;
+        static std::filesystem::path directory();
+
+    private:
+        std::string name_;
+    };
 
 } // namespace takeover
