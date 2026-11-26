@@ -10,7 +10,7 @@ namespace engine {
 class Window {
 public:
     struct Options {
-        std::string title = "Take Over";
+        std::string title = "Takeover Reborn";
         int width = 800;
         int height = 600;
         bool resizable = true;
