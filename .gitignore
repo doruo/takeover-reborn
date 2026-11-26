@@ -1,0 +1,13 @@
+# IDE
+.vscode/
+.idea/
+
+# Original game material (not redistributable): SWF, decompiled sources
+*.swf
+
+# Build output and generated asset pack
+/build*/
+/dist/
+/assets/
+compile_commands.json
+.cache/
