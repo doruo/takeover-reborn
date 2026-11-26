@@ -3,21 +3,48 @@
 #
 #   ./run.sh                    build (incrementally) and play
 #   ./run.sh --fullscreen       any option is passed to the game (--scale N, --cheat...)
-#   TAKEOVER_SWF=path/to/takeover.swf ./run.sh
-#                               where to find the original game for the asset pack
 #
 # The first run configures and compiles the project (a few minutes) and
 # converts the original takeover.swf into the asset pack (assets/, a few
 # seconds). Later runs only rebuild what changed.
 
-BUILD_DIR=${TAKEOVER_BUILD_DIR:-build}
-
 set -euo pipefail
 
+# Made with this ASCII Generator: https://patorjk.com/software/taag
+printf "
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ ███████████           █████                                                      
+▒█▒▒▒███▒▒▒█          ▒▒███                                                       
+▒   ▒███  ▒   ██████   ▒███ █████  ██████   ██████  █████ █████  ██████  ████████ 
+    ▒███     ▒▒▒▒▒███  ▒███▒▒███  ███▒▒███ ███▒▒███▒▒███ ▒▒███  ███▒▒███▒▒███▒▒███
+    ▒███      ███████  ▒██████▒  ▒███████ ▒███ ▒███ ▒███  ▒███ ▒███████  ▒███ ▒▒▒ 
+    ▒███     ███▒▒███  ▒███▒▒███ ▒███▒▒▒  ▒███ ▒███ ▒▒███ ███  ▒███▒▒▒   ▒███     
+    █████   ▒▒████████ ████ █████▒▒██████ ▒▒██████   ▒▒█████   ▒▒██████  █████    
+   ▒▒▒▒▒     ▒▒▒▒▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒  ▒▒▒▒▒▒   ▒▒▒▒▒▒     ▒▒▒▒▒     ▒▒▒▒▒▒  ▒▒▒▒▒     
+                                                                                  
+                                                                                  
+                                                                                  
+          ███████████            █████                                            
+         ▒▒███▒▒▒▒▒███          ▒▒███                                             
+          ▒███    ▒███   ██████  ▒███████   ██████  ████████  ████████            
+          ▒██████████   ███▒▒███ ▒███▒▒███ ███▒▒███▒▒███▒▒███▒▒███▒▒███           
+          ▒███▒▒▒▒▒███ ▒███████  ▒███ ▒███▒███ ▒███ ▒███ ▒▒▒  ▒███ ▒███           
+          ▒███    ▒███ ▒███▒▒▒   ▒███ ▒███▒███ ▒███ ▒███      ▒███ ▒███           
+          █████   █████▒▒██████  ████████ ▒▒██████  █████     ████ █████          
+         ▒▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒   ▒▒▒▒▒▒  ▒▒▒▒▒     ▒▒▒▒ ▒▒▒▒▒           
+                                     
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"
+
+BUILD_DIR=${TAKEOVER_BUILD_DIR:-build}
+GAME_PATH="$BUILD_DIR/game/takeover"
+PARAMS="--assets assets "$@""
+
+# Build
 /bin/bash "./build.sh"
 
 printf "\nStarting Game...\n"
 
-exec "$BUILD_DIR/game/takeover" --assets assets "$@"
-
-printf "\n Game ended succesfully\n"
+# Run
+exec "$GAME_PATH" PARAMS

@@ -1,0 +1,7 @@
+build-essential  
+cmake
+pkg-config 
+zlib1g-dev 
+libcairo2-dev 
+libsdl3-dev 
+zenity
