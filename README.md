@@ -23,6 +23,12 @@ You will need a copy of the game (.swf) in order to extract assets and play.
 > Newgrounds medals and cloud saves) are left out. See
 > [docs/PORT_ARCHITECTURE.md](docs/PORT_ARCHITECTURE.md).
 
+## How was it made possible ?
+
+Flash games were published as a .swf executable, which was runnable by most browsers in the 2010s. It is now deprecated since Flash end of support in 2020. 
+
+I used [JPEXS Decompiler](https://github.com/jindrapetrik/jpexs-decompiler) to decompile a .swf copy of the game, extract the assets and ActionScript original code.
+
 ## Screenshots
 
 ![logo](/static/screenshots/screenshot_level_2.png)
