@@ -2,6 +2,7 @@
 
 #include "engine/display/Stage.h"
 #include "engine/platform/Application.h"
+#include "game/data/GameData.h"
 #include "game/data/LevelInfo.h"
 #include "game/framework/Symbols.h"
 #include "game/framework/core/Trash.h"
@@ -120,10 +121,10 @@ namespace takeover {
 
     void Main::onPreloaderStart() {
         showVersion(false);
-        playIntro("ArmorGamesIntro", &Main::onSponsorIntroDone, Branding::URL_ARMOR_GAMES);
+        playIntro("ArmorGamesIntro", &Main::onSponsorIntroDone, GameData::get().links.armorGames);
     }
 
-    void Main::onSponsorIntroDone() { playIntro("IriySoftIntro", &Main::start, Branding::URL_IRIYSOFT); }
+    void Main::onSponsorIntroDone() { playIntro("IriySoftIntro", &Main::start, GameData::get().links.iriySoft); }
 
     double Main::playTransition(bool out) {
         auto intro = playIntro(out ? "scrProxy2Class" : "scrProxy3Class", nullptr, "");
@@ -251,7 +252,7 @@ namespace takeover {
 
     void Main::onLogoClick(Button*) {
         engine::navigateToURL(
-            Branding::A10_COM ? Branding::URL_A10COM : Branding::URL_ARMOR_GAMES
+            Branding::A10_COM ? GameData::get().links.a10 : GameData::get().links.armorGames
         );
     }
 

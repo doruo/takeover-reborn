@@ -55,6 +55,7 @@ add_library(takeover_game STATIC
     sim/units/UnitCombat.cpp
     # campaign data and progress
     data/CompanyInfo.cpp
+    data/GameData.cpp
     data/LevelInfo.cpp
     progress/Badges.cpp
     progress/CompanyProgress.cpp
@@ -99,9 +100,9 @@ add_library(takeover_game STATIC
 )
 add_library(takeover::game ALIAS takeover_game)
 target_include_directories(takeover_game PUBLIC ${PROJECT_SOURCE_DIR})
-target_link_libraries(takeover_game PUBLIC takeover::engine ZLIB::ZLIB PRIVATE takeover::warnings)
+target_link_libraries(takeover_game PUBLIC takeover::engine ZLIB::ZLIB PRIVATE third_party::json takeover::warnings)
 
-add_executable(takeover main.cpp)
+add_executable(takeover Launcher.cpp)
 target_link_libraries(takeover PRIVATE takeover::game takeover::warnings)
 # Exported symbols make the crash handler's call stacks readable.
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")

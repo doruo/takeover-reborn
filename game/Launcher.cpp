@@ -1,6 +1,6 @@
-// main.cpp - starts Take Over.
+// Launcher.cpp - starts Take Over.
 //
-//     takeover [--assets DIR] [--fullscreen] [--scale N] [--cheat]
+//     takeover [--assets DIR] [--data DIR] [--fullscreen] [--scale N] [--cheat]
 //
 // --cheat turns on the original's developer mode (Preloader.CHEAT_ON):
 // two extra spell buttons (mana and gold, all spells) and "quit" in the
@@ -9,9 +9,12 @@
 //
 // The asset pack is looked for in --assets, then $TAKEOVER_ASSETS, then
 // next to the executable (../share/takeover/assets for an installed game,
-// assets/ in a build tree) and finally ./assets.
+// assets/ in a build tree) and finally ./assets. The data folder (the JSON
+// files of game/data/GameData.h) is looked for the same way: --data, then
+// $TAKEOVER_DATA, then next to the executable, and finally ./data.
 #include "engine/platform/Application.h"
 #include "game/Main.h"
+#include "game/data/GameData.h"
 #include "game/framework/Symbols.h"
 #include "game/framework/core/Trash.h"
 #include "game/level/LevelVisual.h"
@@ -39,9 +42,12 @@ namespace {
     void onCrash(int signal) {
         void* frames[64];
         const int count = backtrace(frames, 64);
-        const char header[] = "\nTake Over crashed. Call stack:\n";
+        const char header[] = "\nTakeover Reborn crashed. Call stack:\n";
+
         (void)!write(STDERR_FILENO, header, sizeof header - 1);
+
         backtrace_symbols_fd(frames, count, STDERR_FILENO);
+
         std::signal(signal, SIG_DFL);
         std::raise(signal);
     }
@@ -49,7 +55,12 @@ namespace {
 
     std::filesystem::path findAssets(const char* fromCommandLine) {
         namespace fs = std::filesystem;
-        const auto isPack = [](const fs::path& p) { return fs::exists(p / "manifest.json") && fs::exists(p / "library.swf"); };
+
+        const auto isPack = 
+        [](const fs::path& p) { 
+            return fs::exists(p / "manifest.json") 
+            && fs::exists(p / "library.swf"); 
+        };
 
         if (fromCommandLine)
             return fromCommandLine;
@@ -59,13 +70,44 @@ namespace {
 
         if (const char* base = SDL_GetBasePath()) {
             const fs::path exe(base);
-            for (const fs::path& candidate : {exe / "../share/takeover/assets", exe / "assets", exe / "../assets",
-                                              exe / "../../assets"})
-                if (isPack(candidate))
+            
+            for (const fs::path& candidate : 
+                {
+                     exe / "../share/takeover/assets",
+                     exe / "assets", 
+                     exe / "../assets",        
+                     exe / "../../assets"
+                }
+            ) {
+                if (isPack(candidate)) {
                     return fs::weakly_canonical(candidate);
+                }
+            }
         }
 
         return "assets";
+    }
+
+    std::filesystem::path findData(const char* fromCommandLine) {
+        namespace fs = std::filesystem;
+        const auto isData = [](const fs::path& p) { return fs::exists(p / "game.json"); };
+
+        if (fromCommandLine)
+            return fromCommandLine;
+
+        if (const char* env = std::getenv("TAKEOVER_DATA"); env && *env)
+            return env;
+
+        if (const char* base = SDL_GetBasePath()) {
+            const fs::path exe(base);
+
+            for (const fs::path& candidate : {exe / "../share/takeover/data", exe / "data", exe / "../data",
+                                              exe / "../../data"})
+                if (isData(candidate))
+                    return fs::weakly_canonical(candidate);
+        }
+
+        return "data";
     }
 
 } // namespace
@@ -77,6 +119,7 @@ int main(int argc, char** argv) {
     std::signal(SIGFPE, onCrash);
 #endif
     const char* assets = nullptr;
+    const char* data = nullptr;
     const char* script = nullptr;
     bool fast = false;
     bool fullscreen = false;
@@ -85,6 +128,8 @@ int main(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         if (std::strcmp(argv[i], "--assets") == 0 && i + 1 < argc)
             assets = argv[++i];
+        else if (std::strcmp(argv[i], "--data") == 0 && i + 1 < argc)
+            data = argv[++i];
         else if (std::strcmp(argv[i], "--fullscreen") == 0)
             fullscreen = true;
         else if (std::strcmp(argv[i], "--scale") == 0 && i + 1 < argc)
@@ -96,7 +141,7 @@ int main(int argc, char** argv) {
         else if (std::strcmp(argv[i], "--cheat") == 0)
             takeover::LevelVisual::mode.add(takeover::LevelVisual::ST_CHEAT_MODE);
         else if (std::strcmp(argv[i], "--help") == 0 || std::strcmp(argv[i], "-h") == 0) {
-            std::printf("usage: takeover [--assets DIR] [--fullscreen] [--scale N] [--cheat]\n"
+            std::printf("usage: takeover [--assets DIR] [--data DIR] [--fullscreen] [--scale N] [--cheat]\n"
                         "  F11 or Alt+Enter toggles fullscreen.\n");
             return 0;
         }
@@ -112,6 +157,9 @@ int main(int argc, char** argv) {
                          assetDir.string().c_str());
             return 1;
         }
+
+        // The game data (version, links, ...) from the JSON files.
+        takeover::GameData::load(findData(data));
 
         engine::Application app({.assets = assetDir,
                                  .title = "Take Over",

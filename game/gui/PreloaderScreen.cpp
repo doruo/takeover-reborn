@@ -1,5 +1,6 @@
 #include "game/gui/PreloaderScreen.h"
 
+#include "game/data/GameData.h"
 #include "game/framework/Symbols.h"
 #include "game/gui/GameScreen.h"
 
@@ -72,7 +73,7 @@ namespace takeover {
 
     std::shared_ptr<engine::MovieClip> createVersionLabel() {
         auto label = symbols::create("VersionNumClass");
-        symbols::setHtmlText(*label, "txtCaption", "ver. 1.1.5");
+        symbols::setHtmlText(*label, "txtCaption", GameData::get().game.version);
 
         return label;
     }

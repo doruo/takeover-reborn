@@ -4,13 +4,14 @@
 #include <SDL3/SDL.h>
 
 #include <string>
+#include "game/data/GameData.h"
 
 namespace engine {
 
     class Window {
     public:
         struct Options {
-            std::string title = "Takeover Reborn";
+            std::string title = takeover::GameData::get().game.title;
             int width = 800;
             int height = 600;
             bool resizable = true;

@@ -1,0 +1,22 @@
+{
+    "game": {
+        "title": "Takeover Reborn",
+        "version": "Doruo | v.1.1.5"
+    },
+
+    "options": {
+        "width": 800,
+        "height": 600,
+        "resizable": true,
+        "hidden": false,
+        "vsync": true
+    },
+
+    "links": {
+        "armorGames": "https://armorgames.com/",
+        "a10": "https://www.a10.com/",
+        "iriySoft": "https://www.iriysoft.com",
+        "iriySoftTwitter": "https://x.com/iriysoft",
+        "iriySoftFacebook": "https://www.facebook.com/IriySoft"
+    }
+}

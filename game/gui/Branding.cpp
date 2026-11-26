@@ -1,6 +1,7 @@
 #include "game/gui/Branding.h"
 
 #include "engine/platform/Application.h"
+#include "game/data/GameData.h"
 #include "game/framework/Symbols.h"
 #include "game/gui/GameScreen.h"
 
@@ -78,10 +79,10 @@ namespace takeover {
             button->removeEventListener(MouseEvent::CLICK, this, &Branding::onA10);
     }
 
-    void Branding::onA10(MouseEvent&) { engine::navigateToURL(URL_A10COM); }
-    void Branding::onTwitter(MouseEvent&) { engine::navigateToURL(URL_IRIYSOFT_TWITTER); }
-    void Branding::onFacebook(MouseEvent&) { engine::navigateToURL(URL_IRIYSOFT_FACEBOOK); }
-    void Branding::onIriySoft(MouseEvent&) { engine::navigateToURL(URL_IRIYSOFT); }
-    void Branding::onArmorGames(MouseEvent&) { engine::navigateToURL(URL_ARMOR_GAMES); }
+    void Branding::onA10(MouseEvent&) { engine::navigateToURL(GameData::get().links.a10); }
+    void Branding::onTwitter(MouseEvent&) { engine::navigateToURL(GameData::get().links.iriySoftTwitter); }
+    void Branding::onFacebook(MouseEvent&) { engine::navigateToURL(GameData::get().links.iriySoftFacebook); }
+    void Branding::onIriySoft(MouseEvent&) { engine::navigateToURL(GameData::get().links.iriySoft); }
+    void Branding::onArmorGames(MouseEvent&) { engine::navigateToURL(GameData::get().links.armorGames); }
 
 } // namespace takeover

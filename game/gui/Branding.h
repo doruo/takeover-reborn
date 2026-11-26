@@ -12,16 +12,18 @@ namespace takeover {
 
     class Branding {
     public:
-        static constexpr const char* URL_ARMOR_GAMES = "https://armorgames.com/";
-        static constexpr const char* URL_A10COM = "https://www.a10.com/";
-        static constexpr const char* URL_IRIYSOFT = "https://www.iriysoft.com";
-        static constexpr const char* URL_IRIYSOFT_TWITTER = "https://x.com/iriysoft";
-        static constexpr const char* URL_IRIYSOFT_FACEBOOK = "https://www.facebook.com/IriySoft";
+        // Branding links are in data/game.json (GameData::Links).
 
         /// Original: Preloader.A10Com.
         static constexpr bool A10_COM = false;
 
-        Branding(engine::MovieClip* iriy, engine::MovieClip* armor, engine::MovieClip* a10com, bool preloader = false);
+        Branding(
+            engine::MovieClip* iriy, 
+            engine::MovieClip* armor, 
+            engine::MovieClip* a10com, 
+            bool preloader = false
+        );
+        
         ~Branding() { dispose(); }
         void dispose();
 
