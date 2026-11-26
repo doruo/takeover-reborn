@@ -37,7 +37,7 @@ namespace engine {
 
     class BitmapData {
     public:
-        /// A `width` x `height` image filled with `fillColor` (0xAARRGGBB; with
+        /// A `width` x `height` image filled with `fillColor` (0xAARRGGBB, with
         /// `transparent` false the alpha is forced to 0xFF).
         BitmapData(int width, int height, bool transparent = true, std::uint32_t fillColor = 0xFFFFFFFF);
 
@@ -52,18 +52,18 @@ namespace engine {
 
         [[nodiscard]] std::shared_ptr<BitmapData> clone() const;
 
-        /// 0xRRGGBB of a pixel, un-multiplied; 0 outside the image.
+        /// 0xRRGGBB of a pixel, un-multiplied, 0 outside the image.
         [[nodiscard]] std::uint32_t getPixel(int x, int y) const;
 
-        /// 0xAARRGGBB of a pixel, un-multiplied; 0 outside the image.
+        /// 0xAARRGGBB of a pixel, un-multiplied, 0 outside the image.
         [[nodiscard]] std::uint32_t getPixel32(int x, int y) const;
         void setPixel32(int x, int y, std::uint32_t argb);
 
         void fillRect(const PixelBox& rect, std::uint32_t argb);
 
         /// Copies `sourceRect` of `source` to `destPoint`. With `mergeAlpha`, the
-        /// source is blended over the destination ("normal" blend mode);
-        /// otherwise its pixels replace the destination's.
+        /// source is blended over the destination ("normal" blend mode).
+        /// Otherwise its pixels replace the destination's.
         void copyPixels(const BitmapData& source, const PixelBox& sourceRect, Point destPoint, bool mergeAlpha = false);
 
         /// Applies a color transform to the pixels of `rect`.
@@ -81,7 +81,7 @@ namespace engine {
 
         /// Marks the pixels as changed (after editing image() directly).
         void touch() { ++version_; }
-        /// Direct access to the premultiplied BGRA pixels; call touch() after.
+        /// Direct access to the premultiplied BGRA pixels. Call touch() after.
         [[nodiscard]] vector::Image& pixels() { return image_; }
 
     private:

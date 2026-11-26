@@ -20,7 +20,7 @@ namespace takeover {
     public:
         NodeContent(std::shared_ptr<NodeContentKey> description, std::shared_ptr<NodeKey> nodeDescription);
 
-        /// Sets the incomes and the name of a supply building; the cost is the
+        /// Sets the incomes and the name of a supply building. The cost is the
         /// combatant's price for it (original: initBySupplyBuilding).
         virtual void initBySupplyBuilding(SupplyBuildingType type, const Combatant* combatant);
 
@@ -42,7 +42,7 @@ namespace takeover {
 
         using NodeContent::NodeContent;
         [[nodiscard]] bool isCollected() const { return collected_; } ///< _SafeStr_1960
-        /// Gives the gold once to the owner of `squad`; true the first time
+        /// Gives the gold once to the owner of `squad`. Returns true the first time
         /// (original: collect).
         virtual bool collect(Squad& squad, Combatant& combatant);
 

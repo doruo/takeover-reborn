@@ -28,7 +28,7 @@ namespace takeover {
         /// Updates the per-campaign badges' metrics.
         void checkLevelBadges();
 
-        /// Records a mission result; returns the XP earned (original: _SafeStr_764).
+        /// Records a mission result. Returns the XP earned (original: _SafeStr_764).
         double addMissionResult(const LevelProgress& result, const LevelInfo& level);
         [[nodiscard]] int missionXp(const LevelInfo& level) const; ///< _SafeStr_3506
 

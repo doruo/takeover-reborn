@@ -1,5 +1,5 @@
 // PlayerStatPanel.h - rank, XP bar and free edicts of the selected campaign
-// (original: _SafePkg_3473/PlayerStatPanel; its definition _SafeStr_3461 is
+// (original: _SafePkg_3473/PlayerStatPanel, its definition _SafeStr_3461 is
 // folded into the constructor).
 #pragma once
 

@@ -32,7 +32,7 @@ namespace takeover {
                 profile->deserialize(*data);
         }
         catch (const std::exception& e) {
-            // The original would stop with an uncaught error; start fresh instead.
+            // The original would stop with an uncaught error. Start fresh instead.
             std::fprintf(
                 stderr, "save file %s is damaged (%s), starting with empty profiles\n",
                 file.path().c_str(),

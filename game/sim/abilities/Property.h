@@ -5,7 +5,7 @@
 //   Property           base with a unique id, a name and a "finished" flag
 //                      (original: _SafeCls_903)
 //   PropertyContainer  owns the properties of one unit, updates them and
-//                      removes the finished ones; a property may veto the
+//                      removes the finished ones. A property may veto the
 //                      addition of another (poison immunity...) or alter it
 //                      (shield wall reduces arrows) (original: _SafeCls_2428)
 //   BoundedValue       an int with a base value, a current value and
@@ -28,7 +28,7 @@ namespace takeover {
         virtual void onPropertyRemoved(IProperty& removed) = 0; ///< _SafeStr_902
 
         /// Called for every property already present when `added` arrives (and
-        /// the other way round); true vetoes the addition.
+        /// the other way round). Returning true vetoes the addition.
         virtual bool makeAddPropertyCollision(IProperty& added) = 0;
         [[nodiscard]] virtual bool isFinished() const = 0;   ///< _SafeStr_901
         [[nodiscard]] virtual int getPropertyId() const = 0; ///< _SafeStr_899

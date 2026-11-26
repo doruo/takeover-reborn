@@ -23,7 +23,7 @@ namespace engine {
     public:
         void clear();
 
-        /// `thickness` in pixels (0 = hairline); a NaN-free way to stop
+        /// `thickness` in pixels (0 = hairline). A NaN-free way to stop
         /// stroking is lineStyle(-1).
         void lineStyle(double thickness, std::uint32_t rgb = 0, double alpha = 1);
         void beginFill(std::uint32_t rgb, double alpha = 1);

@@ -52,7 +52,7 @@ namespace swf {
         Type type = Type::Solid;
         Rgba color;               ///< Solid fills.
         Gradient gradient;        ///< Gradient fills.
-        CharacterId bitmapId = 0; ///< Bitmap fills; 0xFFFF means "no bitmap".
+        CharacterId bitmapId = 0; ///< Bitmap fills, 0xFFFF means "no bitmap".
         Matrix bitmapMatrix;      ///< Maps bitmap pixels (in twips) to shape space.
 
         [[nodiscard]] bool isGradient() const {
@@ -73,7 +73,7 @@ namespace swf {
     enum class JoinStyle : std::uint8_t { Round = 0, Bevel = 1, Miter = 2 };
 
     struct LineStyle {
-        std::uint16_t width = 0; ///< Twips; 0 is a hairline (always 1 px).
+        std::uint16_t width = 0; ///< Twips, 0 is a hairline (always 1 px).
         Rgba color;
         CapStyle startCap = CapStyle::Round;
         CapStyle endCap = CapStyle::Round;
@@ -91,7 +91,7 @@ namespace swf {
         std::vector<LineStyle> lines;
     };
 
-    /// Pen state change. Style indices are 1-based into the current tables; 0
+    /// Pen state change. Style indices are 1-based into the current tables, 0
     /// means "none". std::nullopt means "unchanged".
     struct StyleChangeRecord {
         std::optional<std::pair<std::int32_t, std::int32_t>> moveTo; ///< Absolute, twips.

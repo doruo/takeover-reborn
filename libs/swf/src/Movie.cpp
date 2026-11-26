@@ -108,7 +108,7 @@ namespace swf {
         }
 
         /// The SWF timeline always ends with a ShowFrame followed by End, which leaves
-        /// one trailing empty frame in our representation; drop it.
+        /// one trailing empty frame in our representation. Drop it.
         void finalizeTimeline(Timeline& timeline, int declaredFrameCount) {
             while (static_cast<int>(timeline.frames.size()) > declaredFrameCount && !timeline.frames.empty()) {
                 const Frame& last = timeline.frames.back();
@@ -118,7 +118,7 @@ namespace swf {
                 timeline.frames.pop_back();
             }
 
-            // A sprite may declare more frames than it has ShowFrame tags; pad so the
+            // A sprite may declare more frames than it has ShowFrame tags. Pad so the
             // runtime's totalFrames matches Flash.
             while (static_cast<int>(timeline.frames.size()) < declaredFrameCount)
                 timeline.frames.emplace_back();
@@ -166,7 +166,7 @@ namespace swf {
             ButtonDef b;
             b.id = in.u16();
             b.trackAsMenu = (in.u8() & 1) != 0;
-            in.u16(); // action offset; AS3 buttons carry no actions
+            in.u16(); // action offset. AS3 buttons carry no actions
 
             for (;;) {
                 const std::uint8_t flags = in.u8();

@@ -6,9 +6,9 @@
 //     signalButton.removeListener(this, &Main::onTitleButton);
 //
 // Same semantics as the original: adding the same listener twice keeps one
-// registration; listeners added while dispatching don't run for that
-// dispatch; removed ones stop at once. The original iterated a Dictionary
-// (unspecified order); we use registration order.
+// registration. Listeners added while dispatching don't run for that
+// dispatch. Removed ones stop at once. The original iterated a Dictionary
+// (unspecified order). We use registration order.
 #pragma once
 
 #include "engine/core/Listener.h"
@@ -30,7 +30,7 @@ namespace takeover {
         Signal(const Signal&) = delete;
         Signal& operator=(const Signal&) = delete;
 
-        /// `signal.addListener(this, &Class::method)`; the method may take
+        /// `signal.addListener(this, &Class::method)`. The method may take
         /// parameters the signal's arguments convert to.
         template <typename Object, typename Result, typename... Params>
         void addListener(Object* object, Result (Object::*method)(Params...)) {
@@ -38,7 +38,7 @@ namespace takeover {
                                  [object, method](Args... args) { (object->*method)(std::forward<Args>(args)...); }});
         }
 
-        /// A lambda; keep the returned key to remove it.
+        /// A lambda. Keep the returned key to remove it.
         template <typename Callable>
         ListenerKey addListener(Callable&& callable) {
             Listener listener = Listener::function(std::forward<Callable>(callable));
@@ -101,7 +101,7 @@ namespace takeover {
             compact();
         }
 
-        /// Drops every listener; the signal accepts no new ones afterwards.
+        /// Drops every listener. The signal accepts no new ones afterwards.
         void dispose() {
             removeAllListeners();
             disposed_ = true;

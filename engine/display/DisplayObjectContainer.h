@@ -2,7 +2,7 @@
 // DisplayObjectContainer and Sprite).
 //
 // Children are kept in paint order (first = bottom). Timeline-placed children
-// also carry a depth; the timeline inserts them in depth order.
+// also carry a depth. The timeline inserts them in depth order.
 #pragma once
 
 #include "engine/display/Graphics.h"
@@ -56,7 +56,7 @@ namespace engine {
         /// True if a visible child covers the point (own space), masks applied.
         [[nodiscard]] bool hitTestLocal(Point local) const override;
 
-        /// Calls `visit(child, maskedOut)` for the children in paint order;
+        /// Calls `visit(child, maskedOut)` for the children in paint order.
         /// `isMask` children are reported too. `maskTest(child)` tells whether
         /// the masks active for that child let a given point through: used by
         /// hit testing.

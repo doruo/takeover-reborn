@@ -46,7 +46,7 @@ namespace takeover {
     public:
         explicit USpellButton(ButtonDef def);
 
-        /// Shows the charge, 0..1; clickable when full (original: _SafeStr_1427).
+        /// Shows the charge, 0..1. Clickable when full (original: _SafeStr_1427).
         void setReadyFactor(double factor);
 
     private:

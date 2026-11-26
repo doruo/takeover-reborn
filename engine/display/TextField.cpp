@@ -291,7 +291,7 @@ namespace engine {
         };
 
         auto newParagraph = [&] {
-            // A paragraph break is '\r'; consecutive <p> don't stack empty lines
+            // A paragraph break is '\r'. Consecutive <p> don't stack empty lines
             // unless they contain text.
             pending.push_back(U'\r');
         };

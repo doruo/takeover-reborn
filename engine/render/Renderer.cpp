@@ -158,7 +158,7 @@ void main() {
 )";
 
         // Glow and drop shadow. Step 0 extracts the (offset, maybe inverted) alpha
-        // of the object; it is then blurred; step 1 tints it and combines it with
+        // of the object. It is then blurred. Step 1 tints it and combines it with
         // the object.
         constexpr const char* kGlowFragment = R"(
 uniform int u_step;
@@ -305,7 +305,7 @@ void main() {
         gl::glPixelStorei(GL_PACK_ALIGNMENT, 4);
         gl::glReadPixels(0, 0, width_, height_, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
 
-        // GL rows go bottom-up; flip, and convert premultiplied to straight alpha.
+        // GL rows go bottom-up. Flip, and convert premultiplied to straight alpha.
         std::vector<std::uint8_t> out(pixels.size());
         const std::size_t row = static_cast<std::size_t>(width_) * 4;
 
@@ -600,7 +600,7 @@ void main() {
         };
 
         // 1. The object's alpha, shifted and inverted as needed. Offsets are in
-        //    stage pixels, y down; GL rows go up.
+        //    stage pixels, y down. GL rows go up.
         Layer mask;
         mask.area = layer.area;
         mask.target = acquireTarget(layer.target->width(), layer.target->height());

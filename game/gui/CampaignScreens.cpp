@@ -154,7 +154,7 @@ namespace takeover {
         symbols::child(*infoPanel_, "mcBack")->removeEventListener(engine::MouseEvent::CLICK, this, &GlobalMapScreen::onInfoBackClick);
 
         // The original never disposes the "to battle" button (a local variable
-        // shadows the member); dropping it changes nothing visible.
+        // shadows the member). Dropping it changes nothing visible.
         if (toBattle_)
             releaseLater(toBattle_);
 

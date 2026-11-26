@@ -29,7 +29,7 @@ The original relies on the Flash Player for three things: the display list
 (nested MovieClips, filters, text), the vector rasterizer, and the AVM2
 language runtime. The port splits them:
 
-* **Vector art stays vector; cairo rasterizes it.** The converter turns every
+* **Vector art stays vector, cairo rasterizes it.** The converter turns every
   SWF shape into a *draw list* (closed fill paths + stroke paths + paints) and
   stores it in the pack. At runtime the engine rasterizes a shape with cairo
   the first time it's displayed at a given scale and caches the result as a
@@ -45,7 +45,7 @@ language runtime. The port splits them:
   `TextField`, `SimpleButton`). Porting a screen is then a line-by-line
   translation instead of a redesign.
 * **The language runtime is replaced by C++.** AS3/Haxe classes become C++
-  classes; garbage collection is replaced by explicit ownership (see
+  classes, and garbage collection is replaced by explicit ownership (see
   `CPP_NOTES.md`).
 
 ## Source tree
@@ -82,8 +82,8 @@ takeover-reborn/
 │  ├─ units/  squads/        soldiers and squads on screen (FUnit, FSquad, SquadIcon)
 │  ├─ hud/                   battle panel, building windows
 │  ├─ gui/                   every screen (menus, map, throne room, badges, battle, pause, tutorial)
-│  ├─ progress/  data/       profile, campaigns, badges; campaign and level tables
-│  ├─ media/  resources/     sounds and music; the battle's clip list and resource manager
+│  ├─ progress/  data/       profile, campaigns, badges, campaign and level tables
+│  ├─ media/  resources/     sounds and music, the battle's clip list and resource manager
 │  ├─ GameBattle.*           a battle in progress (input chain, tutorials)
 │  └─ Main.*                 the screen flow, as the original document class
 ├─ packaging/                launcher and readme of the release archive
@@ -150,7 +150,7 @@ word wrap, the `<font>`, `<b>`, `<br>`, `<p align>` HTML subset).
 
 The game code is a translation of the original, class by class: the same
 classes, the same methods in the same order, the same quirks. The header of
-every file names the original class; `docs/NAME_MAP.md` lists every
+every file names the original class, and `docs/NAME_MAP.md` lists every
 recovered name.
 
 **Main** (`game/Main.cpp`) is the document class of the original: it plays
@@ -164,7 +164,7 @@ LevelLogic   rules: incomes, captures, roads and path finding, splash damage, vi
   LevelAi    computer players: recruit, build, send troops, cast spells, ultimates
     LevelVisual   display: map, battlefield layer, icons, HUD layers, effects, signals
       Level       the player's hands: selection, orders by drag and drop, spells, ultimates
-GameBattle   owns the Level and the HUD; chains the input processes; scripts the tutorials
+GameBattle   owns the Level and the HUD, chains the input processes, scripts the tutorials
 BattleScreen hosts the GameBattle, the tutorial panel and the pause menu
 ```
 
@@ -176,12 +176,12 @@ and talk through an event bus, as in the original.
 
 **Drawing the battlefield** follows the original's raster pipeline: every
 unit animation is a library clip that `AnimationMaker` renders once into a
-list of `BitmapData` frames (on first use; the preloader only renders the
+list of `BitmapData` frames (on first use, the preloader only renders the
 first ones). Every frame, `RasterGraphicLayer` sorts the visible objects by
 their y, clears an 800x600 `BitmapData` and copies each object's current
 frame into it, layer by layer (ground marks, corpses, paths, units and
 buildings). A `Bitmap` shows that image on the stage, under the HUD. The
-copies are done by the CPU, as in Flash; the image is uploaded to the GPU
+copies are done by the CPU, as in Flash, and the image is uploaded to the GPU
 once per frame.
 
 ## Game code conventions
@@ -192,12 +192,12 @@ once per frame.
 * AS3 numeric semantics live in `game/framework/core/As3.h`
   (`as3::toInt`, `as3::round`, `as3::random`) so formulas read like the
   original and behave identically.
-* The `Signal` class keeps the original's listener semantics; lambdas can
+* The `Signal` class keeps the original's listener semantics, and lambdas can
   listen too.
-* `dispose()` works like the original's (cleanup + `signalDisposed`); the
+* `dispose()` works like the original's (cleanup + `signalDisposed`). The
   memory itself is released at the start of the next frame (`Trash`), so
   an object disposed while it is running stays valid until it returns.
-* AS3 constructors call virtual methods; C++ ones can't, so screens call
+* AS3 constructors call virtual methods, C++ ones can't, so screens call
   `initScreen()` at the end of their constructor, and simulation objects
   are built with an `init()` after construction.
 * Original bugs that change behaviour are kept and commented ("original
@@ -216,8 +216,8 @@ once per frame.
 
 | Library | Role | Why this one |
 |---|---|---|
-| SDL3 | window, GL context, input, audio device | the standard portable layer; works on Mesa / HD 3000 |
-| OpenGL 3.3 core | rendering | highest API the X220 supports; Vulkan isn't available there |
+| SDL3 | window, GL context, input, audio device | the standard portable layer, works on Mesa / HD 3000 |
+| OpenGL 3.3 core | rendering | highest API the X220 supports, Vulkan isn't available there |
 | miniaudio | MP3 decoding, mixing | single file, no system dependency, decodes the SWF MP3s as-is |
 | cairo | CPU rasterization of vector shapes and glyphs | mature, exact-coverage anti-aliasing, every gradient/stroke feature SWF needs, preinstalled on Linux desktops |
 | stb_image, stb_image_write | JPEG/PNG decoding, PNG writing | single-header, battle-tested |
@@ -234,7 +234,7 @@ once per frame.
   PNG, to compare with the original.
 * **Screens and battles**: the game runs test scripts (`--script`, see the
   README) that click and drag through the menus and battles and take
-  screenshots; the port was checked that way screen by screen, through the
+  screenshots, and the port was checked that way screen by screen, through the
   tutorials, and with the computer players fighting for minutes.
 * **Memory**: an AddressSanitizer/UBSan build (`-DCMAKE_BUILD_TYPE=Debug
   -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined"`) runs the same scripts.

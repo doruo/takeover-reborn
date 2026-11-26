@@ -4,7 +4,7 @@
 // (UpdatableObject), with the interfaces of _SafePkg_29.
 //
 // In the original, dispose() releases what the object holds and announces
-// it with a signal; the garbage collector frees the memory later. Here,
+// it with a signal. The garbage collector frees the memory later. Here,
 // dispose() does the same, and memory is freed when the last shared_ptr
 // goes away, but never before the next frame: dispose() puts the object in
 // the trash (Trash.h), because disposed objects are often still running.
@@ -41,7 +41,7 @@ namespace takeover {
         Signal<Disposable*> signalDisposed_;
     };
 
-    /// A Disposable that is updated every frame and can be paused; it counts
+    /// A Disposable that is updated every frame and can be paused. It counts
     /// the time it has been running (original: _SafeStr_36).
     class UpdatableObject : public Disposable {
     public:

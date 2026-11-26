@@ -1,7 +1,7 @@
 // MovieClip.h - a Sprite that plays a timeline (flash.display.MovieClip).
 //
 // The timeline is a list of edits per frame (swf::Timeline). Entering a frame
-// applies its edits; jumping (gotoAndStop) replays the edits between the
+// applies its edits. Jumping (gotoAndStop) replays the edits between the
 // current and the target frame, from frame 1 when going backwards, and then
 // reconciles the result with the existing children. That reconciliation is
 // what makes Flash keep an object alive across frames (same character at the
@@ -31,7 +31,7 @@ namespace engine {
         /// An empty clip, as `new MovieClip()` in AS3 (one empty frame).
         MovieClip() = default;
 
-        /// A clip playing a library sprite's timeline; frame 1 is entered
+        /// A clip playing a library sprite's timeline. Frame 1 is entered
         /// immediately, so its children exist when the constructor returns.
         MovieClip(Library& library, const swf::Timeline& timeline, std::uint16_t spriteId = 0);
 

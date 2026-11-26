@@ -3,7 +3,7 @@
 // Owns the Level and the HUD (GamePanel, WindowController). Every frame it
 // hands the input to the processes in order - panel, building windows,
 // cursor, selection, spells, orders - where the first that uses it locks
-// it for the others; Space or Escape reset them all. It also scripts the
+// it for the others. Space or Escape reset them all. It also scripts the
 // two tutorial missions, announcing their steps to the HelpScreen.
 #pragma once
 

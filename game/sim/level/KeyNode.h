@@ -70,7 +70,7 @@ namespace takeover {
         /// Gold to reach the next level, -1 at the top (original: _SafeStr_1532).
         [[nodiscard]] int getUpgradeCost(int level) const;
 
-        /// Damage of a percentage of the maximum HP (Stone worms; original: _SafeStr_1536).
+        /// Damage of a percentage of the maximum HP (Stone worms, original: _SafeStr_1536).
         void damagePercent(int percent);
 
         /// Adds damage for this frame (original: _SafeStr_1507).
@@ -129,7 +129,7 @@ namespace takeover {
         void onRuined();              ///< _SafeStr_1519
         void onRebuilt();             ///< _SafeStr_1526
 
-        /// Keeps the strongest event of the frame; true if `event` is it
+        /// Keeps the strongest event of the frame. Returns true if `event` is it
         /// (original: _SafeStr_1506).
         bool postEvent(const PriorityEvent& event);
 

@@ -22,7 +22,7 @@ namespace takeover {
 
     void RasterAnimation::drawTo(engine::BitmapData& place, double x, double y, double yScale,
                                  const engine::ColorTransform* color) {
-        // The original would throw on a frame out of range; skip it instead.
+        // The original would throw on a frame out of range. Skip it instead.
         if (frame_ < 0 || frame_ >= static_cast<int>(frames_->bitmapData.size()))
             return;
 

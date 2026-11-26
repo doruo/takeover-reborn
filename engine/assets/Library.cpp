@@ -245,7 +245,7 @@ namespace engine {
         if (!rgba)
             return nullptr;
         *cached = vector::Image(w, h);
-        // PNG holds straight RGBA; the renderer works in premultiplied BGRA.
+        // PNG holds straight RGBA. The renderer works in premultiplied BGRA.
         for (std::size_t i = 0; i < static_cast<std::size_t>(w) * h; ++i) {
             const unsigned a = rgba[i * 4 + 3];
             auto premultiply = [a](unsigned c) { return static_cast<std::uint8_t>((c * a + 127) / 255); };

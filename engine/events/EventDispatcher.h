@@ -3,8 +3,8 @@
 //     button->addEventListener(MouseEvent::CLICK, this, &Button::onMouseClick);
 //     button->removeEventListener(MouseEvent::CLICK, this, &Button::onMouseClick);
 //
-// A handler may take the concrete event type (`void onMouseClick(MouseEvent&)`);
-// it must then only be registered for event types of that class.
+// A handler may take the concrete event type (`void onMouseClick(MouseEvent&)`).
+// It must then only be registered for event types of that class.
 #pragma once
 
 #include "engine/core/Listener.h"

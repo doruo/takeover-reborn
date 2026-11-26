@@ -25,7 +25,7 @@ namespace engine {
         auto& list = enterFrameListeners();
 
         // Entries are nulled (not erased) on removal so this loop stays valid
-        // while listeners come and go; compact afterwards.
+        // while listeners come and go. Compact afterwards.
         for (std::size_t i = 0; i < list.size(); ++i) {
             if (EventDispatcher* dispatcher = list[i]) {
                 Event event(Event::ENTER_FRAME);
@@ -76,7 +76,7 @@ namespace engine {
         event.currentTarget_ = this;
 
         // Flash snapshots the listener list: listeners added during dispatch
-        // don't run for this event; removed ones are skipped.
+        // don't run for this event. Removed ones are skipped.
         const std::size_t count = registrations_.size();
         ++dispatchDepth_;
 

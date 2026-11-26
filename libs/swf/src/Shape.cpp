@@ -342,7 +342,7 @@ namespace swf {
             return f;
         }
 
-        /// An edge in absolute coordinates; straight edges are stored as curves whose
+        /// An edge in absolute coordinates. Straight edges are stored as curves whose
         /// control point is the midpoint, which is how Flash morphs straight<->curved.
         struct AbsoluteEdge {
             double x0, y0, cx, cy, x1, y1;

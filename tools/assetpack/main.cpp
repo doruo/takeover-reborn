@@ -4,7 +4,7 @@
 //
 // Output:
 //   library.swf      every definition and timeline the game displays, without
-//                    code (DoABC), bitmaps or sounds; still a valid SWF, so
+//                    code (DoABC), bitmaps or sounds. Still a valid SWF, so
 //                    swfdump and ffdec can inspect it
 //   bitmaps/<id>.png decoded bitmaps, straight alpha (editable)
 //   sounds/<id>.mp3  MP3 data exactly as stored in the SWF (editable)

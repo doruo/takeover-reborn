@@ -21,7 +21,7 @@ namespace assetpack {
             const int rc = ::uncompress(out.data(), &outSize, compressed.data(), static_cast<uLong>(compressed.size()));
 
             // Z_BUF_ERROR: the stream holds more than we asked for (row padding of
-            // the last row may be missing or extra); what we have is enough.
+            // the last row may be missing or extra). What we have is enough.
             if (rc != Z_OK && rc != Z_BUF_ERROR)
                 throw swf::FormatError("zlib error " + std::to_string(rc) + " in bitmap");
 
@@ -36,7 +36,7 @@ namespace assetpack {
         }
 
         /// Flash tolerates JPEG streams that start with an extra EOI+SOI pair
-        /// (FF D9 FF D8) left over by old authoring tools; decoders don't.
+        /// (FF D9 FF D8) left over by old authoring tools. Decoders don't.
         std::vector<std::uint8_t> cleanJpeg(Bytes data) {
             std::vector<std::uint8_t> out;
             out.reserve(data.size());
@@ -48,7 +48,7 @@ namespace assetpack {
             out.insert(out.end(), data.begin() + static_cast<std::ptrdiff_t>(i), data.end());
 
             // Some files also embed an EOI+SOI pair in the middle (tables and image
-            // were concatenated); remove it so the stream is one JPEG.
+            // were concatenated). Remove it so the stream is one JPEG.
             for (std::size_t k = 2; k + 3 < out.size(); ++k) {
                 if (out[k] == 0xFF && out[k + 1] == 0xD9 && out[k + 2] == 0xFF && out[k + 3] == 0xD8) {
                     out.erase(out.begin() + static_cast<std::ptrdiff_t>(k), out.begin() + static_cast<std::ptrdiff_t>(k + 4));
@@ -75,7 +75,7 @@ namespace assetpack {
             return image;
         }
 
-        /// Lossless2 colors are premultiplied by alpha; PNG wants straight alpha.
+        /// Lossless2 colors are premultiplied by alpha. PNG wants straight alpha.
         void unpremultiply(std::uint8_t* rgba) {
             const int a = rgba[3];
             if (a == 0 || a == 255)
@@ -192,7 +192,7 @@ namespace assetpack {
 
                 // The authoring tool premultiplies the colors before JPEG
                 // encoding, and compression noise can push a component above its
-                // alpha. Flash clamps it; we do the same, then store straight
+                // alpha. Flash clamps it. We do the same, then store straight
                 // alpha like every other PNG.
                 const auto alpha = inflateExactly(bitmap.alphaData, pixelCount);
 

@@ -2,7 +2,7 @@
 // place where raw input becomes Flash mouse and keyboard events.
 //
 // The platform layer (engine/platform/Application) feeds it mouse positions
-// in stage pixels and Flash key codes; the Stage finds the object under the
+// in stage pixels and Flash key codes. The Stage finds the object under the
 // cursor and dispatches the same event sequence the Flash Player would:
 //
 //   move:   rollOut / mouseOut on what the cursor left, rollOver / mouseOver

@@ -9,7 +9,7 @@ namespace takeover {
             return;
 
         // A disposed object is often still running (a button disposed by its
-        // own click). Flash's garbage collector made that safe; here the object
+        // own click). Flash's garbage collector made that safe. Here the object
         // is kept alive until the next frame, whoever drops it meanwhile.
         std::shared_ptr<Disposable> self = weak_from_this().lock();
         releaseLater(self);

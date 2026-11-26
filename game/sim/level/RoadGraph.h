@@ -2,7 +2,7 @@
 // level/_SafeCls_1460 and package _SafePkg_1543).
 //
 // Crossings (GraphNode) are joined by roads made of way points. Squads walk
-// along the roads; LevelLogic finds the shortest road path between any two
+// along the roads. LevelLogic finds the shortest road path between any two
 // points of the map.
 #pragma once
 
@@ -82,7 +82,7 @@ namespace takeover {
             point = p, distance2 = d2, road = r, roadIndex0 = index0, roadIndex1 = index1;
         }
 
-        /// Keeps `other` if it is closer; true if it was (original: _SafeStr_2320).
+        /// Keeps `other` if it is closer. Returns true if it was (original: _SafeStr_2320).
         bool keepCloser(const RoadPoint& other) {
             if (distance2 > other.distance2) {
                 *this = other;

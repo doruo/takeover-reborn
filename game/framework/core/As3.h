@@ -1,7 +1,7 @@
 // As3.h - ActionScript/Haxe number semantics, so formulas read like the
 // original and give the same results.
 //
-//   as3::toInt(x)   int(x): truncates toward zero; NaN/Infinity give 0, and
+//   as3::toInt(x)   int(x): truncates toward zero. NaN/Infinity give 0, and
 //                   values outside 32 bits wrap like the AVM2 does.
 //   as3::round(x)   Math.round: halves go up (-2.5 -> -2, 2.5 -> 3).
 //   as3::random()   Math.random: uniform in [0, 1).

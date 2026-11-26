@@ -3,7 +3,7 @@
 // The original described them as XML snippets: <movie_clip libName=".."/>.
 // For each special unit kind it lists the 4 directions x N phases of its
 // animations ("RedArchers2Down_Attack"...) and gives the ArmyStat the
-// naming rule; then come buildings, spell effects, cursors and missiles.
+// naming rule. Then come buildings, spell effects, cursors and missiles.
 #pragma once
 
 #include "game/framework/raster/ResourceManager.h"

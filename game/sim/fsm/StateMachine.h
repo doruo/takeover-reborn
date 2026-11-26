@@ -1,7 +1,7 @@
 // StateMachine.h - a small table-driven state machine (original: package
 // _SafePkg_836, plus _SafePkg_1542 for the stronghold flavour).
 //
-// States are objects with a unique number; events are objects compared by
+// States are objects with a unique number. Events are objects compared by
 // identity. A transition says "in state S, event E leads to state T and runs
 // action A". Strongholds use it to go Active -> Ruined -> Rebuilding -> Active.
 //
@@ -20,7 +20,7 @@
 
 namespace takeover {
 
-    /// An event of the machine; events are compared by identity (original:
+    /// An event of the machine. Events are compared by identity (original:
     /// _SafeCls_2207).
     class FsmEvent {
     public:
@@ -44,7 +44,7 @@ namespace takeover {
         int priority; ///< Original: _SafeStr_2552.
     };
 
-    /// A state; every state created gets the next number (original: _SafeStr_828).
+    /// A state. Every state created gets the next number (original: _SafeStr_828).
     class FsmState : public BaseObject {
     public:
         FsmState() : number_(nextNumber_++) {}

@@ -28,7 +28,7 @@ namespace engine {
     class ShapeCache;
     class Stage;
 
-    /// What a render pass needs; passed down the tree.
+    /// What a render pass needs. Passed down the tree.
     struct RenderContext {
         Renderer& renderer;
         ShapeCache& shapes;
@@ -137,7 +137,7 @@ namespace engine {
 
         // /----- TIMELINE BOOKKEEPING -----/
 
-        // Set when a timeline places the object; used to replay frames exactly.
+        // Set when a timeline places the object. Used to replay frames exactly.
 
         [[nodiscard]] int depth() const { return depth_; }
         [[nodiscard]] std::uint16_t characterId() const { return characterId_; }
@@ -166,7 +166,7 @@ namespace engine {
         virtual void renderMask(RenderContext& context, const Matrix& parentWorld);
 
     protected:
-        /// Subclasses draw themselves here; `world` already includes this object.
+        /// Subclasses draw themselves here. `world` already includes this object.
         virtual void draw(RenderContext&, const Matrix& /*world*/, const ColorTransform& /*color*/, bool /*asMask*/) {}
 
     private:

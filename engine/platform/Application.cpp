@@ -208,7 +208,7 @@ namespace engine {
     }
 
     Point Application::windowToStage(float x, float y) const {
-        // SDL reports window coordinates; the renderer works in framebuffer
+        // SDL reports window coordinates. The renderer works in framebuffer
         // pixels (they differ on HiDPI screens).
         int windowW = 0, windowH = 0, pixelsW = 0, pixelsH = 0;
         SDL_GetWindowSize(window_->handle(), &windowW, &windowH);
@@ -320,7 +320,7 @@ namespace engine {
             previous = now;
             const double frameNs = 1e9 / frameRate_;
 
-            // Run the frames that are due; at most two per display refresh, so a
+            // Run the frames that are due. At most two per display refresh, so a
             // slow machine slows the game down rather than freezing the screen.
             int ran = 0;
 

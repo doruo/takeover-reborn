@@ -58,7 +58,7 @@ namespace engine {
 
         SoundChannel(AudioSystem& audio, std::shared_ptr<const SoundData> data, double startMs, int loops,
                      const SoundTransform& transform);
-        /// Called every frame: handles loop counts; true when playback ended.
+        /// Called every frame: handles loop counts. Returns true when playback ended.
         bool poll();
 
         AudioSystem& audio_;

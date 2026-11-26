@@ -31,7 +31,7 @@ namespace takeover {
         /// Computer players build nothing (original: _SafeStr_2391).
         bool aiBuildDisabled = false;
 
-    public: // (all public in the original; the level and the battle use them)
+    public: // (all public in the original, the level and the battle use them)
         void customUpdate(double dt) override;
 
         // Hooks for the presentation, which creates the visible objects.

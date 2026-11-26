@@ -5,7 +5,7 @@
 //
 // Without ids, every DefineShape is rendered. Bitmap fills are resolved from
 // the asset pack whose directory is given by the TAKEOVER_ASSETS environment
-// variable (output of `assetpack`); without it they render empty. Morph shapes are rendered at
+// variable (output of `assetpack`). Without it they render empty. Morph shapes are rendered at
 // ratio 0 and 1 (`<id>_0.png`, `<id>_1.png`).
 
 #include "swf/DrawList.h"

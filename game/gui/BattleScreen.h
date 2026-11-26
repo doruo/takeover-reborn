@@ -38,7 +38,7 @@ namespace takeover {
         void initQuestion();    ///< _SafeStr_3679
         void disposeQuestion(); ///< _SafeStr_3677
 
-        /// Asks "really?"; yes dispatches `onYes` (original: _SafeStr_3671).
+        /// Asks "really?". Yes dispatches `onYes` (original: _SafeStr_3671).
         void ask(const std::string& message, Signal<>* onYes);
         void closeQuestion();   ///< _SafeStr_3678
 

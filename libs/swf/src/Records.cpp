@@ -341,7 +341,7 @@ namespace swf::detail {
 
         if (flags3 & kHasCacheAsBitmap) {
             // Flash authoring tools sometimes set the flag but omit the byte when
-            // it is the last field; the player then treats it as "enabled".
+            // it is the last field. The player then treats it as "enabled".
             p.cacheAsBitmap = in.remaining() > 0 ? in.u8() != 0 : true;
         }
 
@@ -352,7 +352,7 @@ namespace swf::detail {
             readRgba(in); // never used by this game
 
         if (flags & kHasClipActions) {
-            // AVM1 clip actions cannot appear in an AS3 movie; refuse rather than
+            // AVM1 clip actions cannot appear in an AS3 movie. Refuse rather than
             // silently mis-parse the rest of the timeline.
             throw FormatError("PlaceObject with AVM1 clip actions is not supported");
         }

@@ -14,7 +14,7 @@ namespace takeover {
         Signal<EdictIcon*> signalClick; ///< Original: _SafeStr_3469.
         [[nodiscard]] Edict& edict() const { return *edict_; }
 
-        /// Shows the levels bought, buyable or locked; `edictCount` is the
+        /// Shows the levels bought, buyable or locked. `edictCount` is the
         /// number of points spent in the campaign.
         void updateIconView(int edictCount);
 

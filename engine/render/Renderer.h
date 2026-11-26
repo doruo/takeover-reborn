@@ -2,7 +2,7 @@
 //
 // Everything the display list shows ends up as "a texture, an affine matrix,
 // a color transform": shapes are rasterized to textures (ShapeCache), bitmaps
-// already are. Coordinates passed in are stage pixels (800x600); the renderer
+// already are. Coordinates passed in are stage pixels (800x600). The renderer
 // maps the stage to the framebuffer, scaled and centred, like Flash's
 // StageScaleMode.SHOW_ALL.
 //
@@ -92,9 +92,9 @@ namespace engine {
 
         // /----- MASKS -----/
 
-        // beginMask(); <draw the mask shapes>; endMask(); <draw masked content>;
-        // then, once the masked content is done: beginUnmask(); <draw the same mask
-        // shapes again>; endUnmask().
+        // beginMask(), <draw the mask shapes>, endMask(), <draw masked content>.
+        // Then, once the masked content is done: beginUnmask(), <draw the same mask
+        // shapes again>, endUnmask().
 
         void beginMask();
         void endMask();
@@ -138,7 +138,7 @@ namespace engine {
         void releaseTarget(std::unique_ptr<RenderTarget> target);
 
         /// Runs a fullscreen pass of `program` reading `source` into `destination`
-        /// (same size; only the layer's area is processed).
+        /// (same size, only the layer's area is processed).
         void runPass(const Program& program, GLuint source, RenderTarget& destination, const PixelRect& area);
         void blurInPlace(Layer& layer, float blurX, float blurY, int passes);
         void glowOrShadow(Layer& layer, const swf::Rgba& color, float blurX, float blurY, float strength, int passes,

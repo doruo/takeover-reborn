@@ -27,7 +27,7 @@ namespace swf {
         CharacterId id = 0;
         int version = 1; ///< 1..4 for DefineShape..DefineShape4.
         Rect bounds;     ///< Includes half the stroke widths.
-        Rect edgeBounds; ///< Geometry only (DefineShape4); equals bounds otherwise.
+        Rect edgeBounds; ///< Geometry only (DefineShape4). Equals bounds otherwise.
         bool usesFillWindingRule = false;
         Bytes records; ///< SHAPEWITHSTYLE, starting with the fill style array.
     };
@@ -129,7 +129,7 @@ namespace swf {
         std::optional<Rgba> color;
         std::optional<std::int16_t> xOffset;
         std::optional<std::int16_t> yOffset;
-        std::optional<std::uint16_t> height; ///< Twips; present whenever fontId is.
+        std::optional<std::uint16_t> height; ///< Twips. Present whenever fontId is.
         std::vector<GlyphEntry> glyphs;
     };
 

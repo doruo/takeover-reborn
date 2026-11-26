@@ -2,8 +2,8 @@
 //
 // This is the form every renderer understands: "fill this closed path with
 // that paint, then stroke this polyline with that pen". buildDrawList()
-// produces it from the SWF edge representation (Shape.h); the asset pack
-// stores it; the engine rasterizes it.
+// produces it from the SWF edge representation (Shape.h). The asset pack
+// stores it. The engine rasterizes it.
 //
 // Coordinates are twips, in the shape's own space.
 #pragma once
@@ -54,9 +54,9 @@ namespace swf {
     /// Flash rules reproduced here:
     ///   * an edge belongs to the region of `fill1` as drawn and to the region of
     ///     `fill0` reversed, so every region boundary is assembled from edges
-    ///     that may have been drawn in any order;
+    ///     that may have been drawn in any order.
     ///   * a style-table change starts a new layer painted above the previous
-    ///     ones;
+    ///     ones.
     ///   * within a layer, fills are painted in style order, then strokes.
     DrawList buildDrawList(const ShapeGeometry& geometry, bool nonZeroWinding = false);
 
@@ -66,7 +66,7 @@ namespace swf {
 
     /// Does the point (twips, shape space) fall inside a filled region or on a
     /// stroke of the draw list? This is Flash's "shape flag" hit test, used to
-    /// find what is under the mouse. Curves are flattened; strokes count with
+    /// find what is under the mouse. Curves are flattened. Strokes count with
     /// their full width (hairlines as 1 px).
     bool hitTest(const DrawList& drawList, float x, float y);
 

@@ -136,7 +136,7 @@ namespace takeover {
         default: return;
         }
 
-        // The announcement plays first; the power is released when it ends.
+        // The announcement plays first. The power is released when it ends.
         std::shared_ptr<engine::MovieClip> message = symbols::create(messageClass);
         engine::Stage* stage = view_->stage();
         auto target = std::make_shared<MovieClipTarget>(message);
@@ -213,7 +213,7 @@ namespace takeover {
     }
 
     const SpellInfo* Level::ultimateCult(Combatant& combatant) {
-        // Every other enemy soldier dies; some become gold or mana.
+        // Every other enemy soldier dies. Some become gold or mana.
         const Race race = combatant.getRace();
         bool killUnit = true;
 

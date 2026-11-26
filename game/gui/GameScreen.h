@@ -5,7 +5,7 @@
 // the input devices, initButtonsBlock (wire the clip's buttons). Every
 // button reports its id through signalButton.
 //
-// C++ note: AS3 constructors call virtual methods freely; C++ ones can't
+// C++ note: AS3 constructors call virtual methods freely. C++ ones can't
 // (the subclass isn't built yet). So subclass constructors call initScreen()
 // as their last statement, which is what the AS3 code did too.
 #pragma once

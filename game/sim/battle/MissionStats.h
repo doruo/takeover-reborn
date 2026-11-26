@@ -41,7 +41,7 @@ namespace takeover {
 
         explicit MissionStats(Race race) : race_(race) {}
 
-        /// Sets a counter; marks the stats as changed if the value differs
+        /// Sets a counter. Marks the stats as changed if the value differs
         /// (original: _SafeStr_2238).
         void set(int counter, int value);
         void add(int counter, int amount); ///< Original: _SafeStr_2239.

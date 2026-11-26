@@ -418,7 +418,7 @@ namespace takeover {
 
     void LevelVisual::precache(int levelNum) {
         forEachObject(combatants_, [&](const std::shared_ptr<Combatant>& combatant) {
-            // Creating a squad renders its animations; the squad is dropped.
+            // Creating a squad renders its animations. The squad is dropped.
             for (int i = 0; i < 5; ++i) {
                 const ArmyStat* stat = combatant->getArmyStat(unit_types::fromInt(i));
                 makeSquad(combatant->description, *stat, combatant->getArmyStatBonus(*stat))->dispose();

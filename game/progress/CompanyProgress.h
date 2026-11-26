@@ -72,7 +72,7 @@ namespace takeover {
 
         // /----- BADGES -----/
 
-        /// Updates the mission metrics; returns the number of gold medals.
+        /// Updates the mission metrics. Returns the number of gold medals.
         int checkLevelBadges(Badges& badges) const;
         void updateEdictsBadge(Badges& badges) const; ///< _SafeStr_3471
 

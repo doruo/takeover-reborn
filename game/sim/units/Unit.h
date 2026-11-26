@@ -2,7 +2,7 @@
 //
 // A small state machine: Stand, Go (walk to its place in the formation),
 // Fight (a UnitCombat drives it), Dead (lies there, then fades away).
-// Requests to change state arrive as event bits; the strongest one wins at
+// Requests to change state arrive as event bits. The strongest one wins at
 // the next update (see postEvent). Ranged soldiers also fly one missile at
 // a time. The presentation subclass (FUnit) overrides the changeAnimTo_*
 // hooks to play the animations.
@@ -46,7 +46,7 @@ namespace takeover {
         static constexpr int STATE_DEAD = 2;  ///< _SafeStr_2662
         static constexpr int STATE_FIGHT = 3; ///< _SafeStr_2661
 
-        // State change requests; the largest pending one is processed.
+        // State change requests. The largest pending one is processed.
         static constexpr int EV_RESURRECT = 32768; ///< _SafeStr_2659
         static constexpr int EV_TO_GRAVE = 16384;  ///< _SafeStr_2670
         static constexpr int EV_DIE = 8192;        ///< _SafeStr_2664
@@ -92,7 +92,7 @@ namespace takeover {
         void stopHere();                              ///< _SafeStr_1029
         void setDestination(const Point2D& p) { destination_.copyFrom(p); } ///< _SafeStr_1061
         [[nodiscard]] const Point2D& getDestination() const { return destination_; } ///< _SafeStr_2649
-        /// Moves one step towards `target`; true if already there (original: _SafeStr_2657).
+        /// Moves one step towards `target`. Returns true if already there (original: _SafeStr_2657).
         bool stepTowards(double dt, const Point2D& target);
         void push(double angle, double force); ///< _SafeStr_2345
         void checkSpeedChange();               ///< _SafeStr_2656
@@ -117,7 +117,7 @@ namespace takeover {
         void addDamageResist(double seconds, int percent = 25); ///< _SafeStr_1072
         void setDamageFactor(double factor);        ///< _SafeStr_1063
 
-        /// Restores HP; returns what didn't fit (original: _SafeStr_1062).
+        /// Restores HP. Returns what didn't fit (original: _SafeStr_1062).
         int heal(int amount);
 
         /// Back from the dead at `position` (original: _SafeStr_1057).
@@ -143,7 +143,7 @@ namespace takeover {
         virtual void changeAnimTo_Special() {}
         virtual void changeAnimTo_Go() {}
         virtual void changeAnimTo_FallDown() {}
-        /// Starts an attack animation lasting about `period`; returns its length.
+        /// Starts an attack animation lasting about `period`. Returns its length.
         virtual double changeAnimTo_DistanceAttack(double period) { return period; }
         virtual void changeAnimTo_CorpseToGrave() {}
         virtual double changeAnimTo_Attack(double period) { return period; }

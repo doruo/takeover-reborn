@@ -1,7 +1,7 @@
 // Squad.h - a squad's orders and behaviour (original: _SafePkg_868/_SafeCls_1114).
 //
 // State machine of the whole squad:
-//   Idle      standing; fights enemies that come close
+//   Idle      standing. Fights enemies that come close
 //   Moving    follows a road path to a destination
 //   Fighting  every soldier picks the best target nearby
 //   Dead      every soldier is dead

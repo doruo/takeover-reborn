@@ -53,12 +53,12 @@ namespace engine {
 
         // /----- CONTENT -----/
 
-        /// Plain text; paragraphs are separated by '\r' like in Flash.
+        /// Plain text. Paragraphs are separated by '\r' like in Flash.
         [[nodiscard]] std::string text() const;
         void setText(const std::string& text);
         void appendText(const std::string& text) { setText(this->text() + text); }
 
-        /// The HTML last assigned (Flash regenerates its own markup; the game
+        /// The HTML last assigned (Flash regenerates its own markup, the game
         /// only reads back what it wrote).
         [[nodiscard]] const std::string& htmlText() const { return html_; }
         void setHtmlText(const std::string& html);

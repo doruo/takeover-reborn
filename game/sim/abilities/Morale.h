@@ -4,7 +4,7 @@
 // intimidating) and up when it strikes. At the top it turns into Heroism,
 // at the bottom into Fear, each lasting 10 seconds. Otherwise it drifts
 // back towards the base value. Undead and mechanisms ignore morale
-// (locked); disciplined squads can't be frightened.
+// (locked). Disciplined squads can't be frightened.
 #pragma once
 
 #include "game/sim/abilities/Property.h"

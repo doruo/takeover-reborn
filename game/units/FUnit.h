@@ -1,7 +1,7 @@
 // FUnit.h - a soldier on the battlefield (original: _SafePkg_805/_SafeStr_1246,
 // with its definition _SafeStr_1253 and Unit3DAnimation of _SafePkg_1310).
 //
-// The simulation's Unit decides what the soldier does; FUnit shows it: it
+// The simulation's Unit decides what the soldier does. FUnit shows it: it
 // picks the animation (walk, attack, die) facing one of four directions,
 // tints poisoned or frozen soldiers, and draws missiles in flight (arrows
 // as lines, bullets and catapult stones as pictures).

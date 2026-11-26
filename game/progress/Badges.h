@@ -1,7 +1,7 @@
 // Badges.h - the 22 achievements and the 28 metrics they watch (original:
 // progress/Badges and progress/_SafeStr_690 for one badge).
 //
-// Metrics are saved with the profile; badges are not: loading the metrics
+// Metrics are saved with the profile. Badges are not: loading the metrics
 // re-unlocks them.
 #pragma once
 

@@ -4,7 +4,7 @@
 //
 // Each id maps to a library sound class with a volume, start time and loop
 // count (original: _SafeStr_1898). The battle-specific choosers (which
-// sound a unit makes when it attacks, dies, ...) are at the end; they live
+// sound a unit makes when it attacks, dies, ...) are at the end. They live
 // in SoundConstBattle.cpp next to the simulation types they need.
 #pragma once
 
@@ -30,7 +30,7 @@ namespace takeover {
 
         static inline bool MODE_MUTE = false;
 
-        /// Plays a sound effect by id; ids < 0 mean "no sound" (original: _SafeStr_1303).
+        /// Plays a sound effect by id. Ids < 0 mean "no sound" (original: _SafeStr_1303).
         static std::shared_ptr<engine::SoundChannel> play(int id);
 
         /// Plays one of the ids at random (original: _SafeStr_1900).

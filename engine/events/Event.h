@@ -46,7 +46,7 @@ namespace engine {
         [[nodiscard]] bool isPropagationStopped() const { return propagationStopped_; }
         [[nodiscard]] bool isImmediatePropagationStopped() const { return immediatePropagationStopped_; }
 
-        /// Flash asks for a render between frames; we always render once per
+        /// Flash asks for a render between frames. We always render once per
         /// frame, so this does nothing (kept so ported code reads the same).
         void updateAfterEvent() {}
 

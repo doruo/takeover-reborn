@@ -167,8 +167,8 @@ namespace takeover {
         /// Hits every soldier of each enemy squad touched by the area (original: _SafeStr_2356).
         void applySplashToSquads(const SplashArea& area, std::optional<Race> race);
 
-        /// Hits the soldiers in the area, pushing them back unless `noPush`;
-        /// friends too with `friendlyFire` (original: _SafeStr_2319).
+        /// Hits the soldiers in the area, pushing them back unless `noPush`.
+        /// Friends too with `friendlyFire` (original: _SafeStr_2319).
         void applySplash(const SplashArea& area, std::optional<Race> race, bool noPush = false, bool friendlyFire = false);
 
     protected:

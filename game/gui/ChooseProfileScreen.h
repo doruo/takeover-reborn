@@ -1,5 +1,5 @@
 // ChooseProfileScreen.h - the three save slots (original:
-// gui/ChooseProfileScreen; the Armor Games online slots are not ported).
+// gui/ChooseProfileScreen, the Armor Games online slots are not ported).
 #pragma once
 
 #include "game/gui/GameScreen.h"

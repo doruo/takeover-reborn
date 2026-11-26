@@ -1,7 +1,7 @@
 // Effects.h - timed things on the battlefield: animations of spells and
 // buildings, and banners (original: package _SafePkg_838 and _SafeStr_854).
 //
-// A TimedEffect shows a layer object for some seconds; the level removes it
+// A TimedEffect shows a layer object for some seconds. The level removes it
 // once it is finished. Banners are effects that, every half second, act on
 // the squads around them: heal, heroism, bloodlust, liberation.
 #pragma once

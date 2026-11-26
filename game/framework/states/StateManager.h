@@ -1,7 +1,7 @@
 // StateManager.h - a stack of game states (original: _SafePkg_774).
 //
 // The top state is the active one. Pushing a *modal* state pauses every
-// state below it; popping resumes them down to the first modal one. Every
+// state below it. Popping resumes them down to the first modal one. Every
 // state that isn't paused is updated, from the top of the stack down. A
 // state leaves the stack by being disposed, from anywhere.
 #pragma once

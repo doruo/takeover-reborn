@@ -95,7 +95,7 @@ namespace vector {
             default: {
                 const Image* image = bitmaps ? bitmaps(fill.bitmapId) : nullptr;
                 if (!image || image->width == 0) {
-                    // Flash paints a missing bitmap fill as nothing; keep that.
+                    // Flash paints a missing bitmap fill as nothing. Keep that.
                     cairo_set_source_rgba(cr, 0, 0, 0, 0);
                     return {};
                 }

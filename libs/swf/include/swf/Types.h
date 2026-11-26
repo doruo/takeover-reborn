@@ -1,7 +1,7 @@
 // Types.h - plain data types shared by every SWF record.
 //
 // Units: all coordinates stay in *twips* (1/20 pixel), exactly as stored in the
-// file. Converting to pixels is the job of the consumer; keeping twips here
+// file. Converting to pixels is the job of the consumer. Keeping twips here
 // avoids rounding drift when matrices are composed.
 #pragma once
 
@@ -157,7 +157,7 @@ namespace swf {
     };
 
     struct ColorMatrixFilter {
-        /// Row-major 4x5 matrix; the 5th column is an additive offset in [0,255].
+        /// Row-major 4x5 matrix. The 5th column is an additive offset in [0,255].
         std::array<float, 20> matrix{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0};
     };
 

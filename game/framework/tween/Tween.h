@@ -1,7 +1,7 @@
 // Tween.h - value animations over time (original: package _SafePkg_1640).
 //
 //   Transition  an easing function with a start value, a change and a
-//               duration (original: _SafeStr_1612; the easings are the
+//               duration (original: _SafeStr_1612, the easings are the
 //               classic Robert Penner ones)
 //   Tween       plays a Transition when updated, after an optional delay,
 //               possibly several times (original: _SafeCls_1782)
@@ -51,7 +51,7 @@ namespace takeover {
     struct Transition {
         Transition() = default;
 
-        /// `duration` in seconds; times are kept in milliseconds like the original.
+        /// `duration` in seconds. Times are kept in milliseconds like the original.
         Transition(Easing function, double from, double to, double duration)
             : easing(function), x0(from), dx(to - from), mscDuration(duration * 1000) {}
 

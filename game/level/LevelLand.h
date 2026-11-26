@@ -4,7 +4,7 @@
 // A map clip ("Level3Class") has, per location (a stronghold and its
 // surroundings), an area, roads and objects (trees, houses...), each with
 // one frame per owner color. The ground (areas and roads) is drawn once
-// into a bitmap, redrawn when a location changes hands; the objects are
+// into a bitmap, redrawn when a location changes hands. The objects are
 // raster objects of the battlefield layer, so that soldiers walk behind
 // them.
 #pragma once
@@ -83,7 +83,7 @@ namespace takeover {
             def_.locationViews[static_cast<std::size_t>(location)] = view;
         }
 
-        /// The color of a location; 0 for a location without a stronghold (an
+        /// The color of a location, 0 for a location without a stronghold (an
         /// undefined array entry in the original) (original: _SafeStr_2735).
         [[nodiscard]] int locationView(int location) const {
             if (location < 0 || location >= static_cast<int>(def_.locationViews.size()))

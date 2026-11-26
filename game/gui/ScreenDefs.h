@@ -19,7 +19,7 @@ namespace takeover {
     struct ScreenDef {
         virtual ~ScreenDef() = default;
 
-        /// Library class of the screen's view; empty for a plain Sprite
+        /// Library class of the screen's view. Empty for a plain Sprite
         /// (original: _SafeStr_757).
         std::string viewClass;
         virtual void dispose() { viewClass.clear(); }

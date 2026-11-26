@@ -31,7 +31,7 @@ namespace engine {
         const Entry* get(std::uint16_t id, std::uint16_t ratio, const Matrix& localToDevice);
 
         /// Rasterizes any draw list (twips, bounds `bounds`) at the resolution
-        /// suited to `localToDevice`; used for content that is not a library
+        /// suited to `localToDevice`. Used for content that is not a library
         /// character, such as dynamic text.
         [[nodiscard]] Entry rasterize(const swf::DrawList& drawList, const swf::Rect& bounds,
                                       const Matrix& localToDevice) const;

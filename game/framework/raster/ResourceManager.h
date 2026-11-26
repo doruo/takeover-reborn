@@ -35,10 +35,10 @@ namespace takeover {
     };
 
     /// A display object wrapped for the animation classes (original:
-    /// _SafeStr_1620; only the parts the game uses are ported).
+    /// _SafeStr_1620, only the parts the game uses are ported).
     class ImageView : public Disposable {
     public:
-        /// Wraps `sprite`; the base radius defaults to its larger side.
+        /// Wraps `sprite`. The base radius defaults to its larger side.
         explicit ImageView(std::shared_ptr<engine::Sprite> sprite = std::make_shared<engine::Sprite>(), double baseRadius = 0);
 
         [[nodiscard]] const std::shared_ptr<engine::Sprite>& sprite() const { return sprite_; }
@@ -129,7 +129,7 @@ namespace takeover {
     public:
         explicit ResourceManager(int fps = 30);
 
-        /// One Transition per labelled section of a clip; the last one runs to
+        /// One Transition per labelled section of a clip. The last one runs to
         /// the end (original: _SafeStr_1621).
         static std::vector<Transition> transitionsOf(engine::MovieClip& movie, int fps);
 
@@ -145,7 +145,7 @@ namespace takeover {
         /// Computes the animation ranges of clips (original: _SafeStr_1635).
         void registerTransitions(const std::vector<ClipDef>& clips);
 
-        /// Starts rendering; the signal fires when done (original: startLoadRes).
+        /// Starts rendering. The signal fires when done (original: startLoadRes).
         virtual Signal<>& startLoadRes() { return maker_->signalFinish; }
 
         /// A still picture of a clip, from its cached frames if any (original: createRasterObject).

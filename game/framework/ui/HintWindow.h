@@ -36,7 +36,7 @@ namespace takeover {
         [[nodiscard]] engine::TextField* text() const { return text_; }
         [[nodiscard]] engine::DisplayObject* background() const { return background_; }
 
-        /// With auto width the text field grows with its content; otherwise it
+        /// With auto width the text field grows with its content. Otherwise it
         /// keeps its authored width and wraps (original: _SafeStr_2593).
         [[nodiscard]] bool autoWidth() const { return autoWidth_; }
         void setAutoWidth(bool value);

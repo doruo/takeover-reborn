@@ -6,7 +6,7 @@
 //
 // The loop is the Flash one: the movie runs at a fixed frame rate (30 fps
 // for Take Over). Each frame, timelines advance and ENTER_FRAME is
-// broadcast; the game updates itself from there with a fixed dt. If the
+// broadcast. The game updates itself from there with a fixed dt. If the
 // machine can't keep up, the game slows down instead of skipping frames,
 // exactly like in the Flash Player.
 #pragma once
@@ -80,7 +80,7 @@ namespace engine {
     private:
         void handleEvent(const SDL_Event& event);
 
-        /// Executes the test script until it waits; false when it is over.
+        /// Executes the test script until it waits. Returns false when it is over.
         ///   wait N          let N frames run
         ///   move X Y        mouse to stage coordinates
         ///   click X Y       move, press and release the left button

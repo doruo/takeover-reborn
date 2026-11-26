@@ -17,8 +17,8 @@ decides when it dies.
 * **`std::shared_ptr<T>`** only where the original relied on the garbage
   collector to share an object: display objects. In Flash, game code keeps
   references to clips (`panel.butLogo`) that a timeline may remove at any
-  time; the clip stays alive as long as someone refers to it. Containers and
-  game code therefore share ownership of display objects; the parent link is
+  time, and the clip stays alive as long as someone refers to it. Containers and
+  game code therefore share ownership of display objects. The parent link is
   a plain pointer (a child never owns its parent, which would create a cycle
   and leak). See `engine/display/DisplayObject.h`.
 * **Raw pointers and references are non-owning.** A `const T*` returned by a
@@ -93,7 +93,7 @@ using Character = std::variant<ShapeDef, MorphShapeDef, BitmapDef, ...>;
   (`tools/swfdump/main.cpp`, `kindName`).
 
 Rule of thumb used in this project: a **closed** set of data types that
-the code switches over (file records, commands) is a `variant`; an **open**
+the code switches over (file records, commands) is a `variant`, an **open**
 family of behaviours that game code extends (display objects, game states,
 units) is a class hierarchy with virtual functions, as in the original.
 
@@ -107,7 +107,7 @@ compile error. Converting on purpose is explicit: `static_cast<int>(mode)`.
 
 * `[[nodiscard]]` on getters: ignoring the result of `movie.find(id)` is
   almost always a bug, so the compiler warns.
-* Member functions that don't modify the object are `const`; this documents
+* Member functions that don't modify the object are `const`. This documents
   intent and lets them be called on `const` references.
 * `constexpr` constants (`kTwipsPerPixel`) are evaluated at compile time and
   have no runtime cost.
@@ -129,7 +129,7 @@ target_include_directories(swf PUBLIC include)
 target_link_libraries(swf PUBLIC ZLIB::ZLIB PRIVATE takeover::warnings)
 ```
 
-`PUBLIC` propagates to whoever links `swf`; `PRIVATE` stays internal. The
+`PUBLIC` propagates to whoever links `swf`, `PRIVATE` stays internal. The
 `takeover::warnings` interface target applies one warning policy everywhere.
 `CMAKE_EXPORT_COMPILE_COMMANDS` produces `compile_commands.json` so clangd
 gives exact code navigation in any editor.
@@ -145,7 +145,7 @@ gives exact code navigation in any editor.
 The same list is expanded twice with different macros: once to declare a
 function pointer per entry, once (in `Gl.cpp`) to load each pointer by name.
 Adding a function is one line, and the declaration and the loading can't
-get out of sync. It's an old preprocessor technique; use it sparingly,
+get out of sync. It's an old preprocessor technique, use it sparingly,
 for tables like this one.
 
 ## 11. Designated initializers
@@ -156,7 +156,7 @@ C++20 lets you name the fields you set in an aggregate:
 engine::Window window({.title = "clipview", .width = 64, .height = 64, .hidden = true});
 ```
 
-Fields must appear in declaration order; the others keep their default
+Fields must appear in declaration order, the others keep their default
 values. It reads better than a long positional argument list.
 
 ## 12. Disposal that waits for the next frame
@@ -189,7 +189,7 @@ animation->signalFinish.addListener([this, caster](Tween*) {        // a lambda
 });
 ```
 
-A lambda is an anonymous function object; `[this, caster]` lists what it
+A lambda is an anonymous function object. `[this, caster]` lists what it
 captures from the surrounding code. `std::function<void(int)>` stores any
 callable with that signature, which is how `FunctionProcess`
 (`game/framework/input/InputProcess.h`) keeps the functions of the battle's
@@ -197,7 +197,7 @@ input chain.
 
 ## 14. Interfaces and multiple inheritance
 
-AS3 classes implement interfaces; C++ classes inherit from abstract classes
+AS3 classes implement interfaces, C++ classes inherit from abstract classes
 (only pure virtual methods). A stronghold on screen is both a simulation
 object and something drawn on the battlefield:
 
@@ -218,7 +218,7 @@ certain (the original casts without checking), `static_cast` says so.
 ## 16. AS3 `null` and `undefined`
 
 A value that may be missing is a `std::optional<T>` (a path that may not
-exist, the owner of a location); an object that may be missing is a
+exist, the owner of a location). An object that may be missing is a
 pointer that may be `nullptr`. Where the original reads past the end of an
 array and gets `undefined` (treated as 0 or `false`), the port checks the
 index and returns that value explicitly, with a comment.

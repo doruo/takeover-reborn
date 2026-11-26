@@ -50,7 +50,7 @@ namespace takeover {
         Signal<engine::MouseEvent&> signalDown_, signalUp_, signalMove_, signalClick_, signalDoubleClick_;
         bool buttonDown_ = false;
 
-        // Frames since the event, counted down from kCheckDelay; 0 = "this frame".
+        // Frames since the event, counted down from kCheckDelay, 0 = "this frame".
         int pressedCountdown_ = -1, releasedCountdown_ = -1, movedCountdown_ = -1, clickedCountdown_ = -1,
             doubleClickedCountdown_ = -1;
     };

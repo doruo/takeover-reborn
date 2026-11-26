@@ -203,7 +203,7 @@ namespace takeover {
         if (kind != ATK_MELEE && kind != ATK_DISTANCE && kind != ATK_CHARGE && kind != ATK_POISON && kind != ATK_FREEZ)
             return false;
 
-        // The original casts every one of them to a ValueEffect; freezing ones
+        // The original casts every one of them to a ValueEffect. Freezing ones
         // are PercentModifiers, which this cast doesn't fit: leave them alone.
         if (auto* effect = dynamic_cast<ValueEffect*>(&added)) {
             int value = effect->getValue();

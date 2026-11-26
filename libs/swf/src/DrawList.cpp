@@ -74,7 +74,7 @@ namespace swf {
                     }
 
                     if (next == edges.size())
-                        break; // open contour; filling closes it implicitly
+                        break; // open contour. Filling closes it implicitly
 
                     current = next;
                 }

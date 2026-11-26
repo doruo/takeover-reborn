@@ -67,7 +67,7 @@ namespace engine {
         [[nodiscard]] const swf::FontDef* findFont(std::string_view name, bool bold, bool italic,
                                                    std::u32string_view mustContain = {}) const;
         /// Any embedded font holding every character of `text`, preferring the
-        /// requested style; nullptr if none (device text falls back to it).
+        /// requested style, nullptr if none (device text falls back to it).
         [[nodiscard]] const swf::FontDef* findFontCovering(std::u32string_view text, bool bold, bool italic) const;
 
         /// Stage size in pixels and frame rate of the original movie.

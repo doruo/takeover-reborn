@@ -8,7 +8,7 @@
 //     auto* start = symbols::child<engine::MovieClip>(*screen, "butStart");
 //     auto* label = symbols::find<engine::TextField>(*screen, "mcMessage.txtName");
 //
-// Many instance names were obfuscated in the shipped SWF ("_-dj"); the port
+// Many instance names were obfuscated in the shipped SWF ("_-dj"). The port
 // uses those strings as they are, with a comment saying what the child is.
 #pragma once
 
@@ -20,7 +20,7 @@
 
 namespace takeover::symbols {
 
-    /// Instantiates a library symbol by class name; throws if it doesn't exist.
+    /// Instantiates a library symbol by class name. Throws if it doesn't exist.
     /// Symbols whose AS3 class extends Sprite (not MovieClip) are stopped on
     /// their first frame, as Flash would show them.
     std::shared_ptr<engine::MovieClip> create(std::string_view className);

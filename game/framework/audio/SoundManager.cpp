@@ -43,8 +43,8 @@ namespace takeover {
         for (const auto& channel : channels_)
             channel->stop();
 
-        // Flash keeps stopped channels in the dictionary (no SOUND_COMPLETE);
-        // forgetting them here changes nothing observable.
+        // Flash keeps stopped channels in the dictionary (no SOUND_COMPLETE).
+        // Forgetting them here changes nothing observable.
         channels_.clear();
     }
 

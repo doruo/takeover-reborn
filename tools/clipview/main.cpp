@@ -8,8 +8,8 @@
 //     --frame N      go to frame N (gotoAndStop) before rendering (default 1)
 //     --advance N    instead, play N frames from frame 1 (advanceFrame)
 //     --scale S      resolution multiplier (default 1)
-//     --stage        render on the 800x600 stage with the clip at (0, 0);
-//                    default: crop to the clip's bounds (like ffdec exports)
+//     --stage        render on the 800x600 stage with the clip at (0, 0).
+//                    Default: crop to the clip's bounds (like ffdec exports)
 //
 // Used to compare our display list against reference renders, and to look
 // at any symbol of the game without running it.

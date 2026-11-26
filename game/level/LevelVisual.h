@@ -2,7 +2,7 @@
 //
 // On top of the rules (LevelLogic) and the computer players (LevelAi), it
 // builds the display: the ground, the battlefield raster layer, the squad
-// icons, the HUD layers and the tooltips; it creates the visible squads
+// icons, the HUD layers and the tooltips. It creates the visible squads
 // (FSquad) and the timed effects, and announces the battle's events to the
 // HUD and the tutorials through signals.
 //

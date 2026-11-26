@@ -201,7 +201,7 @@ namespace engine {
         ma_decoder_uninit(&decoder);
 
         // Skip the encoder delay declared by the SWF, trim to its sample count
-        // (both are in the sound's own rate; we decode at 44.1 kHz).
+        // (both are in the sound's own rate, we decode at 44.1 kHz).
         const double rateRatio = 44100.0 / info->sampleRate;
         const auto skip = static_cast<std::size_t>(std::max(0, info->seekSamples) * rateRatio) * kChannels;
         if (skip < data->frames.size())

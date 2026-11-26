@@ -5,7 +5,7 @@
 //     for (const auto& [id, character] : movie.characters()) { ... }
 //     const swf::SpriteDef* clip = movie.findSpriteByClass("CastleRedClass");
 //
-// Movie owns the decompressed file bytes; every swf::Bytes span handed out by
+// Movie owns the decompressed file bytes. Every swf::Bytes span handed out by
 // the definitions points into that buffer. Movie is therefore move-only: a
 // move transfers the heap buffer without reallocating, so spans stay valid.
 #pragma once

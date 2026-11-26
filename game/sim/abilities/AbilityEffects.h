@@ -90,7 +90,7 @@ namespace takeover {
         double duration_;              ///< Seconds (original: _SafeStr_910).
     };
 
-    /// Adds a value to a parameter's base every frame; damage is one with a
+    /// Adds a value to a parameter's base every frame. Damage is one with a
     /// negative value on HP (original: _SafeStr_955).
     class ValueEffect : public AbilityEffect {
     public:
@@ -165,8 +165,8 @@ namespace takeover {
         void customUpdate(double dt) override;
     };
 
-    /// Applies a value effect every `period` seconds (poison, regeneration);
-    /// doesn't stack with an effect of the same name (original: _SafeStr_2860).
+    /// Applies a value effect every `period` seconds (poison, regeneration).
+    /// Doesn't stack with an effect of the same name (original: _SafeStr_2860).
     class PeriodicEffect : public ValueEffect {
     public:
         PeriodicEffect(int sourceId = 0, std::string name = "", std::string paramName = "", double period = 0,

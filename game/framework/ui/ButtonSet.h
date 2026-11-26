@@ -45,7 +45,7 @@ namespace takeover {
         std::vector<std::shared_ptr<Button>> buttons_; ///< Original: _SafeStr_1415.
     };
 
-    /// A button with a second look for its "on" state; the second clip
+    /// A button with a second look for its "on" state. The second clip
     /// replaces the first while on (original: _SafeCls_1709).
     class SwitchButton : public Button {
     public:

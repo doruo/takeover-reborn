@@ -19,7 +19,7 @@ namespace takeover {
         [[nodiscard]] virtual bool isEnabled() const = 0;
         virtual void setEnabled(bool enabled) = 0;
 
-        /// Handles this frame's input; returns true if it took it.
+        /// Handles this frame's input. Returns true if it took it.
         virtual bool process(double timeElapsed, bool locked) = 0;
         virtual void reset() = 0;
     };
