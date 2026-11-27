@@ -121,7 +121,11 @@ namespace takeover {
 
     void Main::onPreloaderStart() {
         showVersion(false);
-        playIntro("ArmorGamesIntro", &Main::onSponsorIntroDone, GameData::get().links.armorGames);
+        playIntro(
+            "ArmorGamesIntro", 
+            &Main::onSponsorIntroDone, 
+            GameData::get().links.armorGames
+        );
     }
 
     void Main::onSponsorIntroDone() { playIntro("IriySoftIntro", &Main::start, GameData::get().links.iriySoft); }

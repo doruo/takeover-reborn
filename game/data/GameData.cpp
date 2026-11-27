@@ -68,7 +68,7 @@ namespace takeover {
                 data.links.iriySoft = links.at("iriySoft").get<std::string>();
                 data.links.iriySoftTwitter = links.at("iriySoftTwitter").get<std::string>();
                 data.links.iriySoftFacebook = links.at("iriySoftFacebook").get<std::string>();
-            } 
+            }
             catch (const Json::exception& error) {
                 throw std::runtime_error(file.string() + ": " + error.what());
             }

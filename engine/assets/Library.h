@@ -40,7 +40,9 @@ namespace engine {
         Library& operator=(const Library&) = delete;
 
         [[nodiscard]] const swf::Movie& movie() const { return movie_; }
+
         [[nodiscard]] const swf::Character* find(swf::CharacterId id) const { return movie_.find(id); }
+        
         [[nodiscard]] std::optional<swf::CharacterId> findClass(const std::string& name) const {
             return movie_.findClass(name);
         }
@@ -64,8 +66,12 @@ namespace engine {
         /// An embedded font by name, preferring the requested style. Several
         /// fonts may share a name (each text field embeds its own subset), so
         /// `mustContain` picks one that has the characters needed, if any does.
-        [[nodiscard]] const swf::FontDef* findFont(std::string_view name, bool bold, bool italic,
-                                                   std::u32string_view mustContain = {}) const;
+        [[nodiscard]] const swf::FontDef* findFont(
+            std::string_view name, 
+            bool bold, 
+            bool italic,                                       
+            std::u32string_view mustContain = {}) const;
+
         /// Any embedded font holding every character of `text`, preferring the
         /// requested style, nullptr if none (device text falls back to it).
         [[nodiscard]] const swf::FontDef* findFontCovering(std::u32string_view text, bool bold, bool italic) const;

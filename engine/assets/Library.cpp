@@ -16,16 +16,24 @@ namespace engine {
     namespace {
 
         swf::PathPoint transformPoint(const swf::Matrix& m, double x, double y) {
-            return {static_cast<float>(m.a * x + m.c * y + m.tx), static_cast<float>(m.b * x + m.d * y + m.ty)};
+            return {
+                static_cast<float>(m.a * x + m.c * y + m.tx), 
+                static_cast<float>(m.b * x + m.d * y + m.ty)
+            };
         }
 
-        int lerpInt(int a, int b, double t) { return static_cast<int>(std::lround(a + (b - a) * t)); }
+        int lerpInt(int a, int b, double t) { 
+            return static_cast<int>(std::lround(a + (b - a) * t)); 
+        }
 
     } // namespace
 
     Library::Library(const std::filesystem::path& packDirectory)
-        : root_(packDirectory), movie_(swf::Movie::loadFile(packDirectory / "library.swf")) {
+        : root_(packDirectory), movie_(swf::Movie::loadFile(packDirectory / "library.swf")) 
+    {
+
         std::ifstream manifestFile(root_ / "manifest.json");
+
         if (!manifestFile)
             throw std::runtime_error("missing manifest.json in " + root_.string());
 
@@ -35,13 +43,19 @@ namespace engine {
         stageHeight_ = manifest.at("stage").at("height").get<int>();
         frameRate_ = manifest.at("stage").at("frameRate").get<double>();
 
-        for (const auto& b : manifest.at("bitmaps"))
-            bitmapFiles_[b.at("id").get<swf::CharacterId>()] = root_ / b.at("file").get<std::string>();
+        for (const auto& b : manifest.at("bitmaps")) {
+            bitmapFiles_
+                [b.at("id").get<swf::CharacterId>()] 
+                = root_ / b.at("file").get<std::string>();
+        }
 
         for (const auto& s : manifest.at("sounds")) {
+
             SoundInfo info;
+
             info.id = s.at("id").get<swf::CharacterId>();
             info.file = root_ / s.at("file").get<std::string>();
+
             info.sampleRate = s.at("sampleRate").get<int>();
             info.stereo = s.at("stereo").get<bool>();
             info.sampleCount = s.at("sampleCount").get<std::uint32_t>();
