@@ -11,17 +11,22 @@ Then the code will be reorganized, more adapted to today standards, and add more
 
 Also *new* content could be added easily: new factions, units, buildings, and levels.
 
-The original game, assets and graphics are made and published by [IriySoft](https://iriysoft.com). It is *not* distributed here. 
+The original game, logo, assets, texts and graphics were made and published by [IriySoft](https://iriysoft.com), sponsored as work for hire by [ArmorGames](https://armorgames.com). I am *NOT* affiliated with them. None of what is listed here will be distributed on this repo !
 
 You will need a copy of the game (`.swf`) in order to extract assets and play.
 
-> Status: **playable**. Every screen of the original is ported: preloader and
-> intros, profiles, the three campaigns and their maps, edicts, badges, the
-> battles with their HUD, building windows, spells, banners, ultimate powers,
-> computer players and the two tutorial missions, mission results and saves.
+> Status: **playable**. Tested only first campaign until level 4 for now.
 > Online services of the Flash release (Mochi ads, Playtomic statistics,
-> Newgrounds medals and cloud saves) are left out. See
+> Newgrounds medals and cloud saves) are left out.
 > [docs/PORT_ARCHITECTURE.md](docs/PORT_ARCHITECTURE.md).
+
+## Description
+
+Takeover is a real-time strategy game where you command squads of units to protect your strongholds from enemies and seize their buildings to win. For centuries the Rivadis Empire ruled the continent in its shine and glory. But now it fell into necromancers’ hands and dying. Time for Takeover has come! 
+
+For centuries the Rivadis Empire ruled the continent in its shine and glory. But now it fell into necromancers’ hands and dying. Time for Takeover has come!
+
+Lead one of 3 nations in the battle for Rivadis. Each nation has 5 types of squads, 3 types of strongholds and magic spells. In addition, you can build gold mines, farms to hire more squads, and obelisks to get more mana. (Description from IriySoft)
 
 ## How was it made possible ?
 
@@ -29,20 +34,16 @@ Flash games were published as a `.swf` executable, which was runnable by most br
 
 I used [JPEXS decompiler](https://github.com/jindrapetrik/jpexs-decompiler) to decompile a `.swf` copy of the game, extract the assets and ActionScript original code.
 
-To make the game working, I also had to rewrite the old game engine: event handling, inputs, vectors, movie clip timelines. Most of it is located in `engine` and `game/framework`.
-
-## Screenshots
-
-![level_4](/static/screenshots/level_4.png)
-
-![level_2](/static/screenshots/level_2.png)
+To make the game working, I also had to rewrite the old game engine: event handling, inputs, vectors, movie clip timelines, screen rendering... Most of it is located in `engine` and `game/framework`.
 
 ## Quick start (Linux)
 
 ```bash
 cd takeover-reborn
-./install-deps.sh
-./run.sh
+
+./install-deps.sh # Execute it once only
+
+./run.sh # Execute it everytime
 ```
 
 `run.sh` configures and builds the project the first time (a few minutes), converts the original `takeover.swf` into the asset pack (a few seconds), then starts the game. 
@@ -72,17 +73,11 @@ the cairo and zlib libraries (preinstalled on desktop distributions). SDL3
 is bundled when the build had to compile it. `cmake --install build
 --prefix ~/.local` installs the same files.
 
-## Gameplay
+## Screenshots
 
-The controls are those of the original: click a building to open its
-window (recruit, upgrade, build), drag a squad's round icon onto a place or
-an enemy to send it there, draw a frame around icons to select several
-squads, click a spell then the battlefield to cast it. Space or Escape
-cancels the current action, and the gear button pauses.
+![level_4](/static/screenshots/level_4.png)
 
-`--cheat` turns on the original's developer mode (`Preloader.CHEAT_ON`): two
-extra spell buttons (more gold and mana, any spell) and "Quit" in the pause
-menu wins the mission.
+![level_2](/static/screenshots/level_2.png)
 
 ## Documentation
 
@@ -101,6 +96,10 @@ menu wins the mission.
 
 Options: `-DTAKEOVER_BUILD_GAME=OFF` builds only the tools (no SDL needed),
 `-DTAKEOVER_BUILD_TOOLS=OFF` only the game.
+
+`run.sh` also execute `build.sh` at start. 
+
+Build can be a bit long the first time, then it only update modifications. 
 
 ## Tools
 
@@ -159,3 +158,13 @@ third_party/        vendored single-header libraries (stb, miniaudio, json, doct
 docs/               design and reverse-engineering notes
 run.sh              build and play
 ```
+
+## Tools and third-parties used
+
+- `doctest` - for test-driven tests
+
+- `miniaudio`
+
+- `nlohmann::json` - for storing and handling data in JSON format for C++.
+
+- `stb` - for handling PNGs
