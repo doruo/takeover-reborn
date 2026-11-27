@@ -37,14 +37,18 @@ printf "
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 "
 
-BUILD_DIR=${TAKEOVER_BUILD_DIR:-build}
-GAME_PATH="$BUILD_DIR/game/takeover"
-PARAMS="--assets assets "$@""
+run() {
+    BUILD_DIR=${TAKEOVER_BUILD_DIR:-build}
+    GAME_PATH="$BUILD_DIR/game/takeover"
+    PARAMS="--assets assets "$@""
 
-# Build
-/bin/bash "./build.sh"
+    # Build
+    /bin/bash "./build.sh"
 
-printf "\nStarting Game...\n"
+    printf "\nStarting Game...\n"
 
-# Run
-exec "$GAME_PATH" PARAMS
+    # Run
+    exec "$GAME_PATH" PARAMS
+}
+
+run
