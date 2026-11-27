@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(TakeOver
+project(TakeoverReborn
     VERSION 1.1.5 # version number of the original Flash release
     DESCRIPTION "C++ port of the Flash strategy game Take Over"
     LANGUAGES C CXX)
@@ -53,7 +53,7 @@ endif()
 # --- Release archive: cpack -G TGZ (see tools/package.sh) ----------------------
 set(CPACK_GENERATOR TGZ)
 set(CPACK_PACKAGE_NAME takeover)
-set(CPACK_PACKAGE_VENDOR "Take Over C++ port")
+set(CPACK_PACKAGE_VENDOR "Iriysoft, ArmorGames, Doruo")
 set(CPACK_PACKAGE_FILE_NAME "takeover-${PROJECT_VERSION}-linux-${CMAKE_SYSTEM_PROCESSOR}")
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY ON)
 set(CPACK_STRIP_FILES ON)
