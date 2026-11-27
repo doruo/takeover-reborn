@@ -11,3 +11,9 @@
 /assets/
 compile_commands.json
 .cache/
+
+# Third-party headers downloaded by tools/fetch_third_parties.sh
+/third_party/nlohmann/
+/third_party/doctest/
+/third_party/miniaudio/
+/third_party/stb/
