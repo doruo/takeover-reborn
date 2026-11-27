@@ -121,9 +121,11 @@ int main(int argc, char** argv) {
     const char* assets = nullptr;
     const char* data = nullptr;
     const char* script = nullptr;
+
     bool fast = false;
     bool fullscreen = false;
     int scale = 1;
+
 
     for (int i = 1; i < argc; ++i) {
         if (std::strcmp(argv[i], "--assets") == 0 && i + 1 < argc)
@@ -158,20 +160,26 @@ int main(int argc, char** argv) {
             return 1;
         }
 
-        // The game data (version, links, ...) from the JSON files.
+        // Loads data from JSON.
         takeover::GameData::load(findData(data));
+        takeover::GameData gameData = takeover::GameData::get();
 
-        engine::Application app({.assets = assetDir,
-                                 .title = "Take Over",
-                                 .fullscreen = fullscreen,
-                                 .windowScale = scale,
-                                 .script = script ? script : "",
-                                 .fast = fast});
+        engine::Application app(
+    {
+                .assets = assetDir,
+                .title = gameData.game.title,
+                .fullscreen = fullscreen,
+                .windowScale = scale,
+                .script = script ? script : "",
+                .fast = fast
+            });
+
         takeover::symbols::registerSymbolScripts();
 
         auto game = std::make_shared<takeover::Main>();
         app.stage().addChild(game);
         game->init();
+        
         const int code = app.run();
 
         // Tear the game down while the window, GL context and audio device
