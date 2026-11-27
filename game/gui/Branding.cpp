@@ -49,18 +49,27 @@ namespace takeover {
     }
 
     void Branding::enableIriyLinks(engine::MovieClip* logo, bool enable) {
+        
         if (logo == nullptr)
             return;
 
         const auto link = [&](std::string_view name, void (Branding::*handler)(MouseEvent&)) {
             engine::MovieClip* button = symbols::child(logo, name);
+            
             if (button == nullptr)
                 return;
 
-            if (enable)
-                button->addEventListener(MouseEvent::CLICK, this, handler);
-            else
-                button->removeEventListener(MouseEvent::CLICK, this, handler);
+            if (enable) {
+                button->addEventListener(
+                    MouseEvent::CLICK, this, handler
+                );
+            }
+            
+            else {
+                button->removeEventListener(
+                    MouseEvent::CLICK, this, handler
+                );
+            }
         };
 
         link("btnIriySoft", &Branding::onIriySoft);
