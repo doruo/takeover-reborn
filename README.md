@@ -31,7 +31,9 @@ I used [JPEXS Decompiler](https://github.com/jindrapetrik/jpexs-decompiler) to d
 
 ## Screenshots
 
-![logo](/static/screenshots/screenshot_level_2.png)
+![level_4](/static/screenshots/level_4.png)
+
+![level_2](/static/screenshots/level_2.png)
 
 ## Quick start (Linux)
 
