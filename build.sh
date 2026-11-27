@@ -4,7 +4,7 @@
 #   ./build.sh                    build (incrementally) and play
 #
 # The first run configures and compiles the project (a few minutes) and
-# converts the original takeover.swf_gamefile into the asset pack (assets/, a few
+# converts the original takeover.swfF into the asset pack (assets/, a few
 # seconds). Later runs only rebuild what changed.
 
 set -euo pipefail
