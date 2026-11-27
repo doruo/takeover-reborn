@@ -3,7 +3,7 @@
 
 # Takeover Reborn
 
-Recompilation of the Flash strategy game *Takeover* (Published by IriySoft, 2011, v1.1.5). 
+Recompilation of the Flash strategy game *`Takeover`* (Published by IriySoft, 2011, v1.1.5). 
 
 The goal of this project is to originally have a functionning and stable version with identical behaviour to the original.
 
@@ -13,7 +13,7 @@ Also *new* content could be added easily: new factions, units, buildings, and le
 
 The original game, assets and graphics are made and published by [IriySoft](https://iriysoft.com). It is *not* distributed here. 
 
-You will need a copy of the game (.swf) in order to extract assets and play.
+You will need a copy of the game (`.swf`) in order to extract assets and play.
 
 > Status: **playable**. Every screen of the original is ported: preloader and
 > intros, profiles, the three campaigns and their maps, edicts, badges, the
@@ -25,9 +25,11 @@ You will need a copy of the game (.swf) in order to extract assets and play.
 
 ## How was it made possible ?
 
-Flash games were published as a .swf executable, which was runnable by most browsers in the 2010s. It is now deprecated since Flash end of support in 2020. 
+Flash games were published as a `.swf` executable, which was runnable by most browsers in the 2010s. It is now deprecated since Flash end of support in 2020. 
 
-I used [JPEXS Decompiler](https://github.com/jindrapetrik/jpexs-decompiler) to decompile a .swf copy of the game, extract the assets and ActionScript original code.
+I used [JPEXS decompiler](https://github.com/jindrapetrik/jpexs-decompiler) to decompile a `.swf` copy of the game, extract the assets and ActionScript original code.
+
+To make the game working, I also had to rewrite the old game engine: event handling, inputs, vectors, movie clip timelines. Most of it is located in `engine` and `game/framework`.
 
 ## Screenshots
 
@@ -56,7 +58,7 @@ Later runs only rebuild what changed.
 Saves go to `~/.local/share/takeover/` (`TAKEOVER_SAVE_DIR` overrides it).
 
 If `libsdl3-dev` isn't available (older distributions), CMake downloads and
-builds SDL 3.2.10 automatically (needs network once).
+builds `SDL 3.2.10` automatically (needs network once).
 
 ## A release archive to copy elsewhere
 
