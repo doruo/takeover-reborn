@@ -32,7 +32,7 @@ build(){
 # Extract the asset pack, converted from the original SWF the first time.
 extract_assets(){
 
-  printf "\n/---- Assets Extraction ----/\n"
+  printf "\Extracting assets...\n"
 
   if [ ! -f assets/manifest.json ]; then
 
