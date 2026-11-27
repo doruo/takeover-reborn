@@ -63,8 +63,6 @@ extract_assets(){
 }
 
 main(){
-    bash tools/fetch_third_parties.sh
-
     build
     extract_assets
 }

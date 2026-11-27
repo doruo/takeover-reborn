@@ -56,5 +56,7 @@ fetch_package_manager
 need cmake
 need c++
 
+bash tools/fetch_third_parties.sh
+
 printf "\n(Password required for dependencies installation)\n"
 sudo $PACKAGE_MANAGER install -y $DEPS
