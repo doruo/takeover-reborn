@@ -7,6 +7,9 @@
 
 namespace takeover {
 
+    using Json = nlohmann::json;
+    using Path = std::filesystem::path;
+
     namespace {
 
         GameData& instance() {
@@ -16,34 +19,40 @@ namespace takeover {
 
         bool loaded = false;
 
-        /// Parses a JSON file, // comments allowed.
-        nlohmann::json readJson(const std::filesystem::path& file) {
+        /// Parses a JSON file.
+        Json readJson(const Path& file) {
             std::ifstream stream(file);
 
             if (!stream)
                 throw std::runtime_error("missing data file " + file.string());
 
             try {
-                return nlohmann::json::parse(stream, nullptr, true, true);
-            } catch (const nlohmann::json::exception& error) {
+                return Json::parse(
+                    stream, 
+                    nullptr, 
+                    true,
+                    true
+                );
+            } 
+            catch (const Json::exception& error) {
                 throw std::runtime_error(file.string() + ": " + error.what());
             }
         }
 
         // /----- game.json -----/
 
-        void readGame(const std::filesystem::path& file, GameData& data) {
-            const nlohmann::json json = readJson(file);
+        void readGame(const Path& file, GameData& data) {
+            const Json json = readJson(file);
 
             try {
                 // Game
-                const nlohmann::json& game = json.at("game");
+                const Json game = json.at("game");
 
                 data.game.title = game.at("title").get<std::string>();
                 data.game.version = game.at("version").get<std::string>();
 
                 // Options
-                const nlohmann::json& options = json.at("options");
+                const Json& options = json.at("options");
 
                 data.options.width = options.at("width").get<int>();
                 data.options.height = options.at("height").get<int>();
@@ -52,7 +61,7 @@ namespace takeover {
                 data.options.vsync = options.at("vsync").get<bool>();
 
                 // Links
-                const nlohmann::json& links = json.at("links");
+                const Json& links = json.at("links");
 
                 data.links.armorGames = links.at("armorGames").get<std::string>();
                 data.links.a10 = links.at("a10").get<std::string>();
@@ -60,14 +69,14 @@ namespace takeover {
                 data.links.iriySoftTwitter = links.at("iriySoftTwitter").get<std::string>();
                 data.links.iriySoftFacebook = links.at("iriySoftFacebook").get<std::string>();
             } 
-            catch (const nlohmann::json::exception& error) {
+            catch (const Json::exception& error) {
                 throw std::runtime_error(file.string() + ": " + error.what());
             }
         }
 
     } // namespace
 
-    void GameData::load(const std::filesystem::path& directory) {
+    void GameData::load(const Path& directory) {
         GameData data;
         readGame(directory / "game.json", data);
 
