@@ -4,8 +4,8 @@
 //     app.stage().addChild(std::make_shared<Main>(app));
 //     return app.run();
 //
-// The loop is the Flash one: the movie runs at a fixed frame rate (30 fps
-// for Take Over). Each frame, timelines advance and ENTER_FRAME is
+// The loop is the Flash one: the movie runs at a fixed frame rate (30 fps by default). 
+// Each frame, timelines advance and ENTER_FRAME is
 // broadcast. The game updates itself from there with a fixed dt. If the
 // machine can't keep up, the game slows down instead of skipping frames,
 // exactly like in the Flash Player.
@@ -19,7 +19,6 @@
 #include "engine/render/ShapeCache.h"
 
 #include <filesystem>
-#include <functional>
 #include <memory>
 #include <string>
 #include <vector>
