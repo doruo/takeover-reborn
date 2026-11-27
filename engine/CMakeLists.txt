@@ -1,5 +1,5 @@
 # engine: a small Flash-like runtime (display list, timelines, rendering,
-# audio, input) on SDL3 + OpenGL 3.3. Knows nothing about Take Over itself.
+# audio, input) on SDL3 + OpenGL 3.3.
 add_library(engine
     assets/Library.cpp
     audio/Sound.cpp
