@@ -108,7 +108,7 @@ namespace takeover {
     using R = Race;
     using U = UnitType;
 
-    //                                name,                 hp, race,            n,dmg,atkSpd,range,melee,morale,speed,cost, upk,abilities                                         tier type         anim  dASH rABS walk  missile
+    //                                  name,                      hp,     race (side),            n,             dmg,       atkSpd,      range, melee,morale,speed,cost, upk,abilities                                         tier type         anim  dASH rABS walk  missile
     ArmyStat ArmyStat::GUARDS          ("Guards",           26, R::Westaria,     9, 2, 3,  15, 0,   0,  50, 40, 100, 1, "",                                               1, U::Infantry, 0.75, 0,  0,  11,   5);
     ArmyStat ArmyStat::WARRIORS        ("Warriors",         18, R::TheKhaganate, 9, 3, 4,  15, 0,   0,  50, 40, 100, 1, "",                                               1, U::Infantry, 0.75, 0,  0,  11,   5);
     ArmyStat ArmyStat::REBELS          ("Rebels",           22, R::TheCult,      9, 1, 5,  16, 0,   0,  50, 40, 100, 1, "LongSpear 50",                                   1, U::Infantry, 0.75, 0,  0,  11,   5);
