@@ -12,6 +12,7 @@ cd "$(dirname "$(readlink -f "$0")")"
 
 FILENAME=$(basename $0)
 BUILD_DIR=${TAKEOVER_BUILD_DIR:-build}
+ORIGINAL_GAMEFILE=${TAKEOVER_SWF:-$(zenity --file-selection)}
 
 delete_existing_build() {
     printf "Deleting existing build at: $BUILD_DIR"
@@ -38,22 +39,22 @@ extract_assets(){
     if [ ! -f assets/manifest.json ]; then
 
         printf "Fetching original .swf game file..."
-        swf_gamefile=${TAKEOVER_SWF:-$(zenity --file-selection)}
+        ORIGINAL_GAMEFILE=${TAKEOVER_SWF:-$(zenity --file-selection)}
 
-        if [ -z "$swf_gamefile" ]; then
-            for candidate in ./$swf_gamefile $swf_gamefile; do
-                if [ -f "$candidate" ]; then swf_gamefile=$candidate; break; fi
+        if [ -z "$ORIGINAL_GAMEFILE" ]; then
+            for candidate in ./$ORIGINAL_GAMEFILE $ORIGINAL_GAMEFILE; do
+                if [ -f "$candidate" ]; then ORIGINAL_GAMEFILE=$candidate; break; fi
             done
         fi
 
-        if [ -z "$swf_gamefile" ] || [ ! -f "$swf_gamefile" ]; then
-            echo "$FILENAME: the asset pack needs the original game file $swf_gamefile." >&2
-            echo "  Put it in this folder, or run: TAKEOVER_SWF=/path/to/$swf_gamefile ./$FILENAME" >&2
+        if [ -z "$ORIGINAL_GAMEFILE" ] || [ ! -f "$ORIGINAL_GAMEFILE" ]; then
+            echo "$FILENAME: the asset pack needs the original game file $ORIGINAL_GAMEFILE." >&2
+            echo "  Put it in this folder, or run: ORIGINAL_GAMEFILE=/path/to/$ORIGINAL_GAMEFILE ./$FILENAME" >&2
             exit 1
         fi
         
-        printf "\nConverting $swf_gamefile into the asset pack...\n"
-        "$BUILD_DIR/tools/assetpack/assetpack" "$swf_gamefile" assets
+        printf "\nConverting $ORIGINAL_GAMEFILE into the asset pack...\n"
+        "$BUILD_DIR/tools/assetpack/assetpack" "$ORIGINAL_GAMEFILE" assets
 
         printf "\nAssets extracted\n"
 
